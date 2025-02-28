@@ -1,0 +1,74 @@
+name: pandora-backend
+version: '4.31'
+services:
+  mysql:
+    image: mysql:8.0.40-debian
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: pandora
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DATABASE=1
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  elasticsearch:
+    image: elasticsearch:7.17.23
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+
+#  kibana:
+#    image: kibana:7.17.23
+#    container_name: kibana
+#    environment:
+#      - I18N_LOCALE=zh-CN  # 设置Kibana的中文选项
+#      - ELASTICSEARCH_URL=http://elasticsearch:9200
+#    ports:
+#      - "5601:5601"
+#    depends_on:
+#      - elasticsearch
+  nacos:
+    image: nacos/nacos-server:v2.2.0
+    container_name: nacos
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    environment:
+      - MODE=standalone
+      - PREFER_HOST_MODE=hostname
+      - NACOS_USERNAME=nacos
+      - NACOS_PASSWORD=nacos
+
+  sentinel-dashboard:
+    image: bladex/sentinel-dashboard:1.8.6
+    container_name: sentinel-dashboard
+#    environment:
+#      - PASSWORD=sentinel
+#      - USERNAME=sentinel
+    ports:
+      - "8858:8858"  # 更新后的端口
+      - "8719:8719"
+
+volumes:
+  mysql-data:
+  redis-data:
+  es-data:
+  etcd-data:
