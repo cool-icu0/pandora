@@ -170,3 +170,60 @@ String upperDataKey = "UserComment";
 ```
 
 生成代码后，可以移动到实际项目中，并且按照 `// todo` 注释的提示来针对自己的业务需求进行修改。
+
+## 项目功能点
+
+### 1. 用户模块
+- 登录注册
+- 用户信息管理
+- 微信开放平台登录
+- 微信公众号功能
+### 2. 题库管理
+接口前缀: /questionBank
+
+- 创建题库: POST /questionBank/add
+- 删除题库: POST /questionBank/delete
+- 更新题库: POST /questionBank/update
+- 获取题库详情: GET /questionBank/get/vo
+- 分页获取题库列表: POST /questionBank/list/page
+### 3. 题目管理
+接口前缀: /question
+
+- 创建题目: POST /question/add
+- 删除题目: POST /question/delete
+- 更新题目: POST /question/update
+- 获取题目详情: GET /question/get/vo
+- 分页获取题目列表: POST /question/list/page
+### 4. 题目互动功能
+1. 点赞功能
+   接口前缀: /question_thumb
+- 点赞/取消点赞: POST /question_thumb/
+2. 评论功能
+   接口前缀: /question_comment
+- 发表评论: POST /question_comment/add
+- 删除评论: POST /question_comment/delete
+- 修改评论: POST /question_comment/update
+- 获取评论详情: GET /question_comment/get
+- 分页获取评论列表: POST /question_comment/list/page
+3. 收藏功能
+   接口前缀: /question_favourite
+- 收藏/取消收藏: POST /question_favourite/
+- 获取用户收藏的题目列表 : GET /question_favourite/my/list
+### 5. 题库-题目关联管理
+接口前缀: /questionBankQuestion
+
+- 创建关联: POST /questionBankQuestion/add
+- 删除关联: POST /questionBankQuestion/delete
+- 更新关联: POST /questionBankQuestion/update
+- 获取关联详情: GET /questionBankQuestion/get/vo
+- 分页获取关联列表: POST /questionBankQuestion/list/page
+- 分页获取关联列表(封装类): POST /questionBankQuestion/list/page/vo
+### 6. AI 模拟面试功能
+接口前缀: /mock_interview
+
+- 创建模拟面试
+- 更新面试状态
+- 获取面试详情
+- 获取面试列表
+### 7、文件上传
+- 文件上传: POST /file/upload
