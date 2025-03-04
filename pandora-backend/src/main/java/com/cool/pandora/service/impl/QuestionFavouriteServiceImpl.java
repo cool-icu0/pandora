@@ -52,7 +52,33 @@ public class QuestionFavouriteServiceImpl extends ServiceImpl<QuestionFavouriteM
         if (question == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
-        return 0;
+        //是否收藏
+        long userId = loginUser.getId();
+        // 已收藏
+        QuestionFavouriteService questionFavouriteService = (QuestionFavouriteService) AopContext.currentProxy();
+        boolean isFavourite = questionFavouriteService.isQuestionFavourite(questionId, userId);
+        int result = 1;
+        if (isFavourite) {
+            // 已收藏，取消收藏
+            QueryWrapper<QuestionFavourite> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("questionId", questionId);
+            queryWrapper.eq("userId", userId);
+            int delete = questionFavouriteMapper.delete(queryWrapper);
+            result = -1;
+            if (delete <= 0) {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "取消收藏失败");
+            }
+            return result;
+        }
+        // 未收藏，收藏
+        QuestionFavourite questionFavourite = new QuestionFavourite();
+        questionFavourite.setUserId(userId);
+        questionFavourite.setQuestionId(questionId);
+        boolean save = this.save(questionFavourite);
+        if (!save) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "收藏失败");
+        }
+        return result;
     
     }
     @Override

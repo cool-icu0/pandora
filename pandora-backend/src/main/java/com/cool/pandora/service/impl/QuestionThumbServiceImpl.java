@@ -91,7 +91,6 @@ public class QuestionThumbServiceImpl extends ServiceImpl<QuestionThumbMapper, Q
         // 查询条件：题目id和点赞状态为1（已点赞）
         QueryWrapper<QuestionThumb> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("questionId", questionId);
-        queryWrapper.eq("thumbStatus", 1);
         return Math.toIntExact(questionThumbMapper.selectCount(queryWrapper));
     }
 }

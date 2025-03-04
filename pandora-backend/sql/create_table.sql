@@ -129,3 +129,12 @@ create table if not exists question_favourite
     updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     UNIQUE (questionId, userId) comment '确保用户不会重复收藏'
 ) comment '题目收藏' collate = utf8mb4_unicode_ci;
+
+-- 题目浏览量表（硬删除）
+CREATE TABLE question_views (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY comment 'id' ,
+    questionId BIGINT not null comment '题目 id',
+    viewCount BIGINT NOT NULL DEFAULT 0  comment '浏览量',
+    createTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP not null comment '更新时间'
+);

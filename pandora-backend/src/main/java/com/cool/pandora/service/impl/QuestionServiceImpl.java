@@ -18,6 +18,7 @@ import com.cool.pandora.model.dto.question.QuestionEsDTO;
 import com.cool.pandora.model.dto.question.QuestionQueryRequest;
 import com.cool.pandora.model.entity.Question;
 import com.cool.pandora.model.entity.QuestionBankQuestion;
+import com.cool.pandora.model.entity.QuestionViews;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.model.vo.QuestionVO;
 import com.cool.pandora.model.vo.UserVO;
@@ -39,12 +40,14 @@ import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**

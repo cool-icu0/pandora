@@ -25,6 +25,7 @@ import com.cool.pandora.model.entity.User;
 import com.cool.pandora.model.vo.QuestionVO;
 import com.cool.pandora.sentinel.SentinelConstant;
 import com.cool.pandora.service.QuestionService;
+import com.cool.pandora.service.QuestionViewsService;
 import com.cool.pandora.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -46,6 +47,9 @@ public class QuestionController {
 
     @Resource
     private QuestionService questionService;
+
+    @Resource
+    private QuestionViewsService questionViewsService;
 
     @Resource
     private UserService userService;
@@ -364,6 +368,32 @@ public class QuestionController {
         // 查询数据库（作为没有 ES 的降级方案）
         Page<Question> questionPage = questionService.listQuestionByPage(questionQueryRequest);
         return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
+    }
+
+    /**
+     * 增加题目浏览量
+     *
+     * @param questionId 题目ID
+     * @return 是否成功
+     */
+    @PostMapping("/view/{questionId}")
+    public BaseResponse<Boolean> increaseQuestionViewCount(@PathVariable("questionId") Long questionId) {
+        ThrowUtils.throwIf(questionId == null || questionId <= 0, ErrorCode.PARAMS_ERROR);
+        boolean result = questionViewsService.increaseViewCount(questionId);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 获取题目浏览量
+     *
+     * @param questionId 题目ID
+     * @return 浏览量
+     */
+    @GetMapping("/view/count/{questionId}")
+    public BaseResponse<Long> getQuestionViewCount(@PathVariable("questionId") Long questionId) {
+        ThrowUtils.throwIf(questionId == null || questionId <= 0, ErrorCode.PARAMS_ERROR);
+        long viewCount = questionViewsService.getViewCount(questionId);
+        return ResultUtils.success(viewCount);
     }
 
     @PostMapping("/delete/batch")
