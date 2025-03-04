@@ -2,16 +2,19 @@ package com.cool.pandora.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cool.pandora.common.ErrorCode;
 import com.cool.pandora.exception.BusinessException;
 import com.cool.pandora.mapper.QuestionFavouriteMapper;
 import com.cool.pandora.mapper.QuestionMapper;
+import com.cool.pandora.model.dto.questionfavourite.QuestionFavouriteQueryRequest;
 import com.cool.pandora.model.entity.Question;
 import com.cool.pandora.model.entity.QuestionFavourite;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.service.QuestionFavouriteService;
 import com.cool.pandora.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -109,5 +112,33 @@ public class QuestionFavouriteServiceImpl extends ServiceImpl<QuestionFavouriteM
         // 查询是否存在记录
         long count = this.count(queryWrapper);
         return count > 0;
+    }
+        @Override
+    public Page<Question> listMyFavouriteQuestionsByPage(QuestionFavouriteQueryRequest questionFavouriteQueryRequest, User loginUser) {
+        long current = questionFavouriteQueryRequest.getCurrent();
+        long size = questionFavouriteQueryRequest.getPageSize();
+        String searchText = questionFavouriteQueryRequest.getSearchText();
+        
+        // 先查询收藏关系
+        QueryWrapper<QuestionFavourite> favouriteQueryWrapper = new QueryWrapper<>();
+        favouriteQueryWrapper.eq("userId", loginUser.getId());
+        List<QuestionFavourite> questionFavouriteList = this.list(favouriteQueryWrapper);
+        List<Long> questionIds = questionFavouriteList.stream()
+                .map(QuestionFavourite::getQuestionId)
+                .collect(Collectors.toList());
+        if (questionIds.isEmpty()) {
+            return new Page<>();
+        }
+        // 构建题目查询条件
+        QueryWrapper<Question> questionQueryWrapper = new QueryWrapper<>();
+        questionQueryWrapper.in("id", questionIds);
+        // 支持标题搜索
+        if (StringUtils.isNotBlank(searchText)) {
+            questionQueryWrapper.like("title", searchText);
+        }
+        // 按收藏时间倒序
+        questionQueryWrapper.orderByDesc("createTime");
+        
+        return questionService.page(new Page<>(current, size), questionQueryWrapper);
     }
 }

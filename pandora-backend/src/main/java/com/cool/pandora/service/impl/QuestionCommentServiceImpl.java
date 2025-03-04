@@ -1,5 +1,6 @@
 package com.cool.pandora.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cool.pandora.common.ErrorCode;
@@ -80,6 +81,11 @@ public class QuestionCommentServiceImpl extends ServiceImpl<QuestionCommentMappe
     public Page<QuestionComment> getCommentPage(QuestionCommentQueryRequest questionCommentQueryRequest) {
         long current = questionCommentQueryRequest.getCurrent();
         long size = questionCommentQueryRequest.getPageSize();
-        return this.page(new Page<>(current, size));
+        QueryWrapper<QuestionComment> queryWrapper = new QueryWrapper<>();
+        // 添加题目ID查询条件
+        queryWrapper.eq("questionId", questionCommentQueryRequest.getQuestionId());
+        // 按创建时间降序排序，保证最新评论在前
+        queryWrapper.orderByDesc("createTime");
+        return this.page(new Page<>(current, size), queryWrapper);
     }
 }

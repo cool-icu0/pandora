@@ -1,6 +1,8 @@
 package com.cool.pandora.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cool.pandora.model.dto.questionfavourite.QuestionFavouriteQueryRequest;
 import com.cool.pandora.model.entity.Question;
 import com.cool.pandora.model.entity.QuestionFavourite;
 import com.cool.pandora.model.entity.User;
@@ -35,4 +37,13 @@ public interface QuestionFavouriteService extends IService<QuestionFavourite> {
      * @return 是否已收藏
      */
     boolean isQuestionFavourite(long questionId, long userId);
+
+        /**
+     * 分页获取用户收藏的题目
+     *
+     * @param questionFavouriteQueryRequest 查询请求
+     * @param loginUser 登录用户
+     * @return 收藏题目分页数据
+     */
+    Page<Question> listMyFavouriteQuestionsByPage(QuestionFavouriteQueryRequest questionFavouriteQueryRequest, User loginUser);
 }

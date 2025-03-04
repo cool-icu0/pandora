@@ -1,10 +1,13 @@
 package com.cool.pandora.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cool.pandora.common.BaseResponse;
 import com.cool.pandora.common.ErrorCode;
 import com.cool.pandora.common.ResultUtils;
 import com.cool.pandora.exception.BusinessException;
+import com.cool.pandora.exception.ThrowUtils;
 import com.cool.pandora.model.dto.questionfavourite.QuestionFavouriteAddRequest;
+import com.cool.pandora.model.dto.questionfavourite.QuestionFavouriteQueryRequest;
 import com.cool.pandora.model.entity.Question;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.service.QuestionFavouriteService;
@@ -84,5 +87,26 @@ public class QuestionFavouriteController {
         // 判断是否已收藏
         boolean isFavourite = questionFavouriteService.isQuestionFavourite(questionId, loginUser.getId());
         return ResultUtils.success(isFavourite);
+    }
+    /**
+     * 分页获取用户收藏的题目
+     *
+     * @param questionFavouriteQueryRequest 查询请求
+     * @param request HTTP请求
+     * @return 收藏题目分页数据
+     */
+    @PostMapping("/my/list/page")
+    public BaseResponse<Page<Question>> listMyFavouriteQuestionsByPage(@RequestBody QuestionFavouriteQueryRequest questionFavouriteQueryRequest,
+                                                                       HttpServletRequest request) {
+        if (questionFavouriteQueryRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        long current = questionFavouriteQueryRequest.getCurrent();
+        long size = questionFavouriteQueryRequest.getPageSize();
+        // 限制爬虫
+        ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
+        Page<Question> questionPage = questionFavouriteService.listMyFavouriteQuestionsByPage(questionFavouriteQueryRequest, loginUser);
+        return ResultUtils.success(questionPage);
     }
 }
