@@ -38,7 +38,16 @@ public interface QuestionFavouriteService extends IService<QuestionFavourite> {
      */
     boolean isQuestionFavourite(long questionId, long userId);
 
-        /**
+    /**
+     * 获取题目收藏数
+     *
+     * @param questionId 题目id
+     * @return 收藏数
+     */
+    int getFavourite(long questionId);
+
+
+    /**
      * 分页获取用户收藏的题目
      *
      * @param questionFavouriteQueryRequest 查询请求

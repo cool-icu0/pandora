@@ -113,7 +113,7 @@ public class QuestionFavouriteServiceImpl extends ServiceImpl<QuestionFavouriteM
         long count = this.count(queryWrapper);
         return count > 0;
     }
-        @Override
+    @Override
     public Page<Question> listMyFavouriteQuestionsByPage(QuestionFavouriteQueryRequest questionFavouriteQueryRequest, User loginUser) {
         long current = questionFavouriteQueryRequest.getCurrent();
         long size = questionFavouriteQueryRequest.getPageSize();
@@ -140,5 +140,14 @@ public class QuestionFavouriteServiceImpl extends ServiceImpl<QuestionFavouriteM
         questionQueryWrapper.orderByDesc("createTime");
         
         return questionService.page(new Page<>(current, size), questionQueryWrapper);
+    }
+
+    @Override
+    public int getFavourite(long questionId) {
+        // 查询条件：题目id和用户id
+        QueryWrapper<QuestionFavourite> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("questionId", questionId);
+        // 查询是否存在记录
+        return (int) this.count(queryWrapper);
     }
 }

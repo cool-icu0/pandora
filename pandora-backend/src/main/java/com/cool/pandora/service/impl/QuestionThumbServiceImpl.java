@@ -93,4 +93,15 @@ public class QuestionThumbServiceImpl extends ServiceImpl<QuestionThumbMapper, Q
         queryWrapper.eq("questionId", questionId);
         return Math.toIntExact(questionThumbMapper.selectCount(queryWrapper));
     }
+
+    @Override
+    public boolean isQuestionThumb(long questionId, Long userId) {
+        // 查询条件：题目id和用户id
+        QueryWrapper<QuestionThumb> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("questionId", questionId);
+        queryWrapper.eq("userId", userId);
+        // 查询是否存在记录
+        long count = this.count(queryWrapper);
+        return count > 0;
+    }
 }

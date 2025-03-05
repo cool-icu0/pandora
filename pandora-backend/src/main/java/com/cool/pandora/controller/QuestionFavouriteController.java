@@ -88,6 +88,23 @@ public class QuestionFavouriteController {
         boolean isFavourite = questionFavouriteService.isQuestionFavourite(questionId, loginUser.getId());
         return ResultUtils.success(isFavourite);
     }
+
+    /**
+     * 获取题目收藏数
+     *
+     * @param questionId 题目id
+     * @return 收藏数
+     */
+    @GetMapping("/count")
+    public BaseResponse<Integer> getFavourite(@RequestParam("questionId") long questionId) {
+        if (questionId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 判断是否已收藏
+        int isFavourite = questionFavouriteService.getFavourite(questionId);
+        return ResultUtils.success(isFavourite);
+    }
+
     /**
      * 分页获取用户收藏的题目
      *

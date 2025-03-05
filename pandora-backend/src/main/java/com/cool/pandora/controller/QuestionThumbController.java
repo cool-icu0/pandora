@@ -67,4 +67,24 @@ public class QuestionThumbController {
         int count = questionThumbService.getQuestionThumbCount(questionId);
         return ResultUtils.success(count);
     }
+
+    /**
+     * 判断用户是否点赞题目
+     *
+     * @param questionId 题目id
+     * @param request
+     * @return 是否点赞
+     */
+    @GetMapping("/get/check")
+    public BaseResponse<Boolean> checkThumb(@RequestParam("questionId") long questionId,
+            HttpServletRequest request) {
+        if (questionId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 获取登录用户
+        final User loginUser = userService.getLoginUser(request);
+        // 判断是否已收藏
+        boolean isFavourite = questionThumbService.isQuestionThumb(questionId, loginUser.getId());
+        return ResultUtils.success(isFavourite);
+    }
 }

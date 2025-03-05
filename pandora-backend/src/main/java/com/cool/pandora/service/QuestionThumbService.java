@@ -34,4 +34,6 @@ public interface QuestionThumbService extends IService<QuestionThumb> {
      * @return 题目点赞数
      */
     int getQuestionThumbCount(long questionId);
+
+    boolean isQuestionThumb(long questionId, Long id);
 }
