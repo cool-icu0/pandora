@@ -12,7 +12,7 @@ spring:
   # session 配置
   session:
     # todo 取消注释开启分布式 session（须先配置 Redis）
-    # store-type: redis
+    store-type: redis
     # 30 天过期
     timeout: 2592000
   # 数据库配置
@@ -198,3 +198,7 @@ knife4j:
 # AI 大模型接入（目前是火山引擎 DeepSeek）
 ai:
   apiKey: xxx
+
+#代码沙箱配置
+codesandbox:
+  type: example
