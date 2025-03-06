@@ -1,7 +1,6 @@
 package com.cool.pandora.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
-import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.csp.sentinel.Entry;
@@ -18,7 +17,7 @@ import com.cool.pandora.common.ResultUtils;
 import com.cool.pandora.constant.UserConstant;
 import com.cool.pandora.exception.BusinessException;
 import com.cool.pandora.exception.ThrowUtils;
-import com.cool.pandora.manager.CounterManager;
+import com.cool.pandora.manager.crawler.CrawlerDetectManager;
 import com.cool.pandora.model.dto.question.*;
 import com.cool.pandora.model.entity.Question;
 import com.cool.pandora.model.entity.User;
@@ -34,7 +33,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 题目接口
@@ -59,15 +57,15 @@ public class QuestionController {
     /**
      * 创建题目
      *
-     * @param questionAddRequest
-     * @param request
-     * @return
+     * @param questionAddRequest 添加题目信息
+     * @param request HTTP 请求
+     * @return 题目 ID
      */
     @PostMapping("/add")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addQuestion(@RequestBody QuestionAddRequest questionAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(questionAddRequest == null, ErrorCode.PARAMS_ERROR);
-        // todo 在此处将实体类和 DTO 进行转换
+        // 在此处将实体类和 DTO 进行转换
         Question question = new Question();
         BeanUtils.copyProperties(questionAddRequest, question);
         List<String> tags = questionAddRequest.getTags();
@@ -76,7 +74,7 @@ public class QuestionController {
         }
         // 数据校验
         questionService.validQuestion(question, true);
-        // todo 填充默认值
+        // 填充默认值
         User loginUser = userService.getLoginUser(request);
         question.setUserId(loginUser.getId());
         // 写入数据库
@@ -90,9 +88,9 @@ public class QuestionController {
     /**
      * 删除题目
      *
-     * @param deleteRequest
-     * @param request
-     * @return
+     * @param deleteRequest 删除请求
+     * @param request HTTP 请求
+     * @return  是否删除成功
      */
     @PostMapping("/delete")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
@@ -118,8 +116,8 @@ public class QuestionController {
     /**
      * 更新题目（仅管理员可用）
      *
-     * @param questionUpdateRequest
-     * @return
+     * @param questionUpdateRequest 更新题目信息
+     * @return  是否更新成功
      */
     @PostMapping("/update")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
@@ -127,7 +125,7 @@ public class QuestionController {
         if (questionUpdateRequest == null || questionUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // todo 在此处将实体类和 DTO 进行转换
+        // 在此处将实体类和 DTO 进行转换
         Question question = new Question();
         BeanUtils.copyProperties(questionUpdateRequest, question);
         List<String> tags = questionUpdateRequest.getTags();
@@ -149,8 +147,8 @@ public class QuestionController {
     /**
      * 根据 id 获取题目（封装类）
      *
-     * @param id
-     * @return
+     * @param id     题目ID
+     * @return      题目信息
      */
     @GetMapping("/get/vo")
     public BaseResponse<QuestionVO> getQuestionVOById(long id, HttpServletRequest request) {
@@ -158,7 +156,9 @@ public class QuestionController {
         // 检测和处置爬虫（可以自行扩展为 - 登录后才能获取到答案）
         User loginUser = userService.getLoginUserPermitNull(request);
         if (loginUser != null) {
-            crawlerDetect(loginUser.getId());
+            CrawlerDetectManager crawlerDetectManager = new CrawlerDetectManager();
+            crawlerDetectManager.crawlerDetect(loginUser.getId());
+            log.info("用户Id为：{}访问了题目id为：{}", loginUser.getId(), id);
         }
         // 友情提示，对于敏感的内容，可以再打印一些日志，记录用户访问的内容
         // 查询数据库
@@ -168,47 +168,11 @@ public class QuestionController {
         return ResultUtils.success(questionService.getQuestionVO(question, request));
     }
 
-    // 仅是为了方便，才把这段代码写到这里
-    @Resource
-    private CounterManager counterManager;
-
-    /**
-     * 检测爬虫
-     *
-     * @param loginUserId
-     */
-    private void crawlerDetect(long loginUserId) {
-        // 调用多少次时告警
-        final int WARN_COUNT = 10;
-        // 调用多少次时封号
-        final int BAN_COUNT = 20;
-        // 拼接访问 key
-        String key = String.format("user:access:%s", loginUserId);
-        // 统计一分钟内访问次数，180 秒过期
-        long count = counterManager.incrAndGetCounter(key, 1, TimeUnit.MINUTES, 180);
-        // 是否封号
-        if (count > BAN_COUNT) {
-            // 踢下线
-            StpUtil.kickout(loginUserId);
-            // 封号
-            User updateUser = new User();
-            updateUser.setId(loginUserId);
-            updateUser.setUserRole("ban");
-            userService.updateById(updateUser);
-            throw new BusinessException(ErrorCode.NO_AUTH_ERROR, "访问次数过多，已被封号");
-        }
-        // 是否告警
-        if (count == WARN_COUNT) {
-            // 可以改为向管理员发送邮件通知
-            throw new BusinessException(110, "警告：访问太频繁");
-        }
-    }
-
     /**
      * 分页获取题目列表（仅管理员可用）
      *
-     * @param questionQueryRequest
-     * @return
+     * @param questionQueryRequest  查询条件
+     * @return  题目列表
      */
     @PostMapping("/list/page")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
@@ -222,9 +186,9 @@ public class QuestionController {
     /**
      * 分页获取题目列表（封装类）
      *
-     * @param questionQueryRequest
-     * @param request
-     * @return
+     * @param questionQueryRequest 查询条件
+     * @param request HTTP 请求
+     * @return  题目列表
      */
     @PostMapping("/list/page/vo")
     public BaseResponse<Page<QuestionVO>> listQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
@@ -242,9 +206,9 @@ public class QuestionController {
     /**
      * 分页获取题目列表（封装类 - 限流版）
      *
-     * @param questionQueryRequest
-     * @param request
-     * @return
+     * @param questionQueryRequest 题目查询条件
+     * @param request HTTP 请求
+     * @return 题目列表
      */
     @PostMapping("/list/page/vo/sentinel")
     public BaseResponse<Page<QuestionVO>> listQuestionVOByPageSentinel(@RequestBody QuestionQueryRequest questionQueryRequest,
@@ -267,14 +231,16 @@ public class QuestionController {
             // 业务异常
             if (!BlockException.isBlockException(ex)) {
                 Tracer.trace(ex);
-                return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "系统错误");
+                // return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "系统错误");
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "系统错误");
             }
             // 降级操作
             if (ex instanceof DegradeException) {
                 return handleFallback(questionQueryRequest, request, ex);
             }
             // 限流操作
-            return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "访问过于频繁，请稍后再试");
+            // return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "访问过于频繁，请稍后再试");
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "访问过于频繁，请稍后再试");
         } finally {
             if (entry != null) {
                 entry.exit(1, remoteAddr);
@@ -287,6 +253,9 @@ public class QuestionController {
      */
     public BaseResponse<Page<QuestionVO>> handleFallback(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                          HttpServletRequest request, Throwable ex) {
+        User loginUser = userService.getLoginUser(request);
+        log.error("listQuestionVOByPageSentinel 降级操作,传入参数：{},用户id：{},报错信息",
+                questionQueryRequest,loginUser.getId(), ex);
         // 可以返回本地数据或空数据
         return ResultUtils.success(null);
     }
@@ -295,9 +264,9 @@ public class QuestionController {
     /**
      * 分页获取当前登录用户创建的题目列表
      *
-     * @param questionQueryRequest
-     * @param request
-     * @return
+     * @param questionQueryRequest 查询条件
+     * @param request HTTP 请求
+     * @return  题目列表
      */
     @PostMapping("/my/list/page/vo")
     public BaseResponse<Page<QuestionVO>> listMyQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
@@ -320,9 +289,9 @@ public class QuestionController {
     /**
      * 编辑题目（给用户使用）
      *
-     * @param questionEditRequest
-     * @param request
-     * @return
+     * @param questionEditRequest 编辑题目信息
+     * @param request HTTP 请求
+     * @return 是否编辑成功
      */
     @PostMapping("/edit")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
@@ -330,7 +299,7 @@ public class QuestionController {
         if (questionEditRequest == null || questionEditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // todo 在此处将实体类和 DTO 进行转换
+        // 在此处将实体类和 DTO 进行转换
         Question question = new Question();
         BeanUtils.copyProperties(questionEditRequest, question);
         List<String> tags = questionEditRequest.getTags();
