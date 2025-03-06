@@ -1,14 +1,10 @@
 package com.cool.pandora.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cool.pandora.manager.AiManager;
 import com.cool.pandora.mapper.QuestionViewsMapper;
 import com.cool.pandora.model.entity.QuestionViews;
-import com.cool.pandora.service.QuestionBankQuestionService;
 import com.cool.pandora.service.QuestionViewsService;
-import com.cool.pandora.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -25,18 +21,6 @@ import java.util.concurrent.TimeUnit;
 public class QuestionViewsServiceImpl extends ServiceImpl<QuestionViewsMapper, QuestionViews> implements QuestionViewsService {
 
     @Resource
-    private UserService userService;
-
-    @Resource
-    private QuestionBankQuestionService questionBankQuestionService;
-
-    @Resource
-    private ElasticsearchRestTemplate elasticsearchRestTemplate;
-
-    @Resource
-    private AiManager aiManager;
-
-    @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
     // Redis中题目浏览量的key前缀
@@ -45,8 +29,8 @@ public class QuestionViewsServiceImpl extends ServiceImpl<QuestionViewsMapper, Q
     /**
      * 增加题目浏览量
      *
-     * @param questionId
-     * @return
+     * @param questionId 题目ID
+     * @return 是否添加成功
      */
     @Override
     public boolean increaseViewCount(Long questionId) {
@@ -65,8 +49,8 @@ public class QuestionViewsServiceImpl extends ServiceImpl<QuestionViewsMapper, Q
     /**
      * 获取题目浏览量
      *
-     * @param questionId
-     * @return
+     * @param questionId 题目ID
+     * @return 浏览量
      */
     @Override
     public long getViewCount(Long questionId) {
@@ -95,6 +79,9 @@ public class QuestionViewsServiceImpl extends ServiceImpl<QuestionViewsMapper, Q
         return redisViewCount;
     }
 
+    /**
+     * 同步Redis中的浏览量数据到MySQL
+     */
     @Override
     public void syncViewCountToDb() {
         try {

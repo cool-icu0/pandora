@@ -8,7 +8,7 @@ import com.cool.pandora.common.ErrorCode;
 import com.cool.pandora.exception.BusinessException;
 import com.cool.pandora.mapper.QuestionFavouriteMapper;
 import com.cool.pandora.mapper.QuestionMapper;
-import com.cool.pandora.model.dto.questionfavourite.QuestionFavouriteQueryRequest;
+import com.cool.pandora.model.dto.questionFavourite.QuestionFavouriteQueryRequest;
 import com.cool.pandora.model.entity.Question;
 import com.cool.pandora.model.entity.QuestionFavourite;
 import com.cool.pandora.model.entity.User;
@@ -17,7 +17,6 @@ import com.cool.pandora.service.QuestionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;

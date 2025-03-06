@@ -1,14 +1,14 @@
-package com.cool.pandora.model.dto.questionfavourite;
+package com.cool.pandora.model.dto.questionThumb;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 /**
- * 题目收藏请求
+ * 题目点赞请求
  */
 @Data
-public class QuestionFavouriteAddRequest implements Serializable {
+public class QuestionThumbAddRequest implements Serializable {
 
     /**
      * 题目 id

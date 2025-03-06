@@ -1,19 +1,19 @@
-package com.cool.pandora.model.dto.questioncomment;
+package com.cool.pandora.model.dto.questionComment;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 /**
- * 题目评论创建请求
+ * 题目评论更新请求
  */
 @Data
-public class QuestionCommentAddRequest implements Serializable {
+public class QuestionCommentUpdateRequest implements Serializable {
 
     /**
-     * 题目 id
+     * id
      */
-    private Long questionId;
+    private Long id;
 
     /**
      * 评论内容

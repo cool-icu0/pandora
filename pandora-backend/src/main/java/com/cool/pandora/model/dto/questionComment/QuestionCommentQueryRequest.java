@@ -1,4 +1,4 @@
-package com.cool.pandora.model.dto.questioncomment;
+package com.cool.pandora.model.dto.questionComment;
 
 import com.cool.pandora.common.PageRequest;
 import lombok.Data;
