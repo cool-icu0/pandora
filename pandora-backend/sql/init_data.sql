@@ -125,3 +125,124 @@ INSERT INTO `question_code` VALUES ('1734761295196057601', '1731620803078791170'
 INSERT INTO `question_code` VALUES ('1734761637199605761', '1731620803078791170', '最小公倍数', '输入两个整数 a\n 和 b\n，请你编写一个函数，int lcm(int a, int b)，计算并输出 a\n 和 b\n 的最小公倍数。\n\n输入格式\n共一行，包含两个整数 a\n 和 b\n。\n\n输出格式\n共一行，包含一个整数，表示 a\n 和 b\n 的最小公倍数。\n\n数据范围\n1≤a,b≤1000', '[\"简单\",\"基础\",\"函数\"]', '\n```\nimport java.util.Scanner;\n\npublic class Main {\n    private static int lcm(int a, int b) {\n        for (int i = 1; i <= a * b; i ++ )\n            if (i % a == 0 && i % b == 0)\n                return i;\n        return -1;\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        System.out.println(lcm(sc.nextInt(), sc.nextInt()));\n    }\n}\n```', '[{\"input\":\"6 8\",\"output\":\"24\"}]', '{\"timeLimit\":1000,\"memoryLimit\":1000,\"stackLimit\":1000}', '0', '0', '0', '0', '2023-12-13 10:26:19', '2023-12-13 10:26:19', '0');
 INSERT INTO `question_code` VALUES ('1734762018646388738', '1731620803078791170', '数组翻转', '给定一个长度为 n\n 的数组 a\n 和一个整数 size\n，请你编写一个函数，void reverse(int a[], int size)，实现将数组 a\n 中的前 size\n 个数翻转。\n\n输出翻转后的数组 a\n。\n\n输入格式\n第一行包含两个整数 n\n 和 size\n。\n\n第二行包含 n\n 个整数，表示数组 a\n。\n\n输出格式\n共一行，包含 n\n 个整数，表示翻转后的数组 a\n。\n\n数据范围\n1≤size≤n≤1000\n,\n1≤a[i]≤1000', '[\"简单\",\"数组\",\"函数\"]', '```\nimport java.util.Scanner;\n\npublic class Main {\n    private static void reverse(int[] a, int size) {\n        for (int i = 0, j = size - 1; i < j; i ++, j -- ) {\n            int t = a[i];\n            a[i] = a[j];\n            a[j] = t;\n        }\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt(), size = sc.nextInt();\n        int[] a = new int[n];\n        for (int i = 0; i < n; i ++ )\n            a[i] = sc.nextInt();\n\n        reverse(a, size);\n        for (int i = 0; i < n; i ++ )\n            System.out.printf(\"%d \", a[i]);\n    }\n}\n```', '[{\"input\":\"5 3 1 2 3 4 5\",\"output\":\"3 2 1 4 5\"}]', '{\"timeLimit\":1000,\"memoryLimit\":1000,\"stackLimit\":1000}', '0', '0', '0', '0', '2023-12-13 10:27:50', '2023-12-13 10:27:50', '0');
 INSERT INTO `question_code` VALUES ('1734770960977956865', '1731620803078791170', '模拟队列', '实现一个队列，队列初始为空，支持四种操作：\n\npush x – 向队尾插入一个数 x\n；\npop – 从队头弹出一个数；\nempty – 判断队列是否为空；\nquery – 查询队头元素。\n现在要对队列进行 M\n 个操作，其中的每个操作 3\n 和操作 4\n 都要输出相应的结果。\n\n输入格式\n第一行包含整数 M\n，表示操作次数。\n\n接下来 M\n 行，每行包含一个操作命令，操作命令为 push x，pop，empty，query 中的一种。\n\n输出格式\n对于每个 empty 和 query 操作都要输出一个查询结果，每个结果占一行。\n\n其中，empty 操作的查询结果为 YES 或 NO，query 操作的查询结果为一个整数，表示队头元素的值。\n\n数据范围\n1≤M≤100000\n,\n1≤x≤109\n,\n所有操作保证合法。', '[\"中等\",\"队列\"]', '```\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int m = sc.nextInt();\n\n        Queue<Integer> q = new LinkedList<>();\n        while (m -- > 0) {\n            String op = sc.next();\n            if (op.equals(\"push\")) {\n                int x = sc.nextInt();\n                q.add(x);\n            } else if (op.equals(\"pop\")) {\n                q.remove();\n            } else if (op.equals(\"empty\")) {\n                if (q.isEmpty()) {\n                    System.out.println(\"YES\");\n                } else {\n                    System.out.println(\"NO\");\n                }\n            } else {\n                System.out.println(q.peek());\n            }\n        }\n    }\n}\n```', '[{\"input\":\"10 push 6 empty query pop empty push 3 push 4 pop query push 6\",\"output\":\"NO 6 YES 4\"}]', '{\"timeLimit\":1000,\"memoryLimit\":1000,\"stackLimit\":1000}', '0', '0', '0', '0', '2023-12-13 11:03:22', '2023-12-13 11:03:22', '0');
+
+
+-- 插入模拟帖子数据
+INSERT INTO post (id, title, content, tags, thumbNum, favourNum, userId, createTime) VALUES
+(1, '初学Java有什么好的学习路径？', '最近开始学习Java编程，想知道有什么推荐的学习路径和资源？谢谢大家！', '[\"Java\", \"编程学习\", \"新手\"]', 13, 5, 1001, NOW() - INTERVAL 30 DAY),
+(2, 'Spring Boot项目实战分享', '分享一个我最近做的Spring Boot项目，包含完整的CRUD功能和权限管理系统...', '[\"Spring Boot\", \"项目实战\", \"后端\"]', 42, 18, 1002, NOW() - INTERVAL 25 DAY),
+(3, '前端框架对比：React vs Vue', '本文将对比当前最流行的两个前端框架React和Vue的优缺点及适用场景...', '[\"前端\", \"React\", \"Vue\"]', 56, 30, 1003, NOW() - INTERVAL 20 DAY),
+(4, 'MySQL性能优化技巧总结', '经过多年的MySQL使用经验，我总结了一些实用的性能优化技巧，包括索引设计、查询优化等...', '[\"MySQL\", \"数据库\", \"性能优化\"]', 78, 45, 1004, NOW() - INTERVAL 15 DAY),
+(5, '微服务架构设计实践', '本文分享我们团队在微服务架构设计和实施过程中的经验和教训...', '[\"微服务\", \"架构设计\", \"分布式系统\"]', 65, 37, 1002, NOW() - INTERVAL 10 DAY),
+(6, 'Docker入门到精通', 'Docker容器化技术已经成为现代开发不可或缺的一部分，本文将带你从入门到精通...', '[\"Docker\", \"容器化\", \"DevOps\"]', 49, 28, 1005, NOW() - INTERVAL 8 DAY),
+(7, '算法学习笔记：动态规划', '动态规划是解决复杂问题的强大工具，本文记录了我学习和应用动态规划的心得...', '[\"算法\", \"动态规划\", \"编程技巧\"]', 37, 22, 1006, NOW() - INTERVAL 5 DAY),
+(8, 'Python数据分析实战', '使用Python进行数据分析的完整实战案例，包括数据清洗、可视化和建模...', '[\"Python\", \"数据分析\", \"机器学习\"]', 51, 33, 1007, NOW() - INTERVAL 3 DAY);
+
+-- 插入模拟点赞数据
+INSERT INTO post_thumb (postId, userId, createTime) VALUES
+(1, 1002, NOW() - INTERVAL 29 DAY),
+(1, 1003, NOW() - INTERVAL 28 DAY),
+(1, 1004, NOW() - INTERVAL 27 DAY),
+(1, 1005, NOW() - INTERVAL 26 DAY),
+(1, 1006, NOW() - INTERVAL 25 DAY),
+(1, 1007, NOW() - INTERVAL 24 DAY),
+(1, 1008, NOW() - INTERVAL 23 DAY),
+(1, 1009, NOW() - INTERVAL 22 DAY),
+(1, 1010, NOW() - INTERVAL 21 DAY),
+(1, 1011, NOW() - INTERVAL 20 DAY),
+(1, 1012, NOW() - INTERVAL 19 DAY),
+(1, 1013, NOW() - INTERVAL 18 DAY),
+(1, 1014, NOW() - INTERVAL 17 DAY),
+(2, 1001, NOW() - INTERVAL 24 DAY),
+(2, 1003, NOW() - INTERVAL 23 DAY),
+(2, 1004, NOW() - INTERVAL 22 DAY),
+(2, 1005, NOW() - INTERVAL 21 DAY),
+(2, 1006, NOW() - INTERVAL 20 DAY),
+(3, 1001, NOW() - INTERVAL 19 DAY),
+(3, 1002, NOW() - INTERVAL 18 DAY),
+(3, 1004, NOW() - INTERVAL 17 DAY),
+(4, 1001, NOW() - INTERVAL 14 DAY),
+(4, 1002, NOW() - INTERVAL 13 DAY),
+(4, 1003, NOW() - INTERVAL 12 DAY),
+(5, 1001, NOW() - INTERVAL 9 DAY),
+(5, 1003, NOW() - INTERVAL 8 DAY),
+(6, 1001, NOW() - INTERVAL 7 DAY),
+(6, 1002, NOW() - INTERVAL 6 DAY),
+(7, 1001, NOW() - INTERVAL 4 DAY),
+(7, 1002, NOW() - INTERVAL 3 DAY),
+(8, 1001, NOW() - INTERVAL 2 DAY),
+(8, 1002, NOW() - INTERVAL 1 DAY);
+
+-- 插入模拟收藏数据
+INSERT INTO post_favour (postId, userId, createTime) VALUES
+(1, 1002, NOW() - INTERVAL 28 DAY),
+(1, 1003, NOW() - INTERVAL 27 DAY),
+(1, 1004, NOW() - INTERVAL 26 DAY),
+(1, 1005, NOW() - INTERVAL 25 DAY),
+(1, 1006, NOW() - INTERVAL 24 DAY),
+(2, 1001, NOW() - INTERVAL 23 DAY),
+(2, 1003, NOW() - INTERVAL 22 DAY),
+(2, 1004, NOW() - INTERVAL 21 DAY),
+(2, 1005, NOW() - INTERVAL 20 DAY),
+(2, 1006, NOW() - INTERVAL 19 DAY),
+(2, 1007, NOW() - INTERVAL 18 DAY),
+(2, 1008, NOW() - INTERVAL 17 DAY),
+(3, 1001, NOW() - INTERVAL 19 DAY),
+(3, 1002, NOW() - INTERVAL 18 DAY),
+(3, 1004, NOW() - INTERVAL 17 DAY),
+(3, 1005, NOW() - INTERVAL 16 DAY),
+(3, 1006, NOW() - INTERVAL 15 DAY),
+(4, 1001, NOW() - INTERVAL 14 DAY),
+(4, 1002, NOW() - INTERVAL 13 DAY),
+(4, 1003, NOW() - INTERVAL 12 DAY),
+(5, 1001, NOW() - INTERVAL 9 DAY),
+(5, 1003, NOW() - INTERVAL 8 DAY),
+(6, 1001, NOW() - INTERVAL 7 DAY),
+(6, 1002, NOW() - INTERVAL 6 DAY),
+(7, 1001, NOW() - INTERVAL 4 DAY),
+(7, 1002, NOW() - INTERVAL 3 DAY),
+(8, 1001, NOW() - INTERVAL 2 DAY),
+(8, 1002, NOW() - INTERVAL 1 DAY);
+
+
+-- 插入评论表测试数据
+INSERT INTO post_comment (postId, userId, content, parentId, rootId, replyUserId, thumbNum, replyCount, heat, level, status) VALUES
+-- 一级评论
+(1, 101, '这篇文章写得非常好，内容很有深度！', NULL, NULL, NULL, 15, 3, 25, 1, 0),
+(1, 102, '我觉得这个观点很有启发性，学习了！', NULL, NULL, NULL, 8, 2, 12, 1, 0),
+(1, 103, '文章的结构很清晰，逻辑性强。', NULL, NULL, NULL, 5, 1, 8, 1, 0),
+(2, 101, '这个主题很有意思，期待更多相关内容。', NULL, NULL, NULL, 10, 2, 15, 1, 0),
+(2, 104, '有些观点我持不同意见，但整体不错。', NULL, NULL, NULL, 3, 1, 5, 1, 0),
+(3, 105, '这篇文章解决了我长期以来的困惑，感谢分享！', NULL, NULL, NULL, 20, 0, 25, 1, 0),
+
+-- 二级评论（回复一级评论）
+(1, 104, '我完全同意你的看法，作者的分析很到位。', 1, 1, 101, 6, 0, 8, 2, 0),
+(1, 105, '能详细说说你觉得哪部分最有启发性吗？', 2, 2, 102, 3, 1, 5, 2, 0),
+(1, 106, '我认为文章的案例分析部分做得最好。', 3, 3, 103, 2, 0, 3, 2, 0),
+(2, 102, '我也很期待，作者的其他文章也都很棒。', 4, 4, 101, 4, 0, 6, 2, 0),
+(2, 103, '能具体说说你不同意的观点是什么吗？', 5, 5, 104, 2, 0, 3, 2, 0),
+
+-- 三级评论（回复二级评论）
+(1, 102, '我觉得关于技术应用的部分讲得特别好。', 8, 2, 105, 1, 0, 2, 3, 0);
+
+-- 插入评论点赞表测试数据
+INSERT INTO comment_thumb (commentId, userId) VALUES
+-- 对一级评论的点赞
+(1, 102), (1, 103), (1, 104), (1, 105), (1, 106), (1, 107), (1, 108), (1, 109), (1, 110), (1, 111),
+(1, 112), (1, 113), (1, 114), (1, 115), (1, 116), -- 15个点赞
+(2, 101), (2, 103), (2, 105), (2, 107), (2, 109), (2, 111), (2, 113), (2, 115), -- 8个点赞
+(3, 101), (3, 102), (3, 104), (3, 106), (3, 108), -- 5个点赞
+(4, 102), (4, 103), (4, 104), (4, 105), (4, 106), (4, 107), (4, 108), (4, 109), (4, 110), (4, 111), -- 10个点赞
+(5, 101), (5, 102), (5, 103), -- 3个点赞
+(6, 101), (6, 102), (6, 103), (6, 104), (6, 105), (6, 106), (6, 107), (6, 108), (6, 109), (6, 110),
+(6, 111), (6, 112), (6, 113), (6, 114), (6, 115), (6, 116), (6, 117), (6, 118), (6, 119), (6, 120), -- 20个点赞
+
+-- 对二级评论的点赞
+(7, 101), (7, 102), (7, 103), (7, 104), (7, 105), (7, 106), -- 6个点赞
+(8, 101), (8, 102), (8, 103), -- 3个点赞
+(9, 101), (9, 102), -- 2个点赞
+(10, 101), (10, 103), (10, 105), (10, 107), -- 4个点赞
+(11, 101), (11, 102), -- 2个点赞
+
+-- 对三级评论的点赞
+(12, 101); -- 1个点赞

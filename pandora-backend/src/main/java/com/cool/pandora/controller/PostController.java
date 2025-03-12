@@ -18,17 +18,14 @@ import com.cool.pandora.model.entity.Post;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.model.vo.PostVO;
 import com.cool.pandora.service.PostService;
+import com.cool.pandora.service.PostViewsService;
 import com.cool.pandora.service.UserService;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 帖子接口
@@ -44,6 +41,9 @@ public class PostController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private PostViewsService postViewsService;
 
     // region 增删改查
 
@@ -256,6 +256,32 @@ public class PostController {
         }
         boolean result = postService.updateById(post);
         return ResultUtils.success(result);
+    }
+
+    /**
+     * 增加题目浏览量
+     *
+     * @param postId 题目ID
+     * @return 是否成功
+     */
+    @PostMapping("/view/{postId}")
+    public BaseResponse<Boolean> addPostViews(@PathVariable("postId") Long postId) {
+        ThrowUtils.throwIf(postId == null || postId <= 0, ErrorCode.PARAMS_ERROR);
+        boolean result = postViewsService.addPostViews(postId);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 获取题目浏览量
+     *
+     * @param postId 题目ID
+     * @return 浏览量
+     */
+    @GetMapping("/view/count/{postId}")
+    public BaseResponse<Long> getQuestionViews(@PathVariable("postId") Long postId) {
+        ThrowUtils.throwIf(postId == null || postId <= 0, ErrorCode.PARAMS_ERROR);
+        long viewCount = postViewsService.getPostViews(postId);
+        return ResultUtils.success(viewCount);
     }
 
 }
