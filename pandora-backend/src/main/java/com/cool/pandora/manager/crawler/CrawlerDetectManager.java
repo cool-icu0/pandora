@@ -5,7 +5,7 @@ import com.cool.pandora.common.ErrorCode;
 import com.cool.pandora.exception.BusinessException;
 import com.cool.pandora.manager.CounterManager;
 import com.cool.pandora.model.entity.User;
-import com.cool.pandora.service.UserService;
+import com.cool.pandora.service.user.UserService;
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;

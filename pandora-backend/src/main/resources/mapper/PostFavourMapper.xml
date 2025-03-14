@@ -3,9 +3,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cool.pandora.mapper.PostFavourMapper">
+<mapper namespace="com.cool.pandora.mapper.post.PostFavourMapper">
 
-    <resultMap id="BaseResultMap" type="com.cool.pandora.model.entity.PostFavour">
+    <resultMap id="BaseResultMap" type="com.cool.pandora.model.entity.post.PostFavour">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="postId" column="postId" jdbcType="BIGINT"/>
         <result property="userId" column="userId" jdbcType="BIGINT"/>
@@ -19,7 +19,7 @@
     </sql>
 
     <select id="listFavourPostByPage"
-            resultType="com.cool.pandora.model.entity.Post">
+            resultType="com.cool.pandora.model.entity.post.Post">
         select p.*
         from post p
                  join (select postId from post_favour where userId = #{favourUserId}) pf

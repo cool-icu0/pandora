@@ -14,8 +14,8 @@ import com.cool.pandora.model.dto.mockinterview.MockInterviewEventRequest;
 import com.cool.pandora.model.dto.mockinterview.MockInterviewQueryRequest;
 import com.cool.pandora.model.entity.MockInterview;
 import com.cool.pandora.model.entity.User;
-import com.cool.pandora.service.MockInterviewService;
-import com.cool.pandora.service.UserService;
+import com.cool.pandora.service.interview.MockInterviewService;
+import com.cool.pandora.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

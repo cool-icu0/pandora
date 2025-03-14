@@ -1,7 +1,7 @@
 package com.cool.pandora.model.vo;
 
 import cn.hutool.json.JSONUtil;
-import com.cool.pandora.model.entity.Question;
+import com.cool.pandora.model.entity.question.Question;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 

@@ -10,7 +10,7 @@ import com.cool.pandora.manager.CosManager;
 import com.cool.pandora.model.dto.file.UploadFileRequest;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.model.enums.FileUploadBizEnum;
-import com.cool.pandora.service.UserService;
+import com.cool.pandora.service.user.UserService;
 import java.io.File;
 import java.util.Arrays;
 import javax.annotation.Resource;

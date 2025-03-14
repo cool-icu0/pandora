@@ -1,6 +1,7 @@
 package com.cool.pandora.mapper;
 
-import com.cool.pandora.model.entity.Post;
+import com.cool.pandora.mapper.post.PostMapper;
+import com.cool.pandora.model.entity.post.Post;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;

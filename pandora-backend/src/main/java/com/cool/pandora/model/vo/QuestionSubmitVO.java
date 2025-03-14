@@ -3,7 +3,7 @@ package com.cool.pandora.model.vo;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.cool.pandora.model.dto.questionSubmit.JudgeInfo;
-import com.cool.pandora.model.entity.QuestionSubmit;
+import com.cool.pandora.model.entity.question.QuestionSubmit;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 

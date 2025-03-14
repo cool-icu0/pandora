@@ -1,7 +1,7 @@
 package com.cool.pandora.model.vo;
 
 import cn.hutool.json.JSONUtil;
-import com.cool.pandora.model.entity.Post;
+import com.cool.pandora.model.entity.post.Post;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;

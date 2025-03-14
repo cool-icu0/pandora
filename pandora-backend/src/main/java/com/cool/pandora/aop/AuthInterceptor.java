@@ -5,7 +5,7 @@ import com.cool.pandora.common.ErrorCode;
 import com.cool.pandora.exception.BusinessException;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.model.enums.UserRoleEnum;
-import com.cool.pandora.service.UserService;
+import com.cool.pandora.service.user.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.springframework.web.context.request.RequestAttributes;

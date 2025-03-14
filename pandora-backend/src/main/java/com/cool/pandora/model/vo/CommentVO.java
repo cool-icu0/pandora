@@ -1,5 +1,5 @@
 package com.cool.pandora.model.vo;
-import com.cool.pandora.model.entity.PostComment;
+import com.cool.pandora.model.entity.post.PostComment;
 import lombok.Data;
 
 import java.io.Serializable;

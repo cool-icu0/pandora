@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cool.pandora.mapper.QuestionMapper">
+<mapper namespace="com.cool.pandora.mapper.question.QuestionMapper">
 
-    <resultMap id="BaseResultMap" type="com.cool.pandora.model.entity.Question">
+    <resultMap id="BaseResultMap" type="com.cool.pandora.model.entity.question.Question">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="title" column="title" jdbcType="VARCHAR"/>
             <result property="content" column="content" jdbcType="VARCHAR"/>

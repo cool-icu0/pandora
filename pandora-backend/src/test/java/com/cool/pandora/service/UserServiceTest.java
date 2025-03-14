@@ -1,6 +1,8 @@
 package com.cool.pandora.service;
 
 import javax.annotation.Resource;
+
+import com.cool.pandora.service.user.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

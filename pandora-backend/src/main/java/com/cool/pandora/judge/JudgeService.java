@@ -1,5 +1,5 @@
 package com.cool.pandora.judge;
-import com.cool.pandora.model.entity.QuestionSubmit;
+import com.cool.pandora.model.entity.question.QuestionSubmit;
 
 /**
  * 判题服务 ：执行代码

@@ -3,9 +3,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cool.pandora.mapper.PostMapper">
+<mapper namespace="com.cool.pandora.mapper.post.PostMapper">
 
-    <resultMap id="BaseResultMap" type="com.cool.pandora.model.entity.Post">
+    <resultMap id="BaseResultMap" type="com.cool.pandora.model.entity.post.Post">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="title" column="title" jdbcType="VARCHAR"/>
         <result property="content" column="content" jdbcType="VARCHAR"/>
@@ -24,7 +24,7 @@
         createTime,updateTime,isDelete
     </sql>
 
-    <select id="listPostWithDelete" resultType="com.cool.pandora.model.entity.Post">
+    <select id="listPostWithDelete" resultType="com.cool.pandora.model.entity.post.Post">
         select *
         from post
         where updateTime >= #{minUpdateTime}

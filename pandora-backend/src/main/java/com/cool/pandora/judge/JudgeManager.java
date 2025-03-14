@@ -5,7 +5,7 @@ import com.cool.pandora.judge.strategy.DefaultJudgeStrategy;
 import com.cool.pandora.judge.strategy.JavaLanguageJudgeStrategy;
 import com.cool.pandora.judge.strategy.JudgeContext;
 import com.cool.pandora.judge.strategy.JudgeStrategy;
-import com.cool.pandora.model.entity.QuestionSubmit;
+import com.cool.pandora.model.entity.question.QuestionSubmit;
 import org.springframework.stereotype.Service;
 
 /**

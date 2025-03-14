@@ -2,6 +2,8 @@ package com.cool.pandora.service;
 
 import com.cool.pandora.model.entity.User;
 import javax.annotation.Resource;
+
+import com.cool.pandora.service.post.PostThumbService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
