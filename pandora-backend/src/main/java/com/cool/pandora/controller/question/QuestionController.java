@@ -170,7 +170,7 @@ public class QuestionController {
             }
         }
 
-        return ResultUtils.error(ErrorCode.NO_AUTH_ERROR, "请求次数超限,您的账号已被封号,请联系管理员");
+        return ResultUtils.error(ErrorCode.NO_AUTH_ERROR, "您的账号已被封号,请联系管理员");
     }
 
     /**

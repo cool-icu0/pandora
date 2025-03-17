@@ -9,6 +9,7 @@ import com.cool.pandora.common.ResultUtils;
 import com.cool.pandora.constant.UserConstant;
 import com.cool.pandora.exception.BusinessException;
 import com.cool.pandora.exception.ThrowUtils;
+import com.cool.pandora.manager.crawler.CrawlerDetectManager;
 import com.cool.pandora.mapper.question.QuestionCodeMapper;
 import com.cool.pandora.model.dto.questionCode.*;
 import com.cool.pandora.model.dto.questionSubmit.QuestionSubmitAddRequest;
@@ -57,6 +58,9 @@ public class QuestionCodeController {
     @Resource
     private QuestionCodeMapper questionCodeMapper;
 
+    @Resource
+    private CrawlerDetectManager crawlerDetectManager;
+
     private final static Gson GSON = new Gson();
 
     // region 增删改查
@@ -70,9 +74,7 @@ public class QuestionCodeController {
      */
     @PostMapping("/add")
     public BaseResponse<Long> addQuestion(@RequestBody QuestionAddRequest questionAddRequest, HttpServletRequest request) {
-        if (questionAddRequest == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+        ThrowUtils.throwIf(questionAddRequest == null,ErrorCode.PARAMS_ERROR);
         QuestionCode questionCode = new QuestionCode();
         BeanUtils.copyProperties(questionAddRequest, questionCode);
         List<String> tags = questionAddRequest.getTags();
@@ -107,18 +109,14 @@ public class QuestionCodeController {
      */
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteQuestionCode(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
-        if (deleteRequest == null || deleteRequest.getId() <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+        ThrowUtils.throwIf(deleteRequest == null || deleteRequest.getId() <= 0,ErrorCode.PARAMS_ERROR);
         User user = userService.getLoginUser(request);
         long id = deleteRequest.getId();
         // 判断是否存在
         QuestionCode oldQuestionCode = questionCodeService.getById(id);
         ThrowUtils.throwIf(oldQuestionCode == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可删除
-        if (!oldQuestionCode.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
-            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
-        }
+        ThrowUtils.throwIf(!oldQuestionCode.getUserId().equals(user.getId()) && !userService.isAdmin(request),ErrorCode.NO_AUTH_ERROR);
         boolean b = questionCodeService.removeById(id);
         return ResultUtils.success(b);
     }
@@ -132,9 +130,7 @@ public class QuestionCodeController {
      */
     @PostMapping("/batchDelete")
     public BaseResponse<Boolean> batchDeleteQuestionCode(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
-        if (deleteRequest == null || deleteRequest.getIds() == null || deleteRequest.getIds().isEmpty()) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+        ThrowUtils.throwIf(deleteRequest == null || deleteRequest.getIds() == null || deleteRequest.getIds().isEmpty(),ErrorCode.PARAMS_ERROR);
         User user = userService.getLoginUser(request);
         List<Long> ids = deleteRequest.getIds();
 
@@ -142,9 +138,7 @@ public class QuestionCodeController {
         for (Long id : ids) {
             QuestionCode oldQuestionCode = questionCodeService.getById(id);
             ThrowUtils.throwIf(oldQuestionCode == null, ErrorCode.NOT_FOUND_ERROR);
-            if (!oldQuestionCode.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
-                throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
-            }
+            ThrowUtils.throwIf(!oldQuestionCode.getUserId().equals(user.getId()) && !userService.isAdmin(request),ErrorCode.NO_AUTH_ERROR);
         }
         boolean success = questionCodeService.removeByIds(ids);
         return ResultUtils.success(success);
@@ -206,9 +200,7 @@ public class QuestionCodeController {
     @PostMapping("/update")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public BaseResponse<Boolean> updateQuestionCode(@RequestBody QuestionUpdateRequest questionUpdateRequest) {
-        if (questionUpdateRequest == null || questionUpdateRequest.getId() <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+        ThrowUtils.throwIf(questionUpdateRequest == null || questionUpdateRequest.getId() <= 0,ErrorCode.PARAMS_ERROR);
         QuestionCode questionCode = new QuestionCode();
         BeanUtils.copyProperties(questionUpdateRequest, questionCode);
         List<String> tags = questionUpdateRequest.getTags();
@@ -241,18 +233,14 @@ public class QuestionCodeController {
      */
     @GetMapping("/get")
     public BaseResponse<QuestionCode> getQuestionCodeById(long id, HttpServletRequest request) {
-        if (id <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+        ThrowUtils.throwIf(id <= 0,ErrorCode.PARAMS_ERROR);
+
         QuestionCode questionCode = questionCodeService.getById(id);
-        if (questionCode == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
-        }
+        ThrowUtils.throwIf(questionCode == null,ErrorCode.NOT_FOUND_ERROR);
+
         User loginUser = userService.getLoginUser(request);
         // 不是本人或管理员，不能直接获取所有信息
-        if (!questionCode.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
-            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
-        }
+        ThrowUtils.throwIf(!questionCode.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser),ErrorCode.NO_AUTH_ERROR);
         return ResultUtils.success(questionCode);
     }
     /**
@@ -263,13 +251,10 @@ public class QuestionCodeController {
      */
     @GetMapping("/get2Answer")
     public BaseResponse<QuestionCode> getQuestionById2Answer(long id, HttpServletRequest request) {
-        if (id <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+        ThrowUtils.throwIf(id <= 0,ErrorCode.PARAMS_ERROR);
+
         QuestionCode questionCode = questionCodeService.getById(id);
-        if (questionCode == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
-        }
+        ThrowUtils.throwIf(questionCode == null,ErrorCode.NOT_FOUND_ERROR);
         User loginUser = userService.getLoginUser(request);
         QuestionCode q1 = new QuestionCode();
         BeanUtils.copyProperties(q1,questionCode);
@@ -285,14 +270,21 @@ public class QuestionCodeController {
      */
     @GetMapping("/get/vo")
     public BaseResponse<QuestionCodeVO> getQuestionCodeVOById(long id, HttpServletRequest request) {
-        if (id <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(id<=0,ErrorCode.PARAMS_ERROR);
+        User loginUser = userService.getLoginUserPermitNull(request);
+        // 友情提示，对于敏感的内容，可以再打印一些日志，记录用户访问的内容
+        if (loginUser != null) {
+            crawlerDetectManager.crawlerDetect(loginUser.getId());
+            log.info("用户Id为：{}访问了题目id为：{}", loginUser.getId(), id);
+            // 禁止访问被封号的用户
+            if(!loginUser.getUserRole().equals(UserConstant.BAN_ROLE)) {
+                QuestionCode questionCode = questionCodeService.getById(id);
+                ThrowUtils.throwIf(questionCode == null,ErrorCode.NOT_FOUND_ERROR);
+                QuestionCodeVO questionCodeVO = questionCodeService.getQuestionCodeVO(questionCode, request);
+                return ResultUtils.success(questionCodeVO);
+            }
         }
-        QuestionCode questionCode = questionCodeService.getById(id);
-        if (questionCode == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
-        }
-        return ResultUtils.success(questionCodeService.getQuestionCodeVO(questionCode, request));
+        return ResultUtils.error(ErrorCode.NO_AUTH_ERROR, "您的账号已被封号,请联系管理员");
     }
 
     /**
@@ -324,9 +316,7 @@ public class QuestionCodeController {
     @PostMapping("/my/list/page/vo")
     public BaseResponse<Page<QuestionCodeVO>> listMyQuestionCodeVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                                          HttpServletRequest request) {
-        if (questionQueryRequest == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+        ThrowUtils.throwIf(questionQueryRequest == null,ErrorCode.PARAMS_ERROR);
         User loginUser = userService.getLoginUser(request);
         questionQueryRequest.setUserId(loginUser.getId());
         long current = questionQueryRequest.getCurrent();
@@ -367,9 +357,7 @@ public class QuestionCodeController {
      */
     @PostMapping("/edit")
     public BaseResponse<Boolean> editQuestionCode(@RequestBody QuestionEditRequest questionEditRequest, HttpServletRequest request) {
-        if (questionEditRequest == null || questionEditRequest.getId() <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
+        ThrowUtils.throwIf(questionEditRequest == null || questionEditRequest.getId() <= 0,ErrorCode.PARAMS_ERROR);
         QuestionCode questionCode = new QuestionCode();
         BeanUtils.copyProperties(questionEditRequest, questionCode);
         List<String> tags = questionEditRequest.getTags();
