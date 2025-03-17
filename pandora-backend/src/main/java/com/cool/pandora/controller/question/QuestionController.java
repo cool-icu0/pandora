@@ -51,6 +51,8 @@ public class QuestionController {
 
     @Resource
     private UserService userService;
+    @Resource
+    private CrawlerDetectManager crawlerDetectManager;
 
     // region 增删改查
 
@@ -155,17 +157,20 @@ public class QuestionController {
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
         // 检测和处置爬虫（可以自行扩展为 - 登录后才能获取到答案）
         User loginUser = userService.getLoginUserPermitNull(request);
+        // 友情提示，对于敏感的内容，可以再打印一些日志，记录用户访问的内容
         if (loginUser != null) {
-            CrawlerDetectManager crawlerDetectManager = new CrawlerDetectManager();
             crawlerDetectManager.crawlerDetect(loginUser.getId());
             log.info("用户Id为：{}访问了题目id为：{}", loginUser.getId(), id);
+            // 禁止访问被封号的用户
+            if(!loginUser.getUserRole().equals(UserConstant.BAN_ROLE)) {
+                Question question = questionService.getById(id);
+                ThrowUtils.throwIf(question == null, ErrorCode.NOT_FOUND_ERROR);
+                QuestionVO questionVO = questionService.getQuestionVO(question, request);
+                return ResultUtils.success(questionVO);
+            }
         }
-        // 友情提示，对于敏感的内容，可以再打印一些日志，记录用户访问的内容
-        // 查询数据库
-        Question question = questionService.getById(id);
-        ThrowUtils.throwIf(question == null, ErrorCode.NOT_FOUND_ERROR);
-        // 获取封装类
-        return ResultUtils.success(questionService.getQuestionVO(question, request));
+
+        return ResultUtils.error(ErrorCode.NO_AUTH_ERROR, "请求次数超限,您的账号已被封号,请联系管理员");
     }
 
     /**

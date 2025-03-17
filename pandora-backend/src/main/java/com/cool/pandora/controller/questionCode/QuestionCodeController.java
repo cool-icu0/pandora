@@ -1,4 +1,4 @@
-package com.cool.pandora.controller.question;
+package com.cool.pandora.controller.questionCode;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cool.pandora.annotation.AuthCheck;

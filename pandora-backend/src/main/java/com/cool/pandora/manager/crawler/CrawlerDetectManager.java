@@ -6,10 +6,12 @@ import com.cool.pandora.exception.BusinessException;
 import com.cool.pandora.manager.CounterManager;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.service.user.UserService;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
+@Component
 public class CrawlerDetectManager {
 
     @Resource
