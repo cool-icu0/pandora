@@ -284,7 +284,7 @@ public class QuestionCodeController {
      * @return
      */
     @GetMapping("/get/vo")
-    public BaseResponse<QuestionCodeVO> getQuestionVOById(long id, HttpServletRequest request) {
+    public BaseResponse<QuestionCodeVO> getQuestionCodeVOById(long id, HttpServletRequest request) {
         if (id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -303,7 +303,7 @@ public class QuestionCodeController {
      * @return
      */
     @PostMapping("/list/page/vo")
-    public BaseResponse<Page<QuestionCodeVO>> listQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
+    public BaseResponse<Page<QuestionCodeVO>> listQuestionCodeVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                                HttpServletRequest request) {
         long current = questionQueryRequest.getCurrent();
         long size = questionQueryRequest.getPageSize();
@@ -347,7 +347,7 @@ public class QuestionCodeController {
      */
     @PostMapping("/list/page")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-    public BaseResponse<Page<QuestionCode>> listQuestionByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
+    public BaseResponse<Page<QuestionCode>> listQuestionCodeByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                            HttpServletRequest request) {
         long current = questionQueryRequest.getCurrent();
         long size = questionQueryRequest.getPageSize();
@@ -407,7 +407,7 @@ public class QuestionCodeController {
      * @return 提交记录的 id
      */
     @PostMapping("/question_submit/do")
-    public BaseResponse<Long> doQuestionSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest,
+    public BaseResponse<Long> doQuestionCodeSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest,
                                                HttpServletRequest request) {
         if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -426,7 +426,7 @@ public class QuestionCodeController {
      * @return
      */
     @PostMapping("/question_submit/list/page")
-    public BaseResponse<Page<QuestionSubmitVO>> listQuestionSubmitByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest,
+    public BaseResponse<Page<QuestionSubmitVO>> listQuestionCodeSubmitByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest,
                                                                          HttpServletRequest request) {
         long current = questionSubmitQueryRequest.getCurrent();
         long size = questionSubmitQueryRequest.getPageSize();
