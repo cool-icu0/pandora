@@ -4,6 +4,7 @@ package com.cool.pandora.service.question;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cool.pandora.model.dto.questionSubmit.QuestionRunAddRequest;
 import com.cool.pandora.model.dto.questionSubmit.QuestionSubmitAddRequest;
 import com.cool.pandora.model.dto.questionSubmit.QuestionSubmitQueryRequest;
 import com.cool.pandora.model.entity.question.QuestionSubmit;

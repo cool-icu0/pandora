@@ -12,6 +12,7 @@ import com.cool.pandora.exception.ThrowUtils;
 import com.cool.pandora.manager.crawler.CrawlerDetectManager;
 import com.cool.pandora.mapper.question.QuestionCodeMapper;
 import com.cool.pandora.model.dto.questionCode.*;
+import com.cool.pandora.model.dto.questionSubmit.QuestionRunAddRequest;
 import com.cool.pandora.model.dto.questionSubmit.QuestionSubmitAddRequest;
 import com.cool.pandora.model.dto.questionSubmit.QuestionSubmitQueryRequest;
 import com.cool.pandora.model.entity.question.QuestionCode;
@@ -237,10 +238,6 @@ public class QuestionCodeController {
 
         QuestionCode questionCode = questionCodeService.getById(id);
         ThrowUtils.throwIf(questionCode == null,ErrorCode.NOT_FOUND_ERROR);
-
-        User loginUser = userService.getLoginUser(request);
-        // 不是本人或管理员，不能直接获取所有信息
-        ThrowUtils.throwIf(!questionCode.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser),ErrorCode.NO_AUTH_ERROR);
         return ResultUtils.success(questionCode);
     }
     /**
@@ -283,8 +280,9 @@ public class QuestionCodeController {
                 QuestionCodeVO questionCodeVO = questionCodeService.getQuestionCodeVO(questionCode, request);
                 return ResultUtils.success(questionCodeVO);
             }
+            return ResultUtils.error(ErrorCode.NO_AUTH_ERROR, "您的账号已被封号,请联系管理员");
         }
-        return ResultUtils.error(ErrorCode.NO_AUTH_ERROR, "您的账号已被封号,请联系管理员");
+        return ResultUtils.error(ErrorCode.NO_AUTH_ERROR, "请先登录");
     }
 
     /**
@@ -407,6 +405,25 @@ public class QuestionCodeController {
     }
 
     /**
+     * 提交运行
+     *
+     * @param questionSubmitAddRequest 提交运行信息
+     * @param request http 请求
+     * @return 运行记录的 id
+     */
+    @PostMapping("/question_submit/run")
+    public BaseResponse<Long> doQuestionCodeRun(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest,
+                                               HttpServletRequest request) {
+        if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 登录才能运行
+        final User loginUser = userService.getLoginUser(request);
+        long questionSubmitId = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
+        return ResultUtils.success(questionSubmitId);
+    }
+
+    /**
      * 分页获取题目提交列表（除了管理员外，普通用户只能看到非答案、提交代码等公开信息）
      *
      * @param questionSubmitQueryRequest
@@ -426,6 +443,17 @@ public class QuestionCodeController {
         return ResultUtils.success(questionSubmitService.getQuestionSubmitVOPage(questionSubmitPage, loginUser));
     }
 
-
+    //根据题目id获取题目提交
+    @GetMapping("/question_submit/get")
+    public BaseResponse<QuestionSubmitVO> getQuestionCodeSubmitById(long questionSubmitId, HttpServletRequest request) {
+        if (questionSubmitId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        QuestionSubmit questionSubmit = questionSubmitService.getById(questionSubmitId);
+        ThrowUtils.throwIf(questionSubmit == null, ErrorCode.NOT_FOUND_ERROR);
+        final User loginUser = userService.getLoginUser(request);
+        QuestionSubmitVO questionSubmitVO = questionSubmitService.getQuestionSubmitVO(questionSubmit, loginUser);
+        return ResultUtils.success(questionSubmitVO);
+    }
 
 }

@@ -48,9 +48,14 @@ public class QuestionSubmit implements Serializable {
     private String submitCode;
 
     /**
-     * 判题状态（0 - 待判题、1 - 判题中、2 - 成功、3 - 失败）
+     * 提交状态（0 - 待判题、1 - 判题中、2 - 成功、3 - 失败）
      */
     private Integer submitState;
+
+    /**
+     * 运行状态，run 为正常运行，submit 为正常提交
+     */
+    private String runStatus;
 
     /**
      * 创建时间

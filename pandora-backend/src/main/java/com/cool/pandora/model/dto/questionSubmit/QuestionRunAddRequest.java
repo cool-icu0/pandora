@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 创建请求
  */
 @Data
-public class QuestionSubmitAddRequest implements Serializable {
+public class QuestionRunAddRequest implements Serializable {
 
     /**
      * 题目 id
@@ -28,7 +28,7 @@ public class QuestionSubmitAddRequest implements Serializable {
     /**
      * 输入数据
      */
-    private String inputList;
+    private String input;
 
     private static final long serialVersionUID = 1L;
 }

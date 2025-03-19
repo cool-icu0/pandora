@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.cool.pandora.common.ErrorCode;
 import com.cool.pandora.exception.BusinessException;
+import com.cool.pandora.exception.ThrowUtils;
 import com.cool.pandora.judge.codesandbox.CodeSandBoxProxy;
 import com.cool.pandora.judge.codesandbox.CodeSandbox;
 import com.cool.pandora.judge.codesandbox.CodeSandboxFactory;
@@ -12,6 +13,8 @@ import com.cool.pandora.judge.codesandbox.model.ExecuteCodeResponse;
 import com.cool.pandora.judge.codesandbox.model.JudgeInfo;
 import com.cool.pandora.judge.strategy.JudgeContext;
 import com.cool.pandora.model.dto.questionCode.JudgeCase;
+import com.cool.pandora.model.dto.questionSubmit.QuestionRunAddRequest;
+import com.cool.pandora.model.dto.questionSubmit.QuestionSubmitAddRequest;
 import com.cool.pandora.model.entity.question.QuestionCode;
 import com.cool.pandora.model.entity.question.QuestionSubmit;
 import com.cool.pandora.model.enums.QuestionSubmitStatusEnum;
@@ -19,6 +22,7 @@ import com.cool.pandora.service.question.QuestionCodeService;
 import com.cool.pandora.service.question.QuestionSubmitService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -45,18 +49,16 @@ public class JudgeServiceImpl implements JudgeService {
     private String judgeType;
 
     @Override
-    public QuestionSubmit doJudge(long questionSubmitId) {
+    public QuestionSubmit doJudge(long questionSubmitId, QuestionSubmitAddRequest questionSubmitAddRequest) {
         // 1、传入题目的提交 id，获取到对应的题目、提交信息（包含代码、编程语言等）
         QuestionSubmit questionSubmit = questionSubmitService.getById(questionSubmitId);
-        if (questionSubmit == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "提交信息不存在");
-        }
+        ThrowUtils.throwIf(questionSubmit == null,ErrorCode.NOT_FOUND_ERROR, "提交信息不存在");
+
         // 通过提交的信息中的题目id 获取到题目的全部信息
         Long questionId = questionSubmit.getQuestionId();
         QuestionCode questionCode = questionCodeService.getById(questionId);
-        if (questionId == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "题目不存在");
-        }
+        ThrowUtils.throwIf(questionId == null,ErrorCode.NOT_FOUND_ERROR, "题目不存在");
+
         // 2、如果题目提交状态不为等待中，就不用重复执行了
         if (!questionSubmit.getSubmitState().equals(QuestionSubmitStatusEnum.WAITING.getValue())) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "题目正在判题中");
@@ -75,7 +77,10 @@ public class JudgeServiceImpl implements JudgeService {
         String submitLanguage = questionSubmit.getSubmitLanguage();
         String submitCode = questionSubmit.getSubmitCode();
         // 获取输入用例
-        String judgeCaseStr = questionCode.getJudgeCase();
+        String judgeCaseStr = questionCode.getJudgeCase();;
+        if (StringUtils.isNotBlank(questionSubmitAddRequest.getInputList())) {
+            judgeCaseStr = questionSubmitAddRequest.getInputList();
+        }
         List<JudgeCase> judgeCasesList = JSON.parseArray(judgeCaseStr, JudgeCase.class);
         // List<JudgeCase> judgeCasesList = JSONUtil.toList(judgeCaseStr, JudgeCase.class);
         // 通过Lambda表达式获取到每个题目的输入用例

@@ -8,6 +8,7 @@ import com.cool.pandora.constant.CommonConstant;
 import com.cool.pandora.exception.BusinessException;
 import com.cool.pandora.judge.JudgeService;
 import com.cool.pandora.mapper.question.QuestionSubmitMapper;
+import com.cool.pandora.model.dto.questionSubmit.QuestionRunAddRequest;
 import com.cool.pandora.model.dto.questionSubmit.QuestionSubmitAddRequest;
 import com.cool.pandora.model.dto.questionSubmit.QuestionSubmitQueryRequest;
 import com.cool.pandora.model.entity.question.QuestionCode;
@@ -59,8 +60,6 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
      */
     @Override
     public long doQuestionSubmit(QuestionSubmitAddRequest questionSubmitAddRequest, User loginUser) {
-
-
         // 校验编程语言是否合法
         String language = questionSubmitAddRequest.getSubmitLanguage();
         QuestionSubmitLanguageEnum languageEnum = QuestionSubmitLanguageEnum.getEnumByValue(language);
@@ -84,13 +83,18 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         questionSubmit.setSubmitState(QuestionSubmitStatusEnum.WAITING.getValue());
         // 设置初始状态
         questionSubmit.setJudgeInfo("{}");
+
+        // 执行代码判断是提交还是运行
+        if (StringUtils.isNotBlank(questionSubmitAddRequest.getInputList())){
+            questionSubmit.setRunStatus("run");
+        }
         boolean save = this.save(questionSubmit);
         if (!save) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据插入失败");
         }
         Long questionSubmitId = questionSubmit.getId();
         CompletableFuture.runAsync(()->{
-            judgeService.doJudge(questionSubmitId);
+            judgeService.doJudge(questionSubmitId,questionSubmitAddRequest);
         });
 
         return questionSubmitId;
@@ -121,6 +125,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(questionId), "questionId", questionId);
         queryWrapper.eq(QuestionSubmitStatusEnum.getEnumByValue(status) != null, "status", status);
+        queryWrapper.eq("runStatus","submit");//显示提交的代码，运行的不显示
         queryWrapper.eq("isDelete", false);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);

@@ -168,9 +168,9 @@ public class QuestionController {
                 QuestionVO questionVO = questionService.getQuestionVO(question, request);
                 return ResultUtils.success(questionVO);
             }
+            return ResultUtils.error(ErrorCode.NO_AUTH_ERROR, "您的账号已被封号,请联系管理员");
         }
-
-        return ResultUtils.error(ErrorCode.NO_AUTH_ERROR, "您的账号已被封号,请联系管理员");
+        return ResultUtils.error(ErrorCode.NO_AUTH_ERROR, "请先登录");
     }
 
     /**
