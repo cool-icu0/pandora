@@ -1,0 +1,139 @@
+#interviewRoomPage {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+    width: 70%;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.message-area {
+    margin-bottom: 48px;
+    height: 55vh;
+    overflow-y: auto;
+}
+
+.message-bubble {
+    max-width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 8px 0;
+}
+
+.message-bubble.ai {
+    background: #f0f2f5;
+    border: 1px solid #d9d9d9;
+}
+
+.message-bubble.user {
+    background: #1890ff;
+    color: white;
+}
+
+.message-content {
+    font-size: 14px;
+}
+
+.message-time {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+    text-align: right;
+}
+
+.input-area {
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.input-area .ant-input-textarea {
+    flex: 1;
+}
+
+.input-area .ant-input {
+    border-radius: 8px;
+    resize: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.input-area .ant-btn {
+  height: auto;
+  padding: 8px 24px;
+  border-radius: 8px;
+  margin-top: 4px;
+}
+
+.input-area .ant-input:hover,
+.input-area .ant-input:focus {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.message-area {
+  margin: 16px 0;
+  height: calc(70vh - 180px);
+  min-height: 400px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.message-area .ant-card-body {
+  height: 100%;
+  padding: 16px;
+}
+
+.messages-list {
+  height: 100%;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.messages-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages-list::-webkit-scrollbar-thumb {
+  background-color: #d9d9d9;
+  border-radius: 3px;
+}
+
+.messages-list::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.message-bubble {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin: 8px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.message-bubble.assistant {
+  background-color: #f0f2f5;
+}
+
+.message-bubble.user {
+  background-color: #1890ff;
+  color: white;
+}
+
+.message-content {
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

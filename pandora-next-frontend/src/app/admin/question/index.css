@@ -1,0 +1,11 @@
+.questionAdminPage {
+  padding-bottom: 50px; /* 添加底部间距 */
+}
+
+.drawerContent {
+  line-height: 1.6;
+}
+
+.ant-table-row {
+  height: 50px; /* 设置每行的高度为50px */
+}

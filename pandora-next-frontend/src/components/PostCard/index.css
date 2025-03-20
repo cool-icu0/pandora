@@ -1,0 +1,219 @@
+.post-card {
+  width: 100%;
+}
+
+.post-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.post-content {
+  min-height: 200px;
+}
+
+.post-actions {
+  display: flex;
+  gap: 16px;
+}
+/* 添加到现有的 CSS 文件末尾 */
+.favorite-button.animating {
+  animation: favorite-animation 0.8s ease-in-out;
+}
+
+.favorite-button.favorited {
+  color: #faad14;
+}
+
+@keyframes favorite-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.favorite-button.animating .anticon {
+  animation: star-pulse 0.8s ease-in-out;
+}
+
+@keyframes star-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/* 点赞按钮动画 */
+.like-button.animating {
+  animation: like-animation 0.8s ease-in-out;
+}
+.post-card .ant-card-extra .ant-space {
+  gap: 8px;
+}
+
+.post-card .ant-card-extra button {
+  padding: 4px 8px;
+}
+.like-button.liked {
+  color: #ff4d4f;
+}
+
+@keyframes like-animation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.like-button.animating .anticon {
+  animation: heart-pulse 0.8s ease-in-out;
+}
+
+@keyframes heart-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  25% {
+    transform: scale(1.5);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  75% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/* 添加到现有CSS文件中 */
+.disabled-action {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.disabled-action:hover {
+  background-color: transparent !important;
+  color: rgba(0, 0, 0, 0.45) !important;
+}
+
+.like-button.disabled-action:hover .anticon,
+.favorite-button.disabled-action:hover .anticon {
+  color: rgba(0, 0, 0, 0.45) !important;
+}
+
+.like-button.liked.disabled-action .anticon {
+  color: rgba(255, 77, 79, 0.45) !important;
+}
+
+.favorite-button.favorited.disabled-action .anticon {
+  color: rgba(250, 173, 20, 0.45) !important;
+}
+.post-card {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.post-card .ant-card {
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.post-card .ant-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.post-card .ant-card-extra {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+}
+
+.post-content {
+  margin-bottom: 24px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .post-card {
+    padding: 0 12px;
+  }
+}
+
+/* 在现有样式的基础上添加以下样式 */
+
+.comments-section {
+  margin-top: 16px;
+}
+
+.comment-list {
+  margin-top: 16px;
+}
+
+.comment-input-container {
+  margin-bottom: 24px;
+}
+
+/* 评论点赞按钮样式 */
+.comment-like-button {
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.comment-like-button.liked {
+  color: #1890ff;
+}
+
+/* 回复按钮样式 */
+.comment-reply-button {
+  cursor: pointer;
+}
+
+/* 评论动画效果 */
+.comment-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.comment-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.comment-exit {
+  opacity: 1;
+}
+
+.comment-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}

@@ -1,0 +1,72 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --primary-color: #2B6CB0;
+  --secondary-color: #4FD1C5;
+  --background-color: #F7FAFC;
+  --text-color: #2D3748;
+  --border-radius: 12px;
+  --transition-speed: 0.2s;
+}
+
+html,
+body {
+  max-width: 100vw;
+  max-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.max-width-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Rich UI 通用样式 */
+.rich-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.rich-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+}
+
+.rich-button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+}
+
+.rich-button:hover {
+  background: #2C5282;
+}
+
+.rich-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #E2E8F0;
+  border-radius: var(--border-radius);
+  outline: none;
+  transition: border-color var(--transition-speed);
+}
+
+.rich-input:focus {
+  border-color: var(--primary-color);
+}

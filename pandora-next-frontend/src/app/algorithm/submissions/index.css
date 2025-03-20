@@ -1,0 +1,30 @@
+.submissions-page {
+  min-height: 100vh;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.ant-table-thead > tr > th {
+  background-color: #fafafa;
+  font-weight: 600;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background-color: #f5f5f5;
+}
+
+.ant-modal-body {
+  padding: 24px;
+}
+
+@media (max-width: 768px) {
+  .submissions-page {
+    padding: 16px !important;
+  }
+  
+  .ant-table {
+    font-size: 12px;
+  }
+}

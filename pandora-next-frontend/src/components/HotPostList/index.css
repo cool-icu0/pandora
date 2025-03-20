@@ -1,0 +1,87 @@
+.hot-post-card {
+  max-width: 1200px;
+  border-radius: 8px;
+  margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.hot-post-title {
+  margin-bottom: 16px !important;
+  display: flex;
+  align-items: center;
+}
+
+.hot-post-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.hot-post-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.hot-post-rank {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  font-weight: bold;
+}
+
+.hot-post-item:nth-child(1) .hot-post-rank {
+  background-color: #ff4d4f;
+  color: white;
+}
+
+.hot-post-item:nth-child(2) .hot-post-rank {
+  background-color: #ff7a45;
+  color: white;
+}
+
+.hot-post-item:nth-child(3) .hot-post-rank {
+  background-color: #ffa940;
+  color: white;
+}
+
+.hot-post-content {
+  flex: 1;
+}
+
+.hot-post-name {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 添加到现有的CSS文件中 */
+.hot-post-rank {
+  font-weight: bold;
+  color: #ff4d4f;
+  font-size: 18px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.hot-post-content {
+  width: 100%;
+}
+
+.hot-post-name {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 70%;
+}
+
+.hot-post-views {
+  color: #8c8c8c;
+  font-size: 14px;
+}

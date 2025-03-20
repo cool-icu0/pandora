@@ -1,0 +1,42 @@
+.comments-section {
+  margin-top: 16px;
+}
+
+.comment-list {
+  margin-top: 16px;
+}
+
+.comment-input-container {
+  margin-bottom: 24px;
+}
+
+/* 评论点赞按钮样式 */
+.comment-action {
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.comment-action:hover {
+  color: #1890ff;
+}
+
+/* 评论动画效果 */
+.comment-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.comment-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.comment-exit {
+  opacity: 1;
+}
+
+.comment-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}

@@ -1,0 +1,425 @@
+.problem-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.problem-info-left {
+  flex: 1;
+}
+
+.problem-info-left h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+
+.problem-info-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.interaction-stats {
+  display: flex;
+  gap: 1rem;
+  color: #6b7280;
+}
+
+.stats-row {
+  display: flex;
+  gap: 2rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.problem-info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.problem-header {
+  flex: 1;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  padding: 1rem 0;
+}
+
+.stats-group {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.interaction-stats {
+  display: flex;
+  gap: 1rem;
+  color: #6b7280;
+  margin-left: 2rem;
+  padding-left: 2rem;
+  border-left: 1px solid #e5e7eb;
+}
+
+.problem-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.interaction-stats {
+  color: #9ca3af;
+}
+
+/* 添加标签区域样式 */
+.tag-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* 添加统计信息区域样式 */
+.stats-container {
+  display: flex;
+  gap: 2rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  border-top: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 1rem 0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  color: #6b7280;
+}
+
+.stat-value {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* 已有的布局样式保持不变 */
+.problem-content {
+  display: flex;
+  gap: 16px;
+}
+
+.problem-content.vertical {
+  flex-direction: column;
+}
+
+.problem-content.horizontal {
+  flex-direction: row;
+}
+
+.problem-content .description-card,
+.problem-content .code-card {
+  flex: 1;
+}
+
+/* 在水平布局时限制描述卡片宽度 */
+.problem-content.vertical .description-card,
+.problem-content.vertical .code-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+.problem-content.horizontal .description-card {
+  width: 45%;
+  max-width: 45%;
+}
+
+.problem-content.horizontal .code-card {
+  width: 55%;
+}
+
+.description-card {
+  width: 45%;
+}
+
+.code-card {
+  width: 55%;
+}
+
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.action-bar {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.language-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.language-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.problem-detail {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.problem-info-container {
+  width: 100%;
+}
+
+.problem-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.problem-title {
+  font-size: 24px;
+  margin: 0;
+  word-break: break-word;
+}
+
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stats-container {
+  margin-bottom: 20px;
+}
+
+.stats-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 80px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.interaction-stats {
+  display: flex;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.problem-content {
+  display: flex;
+  gap: 24px;
+}
+
+.problem-content.vertical {
+  flex-direction: column;
+}
+
+.problem-content.horizontal {
+  flex-direction: row;
+}
+
+.description-card, .code-card {
+  flex: 1;
+  min-width: 0;
+}
+
+.language-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.action-bar {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .action-bar {
+    flex-direction: column;
+  }
+  
+  .action-bar button {
+    width: 100%;
+    margin-right: 0 !important;
+  }
+}
+
+/* 响应式样式 */
+@media (max-width: 1024px) {
+  .problem-detail {
+    padding: 16px !important;
+  }
+  
+  .problem-content.horizontal {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .stat-item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .language-selector {
+    padding: 12px 16px !important;
+  }
+  
+  .language-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .language-controls .ant-select {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .action-bar {
+    flex-direction: column;
+  }
+  
+  .action-bar button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .problem-detail {
+    padding: 12px !important;
+  }
+  
+  .problem-title {
+    font-size: 20px;
+  }
+  
+  .description-card, .code-card {
+    padding: 16px !important;
+  }
+}
+
+/* 添加以下样式到现有的CSS文件中 */
+
+.run-result-container {
+  padding: 16px 0;
+}
+
+.run-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.run-loading p {
+  margin-top: 16px;
+  color: #666;
+}
+
+.run-tabs {
+  margin-top: 24px;
+}
+
+.test-case-detail {
+  padding: 16px;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.test-case-section {
+  margin-bottom: 20px;
+}
+
+.test-case-section:last-child {
+  margin-bottom: 0;
+}
+
+.test-case-io {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 0;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.error-output {
+  background: #fff2f0;
+  border-color: #ffccc7;
+}
+
+.run-result-modal .ant-modal-content {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.run-result-modal .ant-modal-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 24px;
+}
+
+.run-result-modal .ant-modal-body {
+  padding: 24px;
+}
+
+.run-result-modal .ant-result {
+  padding: 24px 0;
+}
+
+.run-result-modal .ant-tabs-nav {
+  margin-bottom: 16px;
+}

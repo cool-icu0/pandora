@@ -1,0 +1,117 @@
+.post-list {
+  width: 100%;
+}
+
+.post-list-container {
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.post-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* 帖子卡片样式 */
+.post-item-card {
+  margin-bottom: 16px !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+/* PC端宽度设置 */
+@media (min-width: 900px) {
+  .post-item-card {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.post-item-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 帖子内容预览样式 */
+.post-content-preview {
+  color: #666;
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* 帖子元信息样式 */
+.ant-list-item-meta-title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  margin-bottom: 8px !important;
+}
+
+.ant-list-item-meta-title a {
+  color: #262626;
+  transition: color 0.3s;
+}
+
+.ant-list-item-meta-title a:hover {
+  color: #1890ff;
+}
+
+.ant-list-item-meta-description {
+  margin-top: 4px;
+}
+
+/* 标签样式 */
+.ant-tag {
+  margin-right: 8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* 操作按钮样式 */
+.ant-list-item-action {
+  margin-top: 16px;
+}
+
+.ant-list-item-action li {
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.ant-list-item-action li:hover {
+  color: #1890ff;
+}
+
+/* 分页样式 */
+.post-pagination {
+  margin-top: 24px;
+  text-align: center;
+}
+
+/* 头像样式 */
+.ant-list-item-meta-avatar {
+  margin-right: 16px;
+}
+
+.ant-avatar {
+  border: 2px solid #f0f0f0;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .post-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .ant-input-search {
+    width: 100% !important;
+  }
+}

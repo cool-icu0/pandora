@@ -1,0 +1,823 @@
+/* 减小整体页面的内边距 */
+#homePage {
+  padding: 12px 0;
+}
+
+/* 布局样式 */
+.home-layout {
+  display: flex;
+  gap: 20px;
+}
+
+.content-left {
+  flex: 1;
+  min-width: 0; /* 防止内容溢出 */
+}
+
+.content-right {
+  width: 350px;
+  flex-shrink: 0;
+}
+
+/* 签到打卡卡片样式 */
+.checkin-card {
+  width: 100%;
+  max-width: 280px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s;
+  position: sticky;
+  top: 20px;
+}
+
+.checkin-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.checkin-card .ant-card-head {
+  padding: 0 12px;
+  min-height: 36px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.checkin-card .ant-card-head-title {
+  padding: 8px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.checkin-card .ant-card-body {
+  padding: 12px;
+}
+
+/* 签到统计数据样式 */
+.checkin-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.checkin-stat-item {
+  text-align: center;
+}
+
+.checkin-stat-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1677ff;
+}
+
+.checkin-stat-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* 分隔线样式 */
+.checkin-divider {
+  margin: 8px 0;
+  border-color: rgba(0, 0, 0, 0.04);
+}
+
+/* 打卡记录容器 */
+.checkin-container {
+  margin-top: 8px;
+}
+
+/* 星期标签样式 */
+.checkin-weekday-labels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 3px;
+}
+
+.checkin-weekday-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: #666;
+}
+
+.checkin-weekday-label.weekend {
+  color: #ff4d4f;
+}
+
+/* 打卡记录网格样式 */
+.checkin-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 10px;
+}
+
+.checkin-day {
+  width: 100%;
+  aspect-ratio: 1/1;
+  background-color: #f5f5f5;
+  border-radius: 2px;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.checkin-day.checked {
+  background-color: #52c41a;
+  box-shadow: 0 1px 2px rgba(82, 196, 26, 0.2);
+}
+
+.checkin-day.today {
+  border: 1px solid #1677ff;
+}
+
+.checkin-day.today::after {
+  /* content: '今'; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 9px;
+  /* color: #1677ff; */
+  font-weight: bold;
+}
+
+/* 月份标签样式 */
+.checkin-month-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #666;
+}
+
+/* 今日任务按钮样式 */
+.checkin-task-link {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.checkin-task-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 已打卡的今日任务按钮样式 */
+.checkin-task-link.checked {
+  cursor: default;
+}
+
+.checkin-task-link.checked .checkin-task-card {
+  background: linear-gradient(135deg, #d9d9d9, #f0f0f0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.checkin-task-link.checked .checkin-task-title {
+  color: #8c8c8c;
+}
+
+.checkin-task-link.checked .checkin-task-subtitle {
+  color: #bfbfbf;
+}
+
+.checkin-task-link.checked:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.checkin-task-card {
+  width: 100%;
+  background: linear-gradient(135deg, #1677ff, #4096ff);
+  color: white;
+  border-radius: 6px;
+  padding: 8px 10px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.checkin-task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(22, 119, 255, 0.3);
+}
+
+.checkin-task-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.checkin-task-subtitle {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 响应式设计优化 */
+@media (max-width: 1200px) {
+  .two-column-layout {
+    grid-template-columns: 3fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .two-column-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .content-main,
+  .content-right {
+    grid-column: span 1;
+  }
+  
+  .bank-grid .ant-list-items {
+    grid-template-columns: 1fr; /* 小屏幕上每行一个题库 */
+  }
+}
+
+/* 响应式调整 */
+@media (max-width: 576px) {
+  .bank-grid .ant-list-items {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 算法题目表格样式 */
+.algorithm-table-container {
+  margin-bottom: 20px;
+}
+
+.home-algorithm-table .ant-table-thead > tr > th {
+  background-color: #f5f5f5;
+  font-weight: 500;
+}
+
+.home-algorithm-table .ant-table-tbody > tr:hover > td {
+  background-color: #f0f7ff;
+}
+
+.home-algorithm-table .ant-table-tbody > tr > td {
+  padding: 12px 16px;
+}
+
+.home-algorithm-table .ant-table-pagination {
+  margin: 16px 0;
+}
+
+.home-algorithm-table .ant-tag {
+  margin-right: 4px;
+}
+
+
+/* 滚动容器样式 */
+.scrollable-container {
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background-color: #fff;
+}
+
+/* 算法题目表格滚动容器 - 移除滚动和高度限制 */
+.algorithm-table-container {
+  margin-bottom: 0;
+  max-height: none;
+  overflow-y: visible;
+  border: none;
+}
+
+/* 优化表格样式 - 移除sticky定位 */
+.home-algorithm-table .ant-table-thead > tr > th {
+  position: static;
+  background-color: #f9f9f9;
+  font-weight: 500;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+}
+
+/* 保持表格紧凑样式 */
+.home-algorithm-table .ant-table-tbody > tr > td {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+/* 面试题目列表滚动容器 */
+.question-list-container {
+  max-height: 300px;
+  padding: 0 4px;
+}
+
+/* 紧凑型分页样式 */
+.compact-pagination {
+  margin: 8px 0 !important;
+  text-align: center !important;
+}
+
+.compact-pagination .ant-pagination-item,
+.compact-pagination .ant-pagination-prev,
+.compact-pagination .ant-pagination-next {
+  margin: 0 2px !important;
+  min-width: 24px !important;
+  height: 24px !important;
+  line-height: 22px !important;
+}
+
+/* 优化表格样式 */
+.home-algorithm-table .ant-table-thead > tr > th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #f9f9f9;
+  font-weight: 500;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+}
+
+.home-algorithm-table .ant-table-tbody > tr > td {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+.home-algorithm-table .ant-table-tbody > tr:last-child > td {
+  border-bottom: none;
+}
+
+/* 优化列表项样式 */
+.question-list-container .ant-list-item {
+  padding: 8px 0 !important;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.06) !important;
+}
+
+.question-list-container .ant-list-item:last-child {
+  border-bottom: none !important;
+}
+
+/* 移除分隔线，使用间距控制各部分的分隔 */
+.content-main .rich-divider {
+  display: none;
+}
+
+/* 调整内容区域间距 */
+.content-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-container {
+  margin-bottom: 0;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  padding: 12px;
+  transition: all 0.3s;
+}
+
+/* 优化标题样式 */
+.section-header {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.gradient-title {
+  font-size: 1.2rem !important;
+  margin-bottom: 0 !important;
+}
+
+/* 面试题目分页容器 */
+.question-pagination-container {
+  padding: 8px 0;
+  text-align: center;
+  border-top: 1px dashed rgba(0, 0, 0, 0.06);
+  margin-top: 8px;
+}
+
+/* 调整面试题目列表容器高度 */
+/* 只显示分页的表格 */
+.pagination-only-table .ant-table-thead,
+.pagination-only-table .ant-table-tbody,
+.pagination-only-table .ant-table-placeholder {
+  display: none;
+}
+
+.pagination-only-table .ant-table {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.pagination-only-table .ant-pagination {
+  margin: 8px 0;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.06);
+}
+
+/* 调整面试题目列表容器样式 */
+.question-list-container {
+  padding: 0 4px;
+}
+
+/* 紧凑型分页样式 */
+.compact-pagination {
+  margin: 8px 0 !important;
+  text-align: center !important;
+}
+
+.compact-pagination .ant-pagination-item,
+.compact-pagination .ant-pagination-prev,
+.compact-pagination .ant-pagination-next {
+  margin: 0 2px !important;
+  min-width: 24px !important;
+  height: 24px !important;
+  line-height: 22px !important;
+}
+
+/* 优化表格样式 */
+.home-algorithm-table .ant-table-thead > tr > th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #f9f9f9;
+  font-weight: 500;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+}
+
+.home-algorithm-table .ant-table-tbody > tr > td {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+.home-algorithm-table .ant-table-tbody > tr:last-child > td {
+  border-bottom: none;
+}
+
+/* 优化列表项样式 */
+.question-list-container .ant-list-item {
+  padding: 8px 0 !important;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.06) !important;
+}
+
+.question-list-container .ant-list-item:last-child {
+  border-bottom: none !important;
+}
+
+/* 移除分隔线，使用间距控制各部分的分隔 */
+.content-main .rich-divider {
+  display: none;
+}
+
+/* 调整内容区域间距 */
+.content-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-container {
+  margin-bottom: 0;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  padding: 12px;
+  transition: all 0.3s;
+}
+
+/* 优化标题样式 */
+.section-header {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.gradient-title {
+  font-size: 1.2rem !important;
+  margin-bottom: 0 !important;
+}
+
+/* 面试题目分页容器 */
+.question-pagination-container {
+  padding: 8px 0;
+  text-align: center;
+  border-top: 1px dashed rgba(0, 0, 0, 0.06);
+  margin-top: 8px;
+}
+
+/* 调整面试题目列表容器高度 */
+.question-list-container {
+  max-height: 320px;
+  padding: 0 4px;
+}
+
+/* 减小section容器的上下间距 */
+.section-container {
+  margin-bottom: 16px; /* 原来可能是24px或更大，减小为16px */
+  padding: 12px; /* 减小内部填充 */
+}
+
+/* 减小section标题的大小和间距 */
+.section-header {
+  margin-bottom: 8px; /* 减小标题与内容的间距 */
+}
+
+.section-header .ant-typography {
+  margin-bottom: 0; /* 移除标题自带的下边距 */
+  font-size: 18px; /* 减小标题字体大小 */
+}
+
+/* 减小表格的行高和内边距 */
+.home-algorithm-table .ant-table-tbody > tr > td {
+  padding: 6px 8px; /* 减小单元格内边距 */
+}
+
+/* 减小分页组件的大小和间距 */
+.compact-pagination {
+  margin: 8px 0 0 0; /* 减小分页组件的上边距 */
+}
+
+/* 减小题库卡片的大小和间距 */
+.bank-grid {
+  gap: 8px; /* 减小卡片之间的间距 */
+}
+
+/* 减小面试题目列表的间距 */
+.question-list-container {
+  padding: 0 2px; /* 减小内边距 */
+}
+
+/* 调整只显示分页的表格样式 */
+.pagination-only-table .ant-pagination {
+  margin: 4px 0; /* 减小分页组件的上下边距 */
+  padding-top: 4px; /* 减小上边框的内边距 */
+}
+
+/* 添加以下样式到文件末尾 */
+
+/* 紧凑型打卡卡片样式 */
+.compact-checkin-card {
+  width: 100%;
+  max-width: 320px;
+}
+
+.compact-checkin-card .ant-card-head {
+  padding: 0 16px;
+  min-height: 40px;
+}
+
+.compact-checkin-card .ant-card-head-title {
+  padding: 8px 0;
+  font-size: 16px;
+}
+
+.compact-checkin-card .ant-card-body {
+  padding: 12px;
+}
+
+/* 紧凑型统计数字样式 */
+.compact-statistic .ant-statistic-title {
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.compact-statistic .ant-statistic-content {
+  font-size: 18px;
+}
+
+/* 紧凑型分隔线 */
+.compact-divider {
+  margin: 8px 0;
+}
+
+/* 紧凑型日历容器 */
+.compact-calendar-container {
+  margin-top: 8px;
+}
+
+.compact-calendar {
+  font-size: 12px;
+}
+
+.compact-calendar .ant-picker-calendar-header {
+  padding: 4px 8px;
+}
+
+.compact-calendar .ant-picker-cell {
+  padding: 2px 0;
+}
+
+/* 紧凑型任务卡片 - 进一步优化 */
+.compact-task-card {
+  width: 100%;
+  padding: 6px 10px;
+  margin-top: 6px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #1677ff, #4096ff);
+}
+
+.compact-task-card .task-title {
+  font-size: 13px;
+  margin-bottom: 2px;
+  color: white;
+}
+
+.compact-task-card .task-subtitle {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 优化打卡记录图样式 */
+.checkin-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 10px;
+}
+
+.checkin-day {
+  width: 100%;
+  aspect-ratio: 1/1;
+  background-color: #f5f5f5;
+  border-radius: 2px;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.checkin-day.checked {
+  background-color: #52c41a;
+  box-shadow: 0 1px 2px rgba(82, 196, 26, 0.2);
+}
+
+.checkin-day.today {
+  border: 1px solid #1677ff;
+}
+
+.checkin-day.today::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 9px;
+  color: #1677ff;
+  font-weight: bold;
+}
+
+.checkin-month-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #666;
+}
+
+.checkin-weekday-labels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 3px;
+}
+
+.checkin-weekday-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: #666;
+}
+
+.checkin-weekday-label.weekend {
+  color: #ff4d4f;
+}
+
+/* 优化打卡卡片整体样式 */
+.compact-checkin-card {
+  width: 100%;
+  max-width: 280px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.compact-checkin-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.compact-checkin-card .ant-card-head {
+  padding: 0 12px;
+  min-height: 36px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.compact-checkin-card .ant-card-head-title {
+  padding: 8px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.compact-checkin-card .ant-card-body {
+  padding: 10px;
+}
+
+/* 优化统计数字样式 */
+.compact-statistic .ant-statistic-title {
+  font-size: 11px;
+  margin-bottom: 1px;
+  color: #666;
+}
+
+.compact-statistic .ant-statistic-content {
+  font-size: 16px;
+  color: #1677ff;
+  font-weight: 600;
+}
+
+/* 优化分隔线 */
+.compact-divider {
+  margin: 6px 0;
+  border-color: rgba(0, 0, 0, 0.04);
+}
+
+/* 调整间距 */
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
+/* 确保任务卡片可见 */
+.visible-task-card {
+  background: linear-gradient(135deg, #1677ff, #4096ff) !important;
+  color: white !important;
+  width: 100% !important;
+  margin-top: 8px;
+  box-shadow: 0 2px 8px rgba(22, 119, 255, 0.2);
+}
+
+.visible-task-card .task-title,
+.visible-task-card .task-subtitle {
+  color: white !important;
+  opacity: 1;
+}
+
+.visible-task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(22, 119, 255, 0.3);
+}
+
+.task-link {
+  display: block;
+  width: 100%;
+}
+
+/* 日期标签样式 */
+.date-label {
+  font-size: 12px;
+  line-height: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #666;
+}
+
+/* 今天的样式 */
+.checkin-day.today {
+  border: 2px solid #1890ff;
+  box-shadow: 0 0 5px rgba(24, 144, 255, 0.5);
+  z-index: 1;
+}
+
+.checkin-day.today .date-label {
+  color: #1890ff;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* 今天且已打卡的样式 */
+.checkin-day.today.checked {
+  background-color: #1890ff;
+  border: 2px solid #096dd9;
+  box-shadow: 0 0 8px rgba(24, 144, 255, 0.7);
+}
+
+.checkin-day.today.checked .date-label {
+  color: white;
+  font-weight: bold;
+}
+
+/* 昨天和明天的样式 */
+.checkin-day.yesterday .date-label,
+.checkin-day.tomorrow .date-label {
+  color: #52c41a;
+}
+
+/* 确保打卡日格子是相对定位，以便放置日期标签 */
+.checkin-day {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* 已打卡日期的标签颜色 */
+.checkin-day.checked .date-label {
+  color: white;
+}

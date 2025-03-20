@@ -1,0 +1,34 @@
+.recommended-post-card {
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.recommended-post-title {
+  margin-bottom: 16px !important;
+  display: flex;
+  align-items: center;
+}
+
+.recommended-post-item {
+  padding: 12px 0;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.recommended-post-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.recommended-post-name {
+  font-weight: 500;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.recommended-post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}

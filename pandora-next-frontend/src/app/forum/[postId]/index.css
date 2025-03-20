@@ -1,0 +1,16 @@
+/* 帖子详情页样式 */
+#postPage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  min-width: 800px;
+}
+
+/* 响应式调整 */
+@media (max-width: 800px) {
+  #postPage {
+    min-width: auto;
+    width: 100%;
+    padding: 16px;
+  }
+}

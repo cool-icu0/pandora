@@ -36,7 +36,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -75,7 +77,7 @@ public class QuestionCodeController {
      */
     @PostMapping("/add")
     public BaseResponse<Long> addQuestion(@RequestBody QuestionAddRequest questionAddRequest, HttpServletRequest request) {
-        ThrowUtils.throwIf(questionAddRequest == null,ErrorCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(questionAddRequest == null, ErrorCode.PARAMS_ERROR);
         QuestionCode questionCode = new QuestionCode();
         BeanUtils.copyProperties(questionAddRequest, questionCode);
         List<String> tags = questionAddRequest.getTags();
@@ -110,14 +112,14 @@ public class QuestionCodeController {
      */
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteQuestionCode(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
-        ThrowUtils.throwIf(deleteRequest == null || deleteRequest.getId() <= 0,ErrorCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(deleteRequest == null || deleteRequest.getId() <= 0, ErrorCode.PARAMS_ERROR);
         User user = userService.getLoginUser(request);
         long id = deleteRequest.getId();
         // 判断是否存在
         QuestionCode oldQuestionCode = questionCodeService.getById(id);
         ThrowUtils.throwIf(oldQuestionCode == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可删除
-        ThrowUtils.throwIf(!oldQuestionCode.getUserId().equals(user.getId()) && !userService.isAdmin(request),ErrorCode.NO_AUTH_ERROR);
+        ThrowUtils.throwIf(!oldQuestionCode.getUserId().equals(user.getId()) && !userService.isAdmin(request), ErrorCode.NO_AUTH_ERROR);
         boolean b = questionCodeService.removeById(id);
         return ResultUtils.success(b);
     }
@@ -131,7 +133,7 @@ public class QuestionCodeController {
      */
     @PostMapping("/batchDelete")
     public BaseResponse<Boolean> batchDeleteQuestionCode(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
-        ThrowUtils.throwIf(deleteRequest == null || deleteRequest.getIds() == null || deleteRequest.getIds().isEmpty(),ErrorCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(deleteRequest == null || deleteRequest.getIds() == null || deleteRequest.getIds().isEmpty(), ErrorCode.PARAMS_ERROR);
         User user = userService.getLoginUser(request);
         List<Long> ids = deleteRequest.getIds();
 
@@ -139,7 +141,7 @@ public class QuestionCodeController {
         for (Long id : ids) {
             QuestionCode oldQuestionCode = questionCodeService.getById(id);
             ThrowUtils.throwIf(oldQuestionCode == null, ErrorCode.NOT_FOUND_ERROR);
-            ThrowUtils.throwIf(!oldQuestionCode.getUserId().equals(user.getId()) && !userService.isAdmin(request),ErrorCode.NO_AUTH_ERROR);
+            ThrowUtils.throwIf(!oldQuestionCode.getUserId().equals(user.getId()) && !userService.isAdmin(request), ErrorCode.NO_AUTH_ERROR);
         }
         boolean success = questionCodeService.removeByIds(ids);
         return ResultUtils.success(success);
@@ -148,10 +150,9 @@ public class QuestionCodeController {
     /**
      * 批量下载MD文件
      *
-     * @param
-     * @return
+     * @param ids 题目id列表
+     * @return zip文件字节数组
      */
-
     @PostMapping("/batchDownload")
     public ResponseEntity<byte[]> batchDownloadQuestions(@RequestBody List<Long> ids) {
         List<QuestionCode> questionCodes = questionCodeMapper.selectBatchIds(ids);
@@ -161,34 +162,50 @@ public class QuestionCodeController {
 
         // 创建临时zip文件
         byte[] zipFileContent = createTempZipFile(questionCodes);
+        if (zipFileContent == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
 
         // 设置响应头，指定文件名
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=questions.zip");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"questions.zip\"");
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/zip");
+        headers.setContentLength(zipFileContent.length);
 
         // 返回文件内容
         return ResponseEntity.ok()
                 .headers(headers)
-                .contentLength(zipFileContent.length)
-                .contentType(MediaType.parseMediaType("application/zip"))
                 .body(zipFileContent);
     }
 
     private byte[] createTempZipFile(List<QuestionCode> questionCodes) {
-        // 创建临时zip文件并写入问题内容，具体实现需要根据业务逻辑进行
-        // 以下是一个简化的示例，实际需要根据具体需求进行实现
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try (ZipOutputStream zos = new ZipOutputStream(baos)) {
-            for (QuestionCode questionCode : questionCodes) {
-                ZipEntry entry = new ZipEntry("question_code_" + questionCode.getId() + ".md");
-                zos.putNextEntry(entry);
-                zos.write(questionCode.getContent().getBytes());
-                zos.closeEntry();
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            try (ZipOutputStream zos = new ZipOutputStream(baos, StandardCharsets.UTF_8)) {
+                zos.setMethod(ZipOutputStream.DEFLATED);
+                zos.setLevel(Deflater.BEST_COMPRESSION);
+
+                for (QuestionCode questionCode : questionCodes) {
+                    // 创建新的 ZIP 条目
+                    String fileName = String.format("question_%d.md", questionCode.getId());
+                    ZipEntry entry = new ZipEntry(fileName);
+                    entry.setTime(System.currentTimeMillis());
+                    
+                    String content = questionCode.getContent();
+                    if (content != null) {
+                        byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
+                        entry.setSize(bytes.length);
+                        
+                        zos.putNextEntry(entry);
+                        zos.write(bytes);
+                        zos.closeEntry();
+                    }
+                }
             }
+            return baos.toByteArray();
         } catch (IOException e) {
-            // 处理异常
+            log.error("创建ZIP文件失败", e);
+            return null;
         }
-        return baos.toByteArray();
     }
 
 
@@ -201,7 +218,7 @@ public class QuestionCodeController {
     @PostMapping("/update")
     @AuthCheck(mustRole = UserConstant.DEFAULT_ROLE)
     public BaseResponse<Boolean> updateQuestionCode(@RequestBody QuestionUpdateRequest questionUpdateRequest) {
-        ThrowUtils.throwIf(questionUpdateRequest == null || questionUpdateRequest.getId() <= 0,ErrorCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(questionUpdateRequest == null || questionUpdateRequest.getId() <= 0, ErrorCode.PARAMS_ERROR);
         QuestionCode questionCode = new QuestionCode();
         BeanUtils.copyProperties(questionUpdateRequest, questionCode);
         List<String> tags = questionUpdateRequest.getTags();
@@ -234,12 +251,13 @@ public class QuestionCodeController {
      */
     @GetMapping("/get")
     public BaseResponse<QuestionCode> getQuestionCodeById(long id, HttpServletRequest request) {
-        ThrowUtils.throwIf(id <= 0,ErrorCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
 
         QuestionCode questionCode = questionCodeService.getById(id);
-        ThrowUtils.throwIf(questionCode == null,ErrorCode.NOT_FOUND_ERROR);
+        ThrowUtils.throwIf(questionCode == null, ErrorCode.NOT_FOUND_ERROR);
         return ResultUtils.success(questionCode);
     }
+
     /**
      * 根据 id 获取
      *
@@ -248,13 +266,13 @@ public class QuestionCodeController {
      */
     @GetMapping("/get2Answer")
     public BaseResponse<QuestionCode> getQuestionById2Answer(long id, HttpServletRequest request) {
-        ThrowUtils.throwIf(id <= 0,ErrorCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
 
         QuestionCode questionCode = questionCodeService.getById(id);
-        ThrowUtils.throwIf(questionCode == null,ErrorCode.NOT_FOUND_ERROR);
+        ThrowUtils.throwIf(questionCode == null, ErrorCode.NOT_FOUND_ERROR);
         User loginUser = userService.getLoginUser(request);
         QuestionCode q1 = new QuestionCode();
-        BeanUtils.copyProperties(q1,questionCode);
+        BeanUtils.copyProperties(q1, questionCode);
         q1.setAnswer(questionCode.getAnswer());
         return ResultUtils.success(q1);
     }
@@ -267,16 +285,16 @@ public class QuestionCodeController {
      */
     @GetMapping("/get/vo")
     public BaseResponse<QuestionCodeVO> getQuestionCodeVOById(long id, HttpServletRequest request) {
-        ThrowUtils.throwIf(id<=0,ErrorCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
         User loginUser = userService.getLoginUserPermitNull(request);
         // 友情提示，对于敏感的内容，可以再打印一些日志，记录用户访问的内容
         if (loginUser != null) {
             crawlerDetectManager.crawlerDetect(loginUser.getId());
             log.info("用户Id为：{}访问了题目id为：{}", loginUser.getId(), id);
             // 禁止访问被封号的用户
-            if(!loginUser.getUserRole().equals(UserConstant.BAN_ROLE)) {
+            if (!loginUser.getUserRole().equals(UserConstant.BAN_ROLE)) {
                 QuestionCode questionCode = questionCodeService.getById(id);
-                ThrowUtils.throwIf(questionCode == null,ErrorCode.NOT_FOUND_ERROR);
+                ThrowUtils.throwIf(questionCode == null, ErrorCode.NOT_FOUND_ERROR);
                 QuestionCodeVO questionCodeVO = questionCodeService.getQuestionCodeVO(questionCode, request);
                 return ResultUtils.success(questionCodeVO);
             }
@@ -294,7 +312,7 @@ public class QuestionCodeController {
      */
     @PostMapping("/list/page/vo")
     public BaseResponse<Page<QuestionCodeVO>> listQuestionCodeVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
-                                                               HttpServletRequest request) {
+                                                                       HttpServletRequest request) {
         long current = questionQueryRequest.getCurrent();
         long size = questionQueryRequest.getPageSize();
         // 限制爬虫
@@ -314,7 +332,7 @@ public class QuestionCodeController {
     @PostMapping("/my/list/page/vo")
     public BaseResponse<Page<QuestionCodeVO>> listMyQuestionCodeVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                                          HttpServletRequest request) {
-        ThrowUtils.throwIf(questionQueryRequest == null,ErrorCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(questionQueryRequest == null, ErrorCode.PARAMS_ERROR);
         User loginUser = userService.getLoginUser(request);
         questionQueryRequest.setUserId(loginUser.getId());
         long current = questionQueryRequest.getCurrent();
@@ -336,7 +354,7 @@ public class QuestionCodeController {
     @PostMapping("/list/page")
     @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<QuestionCode>> listQuestionCodeByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
-                                                           HttpServletRequest request) {
+                                                                   HttpServletRequest request) {
         long current = questionQueryRequest.getCurrent();
         long size = questionQueryRequest.getPageSize();
         Page<QuestionCode> questionCodePage = questionCodeService.page(new Page<>(current, size),
@@ -355,7 +373,7 @@ public class QuestionCodeController {
      */
     @PostMapping("/edit")
     public BaseResponse<Boolean> editQuestionCode(@RequestBody QuestionEditRequest questionEditRequest, HttpServletRequest request) {
-        ThrowUtils.throwIf(questionEditRequest == null || questionEditRequest.getId() <= 0,ErrorCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(questionEditRequest == null || questionEditRequest.getId() <= 0, ErrorCode.PARAMS_ERROR);
         QuestionCode questionCode = new QuestionCode();
         BeanUtils.copyProperties(questionEditRequest, questionCode);
         List<String> tags = questionEditRequest.getTags();
@@ -394,7 +412,7 @@ public class QuestionCodeController {
      */
     @PostMapping("/question_submit/do")
     public BaseResponse<Long> doQuestionCodeSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest,
-                                               HttpServletRequest request) {
+                                                   HttpServletRequest request) {
         if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -408,12 +426,12 @@ public class QuestionCodeController {
      * 提交运行
      *
      * @param questionSubmitAddRequest 提交运行信息
-     * @param request http 请求
+     * @param request                  http 请求
      * @return 运行记录的 id
      */
     @PostMapping("/question_submit/run")
     public BaseResponse<Long> doQuestionCodeRun(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest,
-                                               HttpServletRequest request) {
+                                                HttpServletRequest request) {
         if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -432,7 +450,7 @@ public class QuestionCodeController {
      */
     @PostMapping("/question_submit/list/page")
     public BaseResponse<Page<QuestionSubmitVO>> listQuestionCodeSubmitByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest,
-                                                                         HttpServletRequest request) {
+                                                                             HttpServletRequest request) {
         long current = questionSubmitQueryRequest.getCurrent();
         long size = questionSubmitQueryRequest.getPageSize();
         // 从数据库中查询原始的题目提交分页信息
@@ -443,7 +461,7 @@ public class QuestionCodeController {
         return ResultUtils.success(questionSubmitService.getQuestionSubmitVOPage(questionSubmitPage, loginUser));
     }
 
-    //根据题目id获取题目提交
+    // 根据题目id获取题目提交
     @GetMapping("/question_submit/get")
     public BaseResponse<QuestionSubmitVO> getQuestionCodeSubmitById(long questionSubmitId, HttpServletRequest request) {
         if (questionSubmitId <= 0) {

@@ -1,0 +1,76 @@
+#forumPage {
+  padding: 24px;
+}
+
+/* 添加以下样式到现有的 CSS 文件中 */
+.forum-content-layout {
+  display: flex;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.forum-main-content {
+  flex: 1;
+  min-width: 0; /* 防止内容溢出 */
+}
+
+.forum-side-content {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 整体页面样式 */
+#forumPage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 页面头部样式 */
+.forum-header {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 16px;
+}
+
+.forum-title {
+  margin-bottom: 8px !important;
+  font-weight: 600 !important;
+  color: #262626;
+}
+
+.forum-description {
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+/* 内容布局样式 */
+.forum-content-layout {
+  display: flex;
+  gap: 24px;
+}
+
+.forum-main-content {
+  flex: 1;
+  min-width: 0; /* 防止内容溢出 */
+}
+
+.forum-side-content {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .forum-content-layout {
+    flex-direction: column;
+  }
+  
+  .forum-side-content {
+    width: 100%;
+  }
+}
