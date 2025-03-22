@@ -11,7 +11,7 @@ import UserInfo from "@/app/user/center/components/UserInfo";
 import UserInfoEditForm from "@/app/user/center/components/UserInfoEditForm";
 import {USER_ROLE_ENUM, USER_ROLE_TEXT_MAP} from "@/constants/user";
 import dayjs from "dayjs";
-import { updateUserUsingPost } from "@/api/userController";
+import { editUserUsingPost } from "@/api/userController";
 import { useDispatch } from "react-redux";
 import { setLoginUser } from "@/stores/loginUser";
 import { uploadFileUsingPost } from "@/api/fileController";
@@ -40,14 +40,14 @@ export default function UserCenterPage() {
       );
       // 上传成功，更新用户信息
       if (res.data) {
-        const updateRes = await updateUserUsingPost({
+        const updateRes = await editUserUsingPost({
           id: user.id,
-          userAvatar: res.data
+          userAvatar: res.data as string
         });
-        if (updateRes.code === 0) {
+        if ((updateRes as any).code === 0) {
           message.success('头像更新成功');
           // 更新 Redux 中的用户信息
-          dispatch(setLoginUser({ ...user, userAvatar: res.data }));
+          dispatch(setLoginUser({ ...user, userAvatar: res.data as string }));
         }
       }
     } catch (error: any) {
@@ -92,7 +92,7 @@ export default function UserCenterPage() {
               注册日期：{dayjs(user.createTime).format("YYYY-MM-DD")}
             </Paragraph>
             <Paragraph type="secondary" style={{ marginTop: 8 }} copyable={{
-              text: user.id
+              text: user.id as any
             }}>
               我的 id：{user.id}
             </Paragraph>

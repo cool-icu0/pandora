@@ -42,7 +42,7 @@ export default function QuestionsPage() {
 
   return (
     <div id="questionsPage" className="max-width-content">
-      <Title level={3}>题目大全</Title>
+      <Title level={3}>面试题目</Title>
       <QuestionTable
         defaultQuestionList={questionList}
         defaultTotal={total}

@@ -1,6 +1,8 @@
 'use client';
 
 import MonacoEditor from 'react-monaco-editor';
+import { useEffect, useState } from 'react';
+import './index.css';
 
 interface CodeEditorProps {
   value?: string;
@@ -13,6 +15,28 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   onChange = () => {},
   language = 'java'
 }) => {
+  // 添加主题状态
+  const [editorTheme, setEditorTheme] = useState('vs-dark');
+
+  // 监听主题变化
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'theme-mode') {
+          const theme = document.body.getAttribute('theme-mode');
+          setEditorTheme(theme === 'dark' ?  'vs' :'vs-dark' );
+        }
+      });
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['theme-mode'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const options = {
     minimap: { enabled: false },
     fontSize: 14,
@@ -37,10 +61,19 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         vertical: 'hidden',
         horizontal: 'hidden',
     },
+    // 添加以下配置以增强代码高亮效果
+    bracketPairColorization: {
+      enabled: true,
+    },
+    renderWhitespace: 'selection',
+    colorDecorators: true,
+    semanticHighlighting: {
+      enabled: true
+    },
   };
 
   return (
-    <MonacoEditor
+    <MonacoEditor className="code-editor-container"
       height="400"
       language={language.toLowerCase()}
       theme="vs-dark"

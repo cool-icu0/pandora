@@ -52,6 +52,11 @@ public class QuestionCodeVO implements Serializable {
     private JudgeConfig judgeConfig;
 
     /**
+     * 难度
+     */
+    private String difficulty;
+
+    /**
      * 题目提交数
      */
     private Integer submitNum;

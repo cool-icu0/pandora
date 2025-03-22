@@ -30,8 +30,6 @@ const QuestionTable: React.FC<Props> = (props: Props) => {
   );
   // 题目总数
   const [total, setTotal] = useState<number>(defaultTotal || 0);
-  // 用于判断是否首次加载
-  const [init, setInit] = useState<boolean>(true);
 
   /**
    * 表格列配置
@@ -56,6 +54,7 @@ const QuestionTable: React.FC<Props> = (props: Props) => {
       title: "标签",
       dataIndex: "tagList",
       valueType: "select",
+      hideInSearch: true,
       fieldProps: {
         mode: "tags",
       },
@@ -86,19 +85,6 @@ const QuestionTable: React.FC<Props> = (props: Props) => {
           } as TablePaginationConfig
         }
         request={async (params, sort, filter) => {
-          // 首次请求
-          if (init) {
-            setInit(false);
-            // 如果已有外层传来的默认数据，无需再次查询
-            if (defaultQuestionList && defaultTotal) {
-              return {
-                success: true,
-                data: defaultQuestionList,
-                total: defaultTotal
-              };
-            }
-          }
-
           const sortField = Object.keys(sort)?.[0] || "createTime";
           const sortOrder = sort?.[sortField] || "descend";
 

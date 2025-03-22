@@ -2,7 +2,7 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  background: #efefef;
+  background: var(--bg-card);  /* 使用 container 背景色以提供更好的层次感 */
   padding: 16px;
   text-align: center;
 }

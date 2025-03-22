@@ -1,5 +1,107 @@
+/* 添加主题相关样式 */
 .md-viewer {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+
+  .bytemd {
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+  }
+
+  .bytemd-toolbar {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+  }
+
+  /* 修改编辑器主题颜色 */
+  .bytemd-editor {
+    background-color: var(--code-bg);
+    color: var(--text-primary);
+  }
+
+  .bytemd-editor .cm-editor {
+    background-color: var(--code-bg);
+  }
+
+  .bytemd-editor .cm-content {
+    color: var(--text-primary);
+  }
+
+  .bytemd-editor .cm-line {
+    caret-color: var(--text-primary);
+  }
+
+  .bytemd-editor .cm-gutters {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+  }
+
+  .bytemd-editor .cm-activeLineGutter,
+  .bytemd-editor .cm-activeLine {
+    background-color: var(--hover-bg);
+  }
+
+  .bytemd-preview {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border-left: 1px solid var(--border-color);
+  }
+
+  .bytemd-toolbar-icon {
+    color: var(--text-secondary);
+    &:hover {
+      color: var(--text-primary);
+      background-color: var(--hover-bg);
+    }
+  }
+
   .bytemd-toolbar-icon.bytemd-tippy.bytemd-tippy-right:last-child {
     display: none;
+  }
+
+  .markdown-body {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+
+    pre {
+      background-color: var(--code-bg);
+      border: 1px solid var(--border-color);
+    }
+
+    code {
+      background-color: var(--code-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    blockquote {
+      border-left: 4px solid var(--border-color);
+      color: var(--text-secondary);
+      background-color: var(--bg-primary);
+      padding: 1em;
+      margin: 1em 0;
+    }
+
+    table {
+      border-collapse: collapse;
+      
+      tr {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+      }
+
+      th, td {
+        padding: 8px;
+        border: 1px solid var(--border-color);
+      }
+
+      th {
+        background-color: var(--bg-primary);
+      }
+    }
+
+    hr {
+      border-color: var(--border-color);
+    }
   }
 }

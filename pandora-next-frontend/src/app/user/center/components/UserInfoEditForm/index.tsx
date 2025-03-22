@@ -46,6 +46,9 @@ const UserInfoEditForm = (props: Props) => {
       labelAlign="left"
       onFinish={doSubmit}
     >
+      <Form.Item label="用户名" name="userName">
+        <Input placeholder="请输入用户名" />
+      </Form.Item>
       <Form.Item label="手机号" name="phoneNumber">
         <Input placeholder="请输入手机号" />
       </Form.Item>

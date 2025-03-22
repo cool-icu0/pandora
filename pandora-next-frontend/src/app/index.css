@@ -1,3 +1,32 @@
+/* 添加在文件开头 */
+:root {
+  --bg-primary: #f7f9fc;
+  --bg-card: #fff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --hover-bg: #f3f4f6;
+  --code-bg: #f8f9fa;
+  --error-bg: #fff2f0;
+  --error-border: #ffccc7;
+  --link-color: #1890ff;
+  --icon-color: #9ca3af;
+}
+
+[theme-mode="dark"] {
+  --bg-primary: #141414;
+  --bg-card: #1f1f1f;
+  --text-primary: #ffffff;
+  --text-secondary: #a3a3a3;
+  --border-color: #303030;
+  --hover-bg: #262626;
+  --code-bg: #262626;
+  --error-bg: #2a1f1f;
+  --error-border: #5c2223;
+  --link-color: #4096ff;
+  --icon-color: #666666;
+}
+
 /* 减小整体页面的内边距 */
 #homePage {
   padding: 12px 0;
@@ -23,13 +52,15 @@
 .checkin-card {
   width: 100%;
   max-width: 280px;
-  background: white;
+  background: var(--bg-card);
+  color: var(--text-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border-radius: 10px;
   overflow: hidden;
   transition: all 0.3s;
   position: sticky;
   top: 20px;
+  border: 1px solid var(--border-color);
 }
 
 .checkin-card:hover {
@@ -38,16 +69,12 @@
 }
 
 .checkin-card .ant-card-head {
-  padding: 0 12px;
-  min-height: 36px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .checkin-card .ant-card-head-title {
-  padding: 8px 0;
-  font-size: 15px;
-  font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .checkin-card .ant-card-body {
@@ -363,15 +390,6 @@
   gap: 16px;
 }
 
-.section-container {
-  margin-bottom: 0;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-  padding: 12px;
-  transition: all 0.3s;
-}
-
 /* 优化标题样式 */
 .section-header {
   margin-bottom: 8px;
@@ -477,7 +495,7 @@
 
 .section-container {
   margin-bottom: 0;
-  background-color: #fff;
+  background-color: var(--bg-card);
   border-radius: 10px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
   padding: 12px;
@@ -640,7 +658,7 @@
   background-color: #f5f5f5;
   border-radius: 2px;
   position: relative;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
 }
 
 .checkin-day.checked {
@@ -811,11 +829,7 @@
   color: #52c41a;
 }
 
-/* 确保打卡日格子是相对定位，以便放置日期标签 */
-.checkin-day {
-  position: relative;
-  transition: all 0.3s ease;
-}
+
 
 /* 已打卡日期的标签颜色 */
 .checkin-day.checked .date-label {

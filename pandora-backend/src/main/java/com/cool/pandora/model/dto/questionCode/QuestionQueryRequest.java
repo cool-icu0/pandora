@@ -45,6 +45,11 @@ public class QuestionQueryRequest extends PageRequest implements Serializable {
     private String answer;
 
     /**
+     * 难度
+     */
+    private String difficulty;
+
+    /**
      * 点赞数
      */
     private Integer thumbNum;

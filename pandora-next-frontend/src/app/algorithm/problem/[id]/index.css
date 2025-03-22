@@ -1,3 +1,106 @@
+/* 添加在文件开头 */
+:root {
+  --bg-primary: #f7f9fc;
+  --bg-card: #fff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --hover-bg: #f3f4f6;
+  --code-bg: #f8f9fa;
+  --error-bg: #fff2f0;
+  --error-border: #ffccc7;
+  --link-color: #1890ff;
+  --icon-color: #9ca3af;
+}
+
+[theme-mode="dark"] {
+  --bg-primary: #141414;
+  --bg-card: #1f1f1f;
+  --text-primary: #ffffff;
+  --text-secondary: #a3a3a3;
+  --border-color: #303030;
+  --hover-bg: #262626;
+  --code-bg: #262626;
+  --error-bg: #2a1f1f;
+  --error-border: #5c2223;
+  --link-color: #4096ff;
+  --icon-color: #666666;
+}
+
+/* 修改所有颜色相关的样式 */
+.problem-info {
+  color: var(--text-primary);
+}
+
+.interaction-stats {
+  color: var(--text-secondary);
+}
+
+.stats-container {
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.stat-label {
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  color: var(--text-primary);
+}
+
+.language-label {
+  color: var(--text-primary);
+}
+
+.error-output {
+  background: var(--error-bg);
+  border-color: var(--error-border);
+}
+
+/* 链接样式 */
+a {
+  color: var(--link-color);
+}
+
+a:hover {
+  color: var(--link-color);
+  opacity: 0.8;
+}
+
+/* 图标颜色 */
+.anticon {
+  color: var(--icon-color);
+}
+
+/* 修改模态框和其他组件样式 */
+.ant-modal-content,
+.ant-modal-header,
+.ant-modal-body,
+.ant-modal-footer {
+  background: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.ant-modal-title {
+  color: var(--text-primary) !important;
+}
+
+.ant-tabs-tab {
+  color: var(--text-secondary) !important;
+}
+
+.ant-tabs-tab-active {
+  color: var(--link-color) !important;
+}
+
+.ant-tabs-ink-bar {
+  background: var(--link-color) !important;
+}
+
+/* 其他已有的样式保持不变 */
 .problem-info {
   display: flex;
   justify-content: space-between;
@@ -188,8 +291,58 @@
 }
 
 .problem-detail {
-  max-width: 1200px;
+  max-width: 1600px;
+  width: 100%;
   margin: 0 auto;
+  padding: 24px;
+  background: var(--bg-card);  /* 修改为使用 --bg-card 变量 */
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  left: 24px;
+  top: -10px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-button:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .back-button {
+    left: 16px;
+    top: 16px;
+    padding: 6px 12px;
+  }
+}
+
+/* 在小屏幕上调整padding */
+@media (max-width: 1024px) {
+  .problem-detail {
+    padding: 16px;
+    max-width: 100%;  /* 小屏幕下占满全屏 */
+  }
+}
+
+@media (max-width: 480px) {
+  .problem-detail {
+    padding: 12px;
+  }
 }
 
 .problem-info-container {
@@ -302,6 +455,11 @@
 }
 
 @media (max-width: 768px) {
+  .back-button-container,
+  .layout-switch {
+    display: none;
+  }
+
   .stats-group {
     flex-direction: column;
     gap: 12px;
@@ -423,3 +581,75 @@
 .run-result-modal .ant-tabs-nav {
   margin-bottom: 16px;
 }
+
+
+
+/* 修改相关样式 */
+.problem-detail {
+  background: var(--bg-primary);
+}
+
+.problem-title {
+  color: var(--text-primary);
+}
+
+.stats-container {
+  border-color: var(--border-color);
+}
+
+.stat-label {
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  color: var(--text-primary);
+}
+
+.interaction-stats {
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.description-card, 
+.code-card {
+  background: var(--bg-card) !important;
+}
+
+.language-selector {
+  background: var(--code-bg) !important;
+}
+
+.back-button {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.back-button:hover {
+  background: var(--hover-bg);
+}
+
+.test-case-detail {
+  background: var(--code-bg);
+}
+
+.test-case-io {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+}
+
+/* 修改运行结果模态框样式 */
+.run-result-modal .ant-modal-content {
+  background: var(--bg-card);
+}
+
+.run-result-modal .ant-modal-header {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+}
+
+.run-loading p {
+  color: var(--text-secondary);
+}
+
+/* 其他样式保持不变 */

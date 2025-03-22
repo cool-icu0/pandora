@@ -60,6 +60,11 @@ public class QuestionCode implements Serializable {
     private String judgeConfig;
 
     /**
+     * 难度
+     */
+    private String difficulty;
+
+    /**
      * 题目提交数
      */
     private Integer submitNum;

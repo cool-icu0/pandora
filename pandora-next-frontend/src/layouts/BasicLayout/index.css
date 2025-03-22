@@ -5,3 +5,23 @@
 .ant-pro-layout-top {
   height: 100%;
 }
+
+/* 亮色主题 */
+body[theme-mode="light"] {
+  --bg-color: #ffffff;
+  --text-color: rgba(0, 0, 0, 0.85);
+  --border-color: #f0f0f0;
+}
+
+/* 暗色主题 */
+body[theme-mode="dark"] {
+  --bg-color: #141414;
+  --text-color: rgba(255, 255, 255, 0.85);
+  --border-color: #303030;
+}
+
+/* 应用主题变量 */
+#basicLayout {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

@@ -15,7 +15,7 @@ export default function SubmissionsPage() {
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [pagination, setPagination] = useState({
     current: 1,
-    pageSize: 10,
+    pageSize: 5,
     total: 0,
   });
   const [codeModalVisible, setCodeModalVisible] = useState(false);

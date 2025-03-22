@@ -13,6 +13,7 @@ import com.cool.pandora.exception.BusinessException;
 import com.cool.pandora.mapper.UserMapper;
 import com.cool.pandora.model.dto.user.UserQueryRequest;
 import com.cool.pandora.model.entity.User;
+import com.cool.pandora.model.enums.AvatarEnum;
 import com.cool.pandora.model.enums.UserRoleEnum;
 import com.cool.pandora.model.vo.LoginUserVO;
 import com.cool.pandora.model.vo.UserVO;
@@ -78,6 +79,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
             // 3. 插入数据
             User user = new User();
+            //随机取个名字
+            user.setUserName( "用户" + (int)(Math.random()*1000*1000));
+            user.setUserRole(UserRoleEnum.USER.getValue());
+            //随机从AvatarEnum中获取一个头像
+            user.setUserAvatar(AvatarEnum.getRandomAvatar());
             user.setUserAccount(userAccount);
             user.setUserPassword(encryptPassword);
             boolean saveResult = this.save(user);

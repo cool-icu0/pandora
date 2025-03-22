@@ -150,6 +150,7 @@ create table if not exists question_code
     answer      text                               null comment '题目答案',
     judgeCase   text                               null comment '判题用例（json 数组）',
     judgeConfig text                               null comment '判题配置（json 对象）',
+    difficulty  varchar(50) default '简单'          not null comment '题目难度',
     submitNum   int      default 0                 not null comment '题目提交数',
     acceptedNum int      default 0                 not null comment '题目通过数',
     thumbNum    int      default 0                 not null comment '点赞数',

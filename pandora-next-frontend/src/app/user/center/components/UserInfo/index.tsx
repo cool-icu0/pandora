@@ -17,6 +17,8 @@ const UserInfo = (props: Props) => {
   return (
     <div className="user-info">
       <div style={{ textAlign: "left" }}>
+        {/* 用户名 */}
+        <Paragraph type="secondary">用户名：{user.userName}</Paragraph>
         {/* 手机号 */}
         <Paragraph type="secondary">
           手机号：{user.phoneNumber || "未填写"}

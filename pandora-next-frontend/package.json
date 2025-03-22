@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.1",
+    "@ant-design/plots": "^2.3.3",
     "@ant-design/pro-components": "^2.7.15",
     "@ant-design/pro-form": "^2.29.0",
     "@ant-design/pro-table": "^3.16.6",
+    "@antv/g2": "^5.2.12",
     "@bytemd/plugin-gfm": "^1.21.0",
     "@bytemd/plugin-highlight": "^1.21.0",
     "@bytemd/react": "^1.21.0",
@@ -25,9 +27,11 @@
     "echarts": "^5.5.1",
     "echarts-for-react": "^3.0.2",
     "github-markdown-css": "^5.6.1",
+    "monaco-editor": "^0.52.2",
     "next": "14.2.7",
     "react": "^18",
     "react-dom": "^18",
+    "react-monaco-editor": "^0.58.0",
     "react-redux": "^9.1.2"
   },
   "devDependencies": {

@@ -1,16 +1,81 @@
-/* 帖子详情页样式 */
-#postPage {
+.post-page-container {
+  display: flex;
+  gap: 24px;
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
-  min-width: 800px;
 }
 
-/* 响应式调整 */
-@media (max-width: 800px) {
-  #postPage {
-    min-width: auto;
-    width: 100%;
+.post-main-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-info-sidebar {
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.user-info-card {
+  position: sticky;
+  top: 24px;
+}
+
+.user-info-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.username {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.user-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user-profile {
+  color: #666;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.role-tag {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #e6f4ff;
+  color: #1677ff;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.join-time {
+  color: #999;
+  font-size: 12px;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .post-page-container {
+    flex-direction: column;
     padding: 16px;
+  }
+
+  .user-info-sidebar {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .user-info-card {
+    position: static;
   }
 }

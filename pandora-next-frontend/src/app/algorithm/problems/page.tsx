@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Card, Tag, Input, Select, Space, Table, message } from 'antd';
+// 修改导入部分
+import { useEffect, useState, useRef } from 'react';
+import { Card, Tag, Input, Select, Space, Table, message, Progress, Tooltip } from 'antd';
 import { SearchOutlined, LikeFilled, StarFilled } from '@ant-design/icons';
 import { listQuestionCodeVoByPageUsingPost } from '@/api/questionCodeController';
+import { Pie } from '@ant-design/plots';
 
 export default function AlgorithmPage() {
   const [loading, setLoading] = useState(false);
@@ -56,6 +58,7 @@ export default function AlgorithmPage() {
       title: '题目',
       dataIndex: 'title',
       key: 'title',
+      width: 250,
       render: (title: string, record: API.QuestionCodeVO) => (
         <a href={`/algorithm/problem/${record.id}`}>{title}</a>
       )
@@ -63,35 +66,140 @@ export default function AlgorithmPage() {
     {
       title: '通过率',
       key: 'acceptance',
+      width: 250,
       render: (_: any, record: API.QuestionCodeVO) => {
         const acceptanceRate = (((record.acceptedNum || 0) / (record.submitNum || 1)) * 100);
-        let color = '';
-        let level = '';
+        const acceptedNum = record.acceptedNum || 0;
+        const totalSubmit = record.submitNum || 0;
+        let strokeColor = '';
         
         if (acceptanceRate <= 30) {
-          color = '#f50';
-          level = '极难';
+          strokeColor = '#ff4d4f';
         } else if (acceptanceRate <= 50) {
-          color = '#ff4d4f';
-          level = '困难';
+          strokeColor = '#ff7875';
         } else if (acceptanceRate <= 70) {
-          color = '#faad14';
-          level = '中等';
+          strokeColor = '#ffa940';
         } else if (acceptanceRate <= 85) {
+          strokeColor = '#52c41a';
+        } else {
+          strokeColor = '#52c41a';
+        }
+
+        const tooltipContent = (
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ marginBottom: '8px' }}>
+              通过数：{acceptedNum}<br />
+              提交数：{totalSubmit}
+            </div>
+            <DonutChart 
+              data={
+                acceptedNum === 0 && totalSubmit === 0 
+                  ? [{ type: '未开始', value: 1 }]
+                  : [
+                      { type: '通过', value: acceptedNum },
+                      { type: '未通过', value: totalSubmit - acceptedNum }
+                    ]
+              }
+              color={
+                acceptedNum === 0 && totalSubmit === 0 
+                  ? ['#f0f0f0']
+                  : [strokeColor, '#f0f0f0']
+              }
+            />
+          </div>
+        );
+
+// 替换原来的 DonutChart 组件
+function DonutChart({ data, color }: { data: { type: string; value: number }[]; color: string[] }) {
+  const config = {
+    data,
+    angleField: 'value',
+    colorField: 'type',
+    legend: false,
+    innerRadius: 0.6,
+    animation: {
+      appear: {
+        animation: 'wave-in',
+        duration: 1000,
+      },
+    },
+    style: {
+      stroke: '#fff',
+      lineWidth: 1,
+    },
+    width: 100,
+    height: 100,
+    autoFit: false,
+    padding: 0,
+    scale: {
+      color: {
+        range: color,
+      },
+    },
+  };
+
+  return <Pie {...config} />;
+}
+
+        return (
+          <Tooltip title={tooltipContent} color='white' overlayInnerStyle={{ color: 'rgba(0, 0, 0, 0.85)' }}>
+            <div style={{ width: '200px', padding: '4px 0' }}>
+              <Progress
+                percent={Number(acceptanceRate.toFixed(2))}
+                size={[200, 20]}
+                strokeColor={strokeColor}
+                trailColor="#f0f0f0"
+                format={(percent) => (
+                  <span style={{ 
+                    color: 'black',
+                    fontSize: '12px',
+                    textShadow: '0 0 2px rgba(0,0,0,0.5)',
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    transform: 'translate(-50%, -50%)'
+                  }}>
+                    {percent}%
+                  </span>
+                )}
+                style={{
+                  margin: 0,
+                  width: '200px',
+                  position: 'relative'
+                }}
+                strokeLinecap="round"
+              />
+            </div>
+          </Tooltip>
+        );
+      },
+    },
+    {
+      title: '难度',
+      key: 'difficulty',
+      render: (_: any, record: API.QuestionCodeVO) => {
+        let color = '';
+        
+        if ((record as any).difficulty === '极难') {
+          color = '#f50';
+        } else if ((record as any).difficulty === '困难') {
+          color = '#ff4d4f';
+        } else if ((record as any).difficulty === '中等') {
+          color = '#faad14';
+        } else if ((record as any).difficulty === '初级') {
           color = '#1890ff';
-          level = '初级';
         } else {
           color = '#52c41a';
-          level = '简单';
         }
 
         return (
           <Tag color={color}>
-            {acceptanceRate.toFixed(1)}% · {level}
+            {(record as any).difficulty}
           </Tag>
         );
       }
     },
+
     {
       title: '标签',
       dataIndex: 'tags',

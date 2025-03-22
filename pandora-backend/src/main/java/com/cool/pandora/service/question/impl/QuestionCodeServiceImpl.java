@@ -103,6 +103,7 @@ public class QuestionCodeServiceImpl extends ServiceImpl<QuestionCodeMapper, Que
         String answer = questionQueryRequest.getAnswer();
         String sortField = questionQueryRequest.getSortField();
         String sortOrder = questionQueryRequest.getSortOrder();
+        String diffculty = questionQueryRequest.getDifficulty();
 
 
         // 拼接查询条件
@@ -117,6 +118,7 @@ public class QuestionCodeServiceImpl extends ServiceImpl<QuestionCodeMapper, Que
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
         queryWrapper.eq("isDelete", false);
+        queryWrapper.eq(StringUtils.isNotBlank(diffculty), "difficulty", diffculty);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;

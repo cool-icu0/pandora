@@ -205,16 +205,6 @@ export default function HomePage() {
     }
   };
 
-  // 处理跳转到指定页
-  const handleJumpToPage = (value: string) => {
-    const page = parseInt(value, 10);
-    if (!isNaN(page)) {
-      handleAlgorithmPageChange(page);
-    } else {
-      message.warning('请输入有效的页码');
-    }
-  };
-
   // 添加面试题库分页变化处理函数
   const handleBankPageChange = (page: number, pageSize?: number) => {
     if (page > 0 && page <= Math.ceil(bankPagination.total / bankPagination.pageSize)) {

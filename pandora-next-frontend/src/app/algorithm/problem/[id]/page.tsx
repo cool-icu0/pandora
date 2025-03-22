@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Card, Tag, Space, Button, message, Select, Modal } from 'antd';
+import { Card, Tag, Space, Button, message, Select } from 'antd';
 import { LikeFilled, StarFilled, EditOutlined } from '@ant-design/icons';
 import { getQuestionCodeByIdUsingGet, doQuestionCodeSubmitUsingPost, getQuestionCodeSubmitByIdUsingGet, doQuestionCodeRunUsingPost } from '@/api/questionCodeController';
 import MdViewer from '@/components/MdViewer';
@@ -11,12 +11,14 @@ import { Typography } from 'antd';
 import RunResultModal from './components/RunResultModal';
 import EditTestCaseModal from './components/EditTestCaseModal';
 import SubmitResultModal from './components/SubmitResultModal';
+import { LeftOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
 import './index.css';
 
 import { PlayCircleOutlined, CloudUploadOutlined } from '@ant-design/icons';
+import Link from 'next/link';
 
 export default function ProblemDetail({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(false);
@@ -60,7 +62,7 @@ export default function ProblemDetail({ params }: { params: { id: string } }) {
   }, []);
 
   const templateCode = {
-    java: `public class Solution {
+    java: `public class Main {
     public static void main(String[] args) {
         // 在这里编写你的代码
     }
@@ -273,23 +275,30 @@ ${judgeCase}
 
     const acceptanceRate = (((problem.acceptedNum || 0) / (problem.submitNum || 1)) * 100);
     let color = '';
-    let level = '';
     
     if (acceptanceRate <= 30) {
       color = '#f50';
-      level = '极难';
     } else if (acceptanceRate <= 50) {
       color = '#ff4d4f';
-      level = '困难';
     } else if (acceptanceRate <= 70) {
       color = '#faad14';
-      level = '中等';
     } else if (acceptanceRate <= 85) {
       color = '#1890ff';
-      level = '初级';
     } else {
       color = '#52c41a';
-      level = '简单';
+    }
+    let colors = '';
+        
+    if ((problem as any).difficulty === '极难') {
+      colors = '#f50';
+    } else if ((problem as any).difficulty === '困难') {
+      colors = '#ff4d4f';
+    } else if ((problem as any).difficulty === '中等') {
+      colors = '#faad14';
+    } else if ((problem as any).difficulty === '初级') {
+      colors = '#1890ff';
+    } else {
+      colors = '#52c41a';
     }
 
     return (
@@ -298,10 +307,11 @@ ${judgeCase}
             <div className="problem-header">
                 <h1 className="problem-title">{problem.title}</h1>
                 <div className="tag-container">
-                <Tag color={color}>{level}</Tag>
-                {(typeof problem.tags === 'string' ? JSON.parse(problem.tags) : problem.tags || []).map((tag:any) => (
-                    <Tag key={tag}>{tag}</Tag>
-                ))}
+                    <Tag color={color}>{acceptanceRate.toFixed(2)}%</Tag>
+                    <Tag color={colors}>{(problem as any).difficulty}</Tag>
+                    {(typeof problem.tags === 'string' ? JSON.parse(problem.tags) : problem.tags || []).map((tag:any) => (
+                        <Tag key={tag}>{tag}</Tag>
+                    ))}
                 </div>
             </div>
 
@@ -336,6 +346,14 @@ ${judgeCase}
                 >
                     {isVerticalLayout ? '上下排列' : '左右排列'}
                 </Button>
+                <Link href="/algorithm/problems" className="back-link">
+                    <Button 
+                        className="back-button" 
+                        icon={<LeftOutlined />}
+                    >
+                        返回题目列表
+                    </Button>
+                </Link>
             </div>
         </div>
     </Space>
@@ -401,31 +419,28 @@ ${judgeCase}
   };
 
   return (
-    <div className="problem-detail" style={{ padding: '24px', background: '#f7f9fc' }}>
+    <div className="problem-detail">
         {renderProblemInfo()}
         <Card loading={loading} bordered={false} style={{ borderRadius: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
             <div className={`problem-content ${isVerticalLayout ? 'vertical' : 'horizontal'}`}>
                 <Card className="description-card" bordered={false} style={{ 
                     borderRadius: '12px',
-                    background: '#fff',
                     padding: '24px'
                 }}>
-                    <Title level={4} style={{ marginBottom: '20px', color: '#1a1a1a' }}>题目描述</Title>
+                    <Title level={4} style={{ marginBottom: '20px'}}>题目描述</Title>
                     <MdViewer value={problem?.content || ''} />
                 </Card>
                 <Card className="code-card" bordered={false} style={{ 
                     borderRadius: '12px',
-                    background: '#fff',
                     padding: '24px'
                 }}>
                     <div className="language-selector" style={{
-                        background: '#f8f9fa',
                         padding: '16px 24px',
                         borderRadius: '12px',
                         marginBottom: '24px'
                     }}>
                         <div className="language-controls">
-                            <Title level={5} style={{ margin: 0, color: '#1a1a1a' }}>选择语言：</Title>
+                            <Title level={5} style={{ margin: 0 }}>选择语言：</Title>
                             <Select
                                 value={selectedLanguage}
                                 onChange={handleLanguageChange}
@@ -446,9 +461,7 @@ ${judgeCase}
                                 style={{ 
                                     borderRadius: '8px',
                                     height: '40px',
-                                    background: '#f0f2f5',
                                     border: 'none',
-                                    color: '#1a1a1a',
                                     fontWeight: 500
                                 }}
                             >
@@ -456,7 +469,7 @@ ${judgeCase}
                             </Button>
                         </div>
                     </div>
-                    <Title level={4} style={{ marginBottom: '20px', color: '#1a1a1a' }}>编写代码</Title>
+                    <Title level={4} style={{ marginBottom: '20px' }}>编写代码</Title>
                     <div style={{ borderRadius: '12px', overflow: 'hidden' }}>
                         <CodeEditor
                             value={code || templateCode[selectedLanguage as keyof typeof templateCode]}
@@ -470,7 +483,6 @@ ${judgeCase}
                             style={{
                                 borderRadius: '8px',
                                 height: '40px',
-                                background: '#f0f2f5',
                                 border: 'none',
                                 padding: '0 24px',
                                 marginRight: '8px'
@@ -484,7 +496,6 @@ ${judgeCase}
                             style={{
                                 borderRadius: '8px',
                                 height: '40px',
-                                background: '#f0f2f5',
                                 border: 'none',
                                 padding: '0 24px'
                             }}

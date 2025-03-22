@@ -1,15 +1,10 @@
 "use client";
-import { message } from "antd";
+import { message, Card, Avatar } from "antd";
 import { getPostVoByIdUsingGet } from "@/api/postController";
 import PostCard from "@/components/PostCard";
 import { useEffect, useState } from "react";
 import "./index.css";
 
-
-/**
- * 帖子详情页
- * @constructor
- */
 export default function PostPage({ params }) {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,8 +39,24 @@ export default function PostPage({ params }) {
   }
 
   return (
-    <div id="postPage">
-      <PostCard post={post} />
+    <div className="post-page-container">
+      <div className="post-main-content">
+        <PostCard post={post} />
+      </div>
+      <div className="user-info-sidebar">
+        <Card className="user-info-card">
+          <div className="user-info-header">
+            <Avatar size={64} src={post.user.userAvatar} />
+            <h3 className="username">{post.user.userName}</h3>
+          </div>
+          <div className="user-info-content">
+            <p className="user-profile">{post.user.userProfile || '这个用户很懒，还没有简介'}</p>
+            <div className="user-role">
+              <span className="role-tag">{post.user.userRole}</span>
+            </div>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 }
