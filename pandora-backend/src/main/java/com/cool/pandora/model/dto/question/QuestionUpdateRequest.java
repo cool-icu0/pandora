@@ -31,6 +31,10 @@ public class QuestionUpdateRequest implements Serializable {
      * 标签列表
      */
     private List<String> tags;
+    /**
+     * 题目难度
+     */
+    private String difficulty;
 
     /**
      * 推荐答案

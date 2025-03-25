@@ -236,16 +236,16 @@ public class QuestionController {
             // 业务异常
             if (!BlockException.isBlockException(ex)) {
                 Tracer.trace(ex);
-                // return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "系统错误");
-                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "系统错误");
+                return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "系统错误");
+                // throw new BusinessException(ErrorCode.SYSTEM_ERROR, "系统错误");
             }
             // 降级操作
             if (ex instanceof DegradeException) {
                 return handleFallback(questionQueryRequest, request, ex);
             }
             // 限流操作
-            // return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "访问过于频繁，请稍后再试");
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "访问过于频繁，请稍后再试");
+            return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "访问过于频繁，请稍后再试");
+            // throw new BusinessException(ErrorCode.SYSTEM_ERROR, "访问过于频繁，请稍后再试");
         } finally {
             if (entry != null) {
                 entry.exit(1, remoteAddr);

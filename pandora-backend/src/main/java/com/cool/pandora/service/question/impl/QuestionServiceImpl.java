@@ -388,6 +388,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             question.setTitle(title);
             question.setUserId(user.getId());
             question.setTags("[\"待审核\"]");
+            question.setDifficulty("简单");
             // 优化点：可以并发生成
             question.setAnswer(aiGenerateQuestionAnswer(title));
             return question;

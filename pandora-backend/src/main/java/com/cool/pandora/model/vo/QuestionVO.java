@@ -57,6 +57,10 @@ public class QuestionVO implements Serializable {
     private List<String> tagList;
 
     /**
+     * 题目难度
+     */
+
+    /**
      * 创建用户信息
      */
     private UserVO user;
