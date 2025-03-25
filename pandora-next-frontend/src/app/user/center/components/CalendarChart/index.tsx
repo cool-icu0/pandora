@@ -26,8 +26,8 @@ const CalendarChart = (props: Props) => {
       const res = await getUserSignInRecordUsingGet({
         year,
       });
-      setDataList(res.data);
-    } catch (e) {
+      setDataList((res as any).data);
+    } catch (e:any) {
       message.error("获取刷题签到记录失败，" + e.message);
     }
   };
