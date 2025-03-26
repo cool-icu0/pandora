@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api/recommend")
+@RequestMapping("/recommend")
 public class RecommendController {
 
     @Resource

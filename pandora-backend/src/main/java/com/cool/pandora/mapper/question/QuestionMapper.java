@@ -43,8 +43,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
             "AND s.submitState = 2 " +  // 完成状态
             "AND s.createTime >= #{oneMonthAgo} " +
             "AND s.isDelete = 0 " +
-            "AND q.isDelete = 0 " +
-            "ORDER BY s.createTime DESC")
+            "AND q.isDelete = 0 ")
     List<Question> selectRecentCompletedQuestions(Long userId, Date oneMonthAgo);
 
     /**
