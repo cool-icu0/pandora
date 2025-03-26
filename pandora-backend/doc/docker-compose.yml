@@ -66,6 +66,28 @@ services:
     ports:
       - "8858:8858"  # 更新后的端口
       - "8719:8719"
+  oap:
+    image: apache/skywalking-oap-server:10.0.0-java17
+    container_name: skywalking-oap17
+    ports:
+      - "12800:12800"
+      - "11800:11800"
+    environment:
+      TZ: Asia/Shanghai
+      SW_STORAGE: elasticsearch
+      SW_STORAGE_ES_CLUSTER_NODES: elasticsearch:9200
+      SW_ES_USER: elastic
+      SW_ES_PASSWORD: elastic
+      SW_HEALTH_CHECKER: default
+      JAVA_OPTS: "-Xms1024m -Xmx2048m"
+
+  ui:
+    image: apache/skywalking-ui:10.0.0-java17
+    container_name: skywalking-ui17
+    ports:
+      - "8080:8080"
+    environment:
+      SW_OAP_ADDRESS: http://oap:12800
 
 volumes:
   mysql-data:
