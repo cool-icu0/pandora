@@ -1,5 +1,59 @@
-#InterviewPage {
-  width: 100%;
+/* 整体页面样式 */
+.p-6 {
+  padding: 24px;
+}
+
+/* 搜索区域样式 */
+.search-container {
+  margin-bottom: 16px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+/* 表格样式 */
+.table-container {
+  overflow-x: auto;
+}
+
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+/* 难度标签样式 */
+.difficulty-tag {
+  min-width: 40px;
+  text-align: center;
+}
+
+/* 进度条提示框样式 */
+.progress-tooltip {
+  padding: 12px;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 排行榜样式 */
+.rank-card {
+  width: 300px;
+  height: fit-content;
+  background: #fff;
+}
+
+.rank-header {
+  margin-bottom: 16px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rank-select {
+  width: 100px;
 }
 
 .rank-item {
@@ -19,48 +73,45 @@
   font-size: 16px;
 }
 
-/* 第一名样式 */
+/* 前三名特殊样式 */
 .rank-item:nth-child(1) .rank-index {
   color: #f5222d;
   font-size: 20px;
   font-weight: 800;
 }
 
-/* 第二名样式 */
 .rank-item:nth-child(2) .rank-index {
   color: #fa8c16;
   font-size: 18px;
   font-weight: 700;
 }
 
-/* 第三名样式 */
 .rank-item:nth-child(3) .rank-index {
   color: #52c41a;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
 }
+
 .rank-container {
-  padding: 12px;
+  padding: 10px 12px;
   border-radius: 8px;
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   gap: 8px;
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s;
+}
+
+.rank-container:hover {
+  border-color: #1890ff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .rank-avatar {
   flex-shrink: 0;
   width: 36px;
   height: 36px;
-  margin-right: 8px;
-}
-
-.rank-info {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  border-radius: 50%;
 }
 
 .rank-user {
@@ -69,19 +120,13 @@
   overflow: hidden;
 }
 
-.rank-count {
-  flex-shrink: 0;
-  font-weight: 500;
-  color: #1890ff;
-  margin-left: 8px;
-}
-
 .rank-name {
   margin: 0;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: rgba(0, 0, 0, 0.85);
 }
 
 .rank-profile {
@@ -99,59 +144,7 @@
   color: #1890ff;
 }
 
-.rank-tag {
-  position: absolute;
-  right: -1px;
-  top: -1px;
-  z-index: 1;
-  border-radius: 4px 4px 0 4px;
-}
-
-
-
-.rank-index {
-  margin-right: 8px;
-  min-width: 20px;
-}
-
-
-
-.rank-info {
-  flex: 1;
-  min-width: 120px;
-  overflow: hidden;
-}
-
-.rank-name {
-  margin: 0;
-  font-weight: 500;
-}
-
-.rank-profile {
-  margin: 0;
-  font-size: 12px;
-}
-
-.rank-count {
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.rank-header {
-  margin-bottom: 16px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.rank-select {
-  width: 100px;
-}
-
-.rank-card {
-  width: 300px;
-}
-
+/* 响应式布局 */
 @media screen and (max-width: 768px) {
   .rank-card {
     width: 100%;
@@ -161,7 +154,7 @@
     padding: 8px;
   }
   
-  .rank-info {
+  .rank-user {
     min-width: 100px;
   }
 }
@@ -174,5 +167,9 @@
   
   .rank-select {
     width: 100%;
+  }
+  
+  .p-6 {
+    padding: 16px;
   }
 }

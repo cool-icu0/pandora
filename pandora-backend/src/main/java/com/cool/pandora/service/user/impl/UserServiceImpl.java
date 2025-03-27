@@ -443,7 +443,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .sorted((a, b) -> b.getSignInCount() - a.getSignInCount())
                 .limit(limit)
                 .collect(Collectors.toList());
-                
+        
         return rankList;
     }
 

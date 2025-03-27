@@ -90,6 +90,21 @@ export async function getUserSignInRecordUsingGet(
   });
 }
 
+/** getUserSignInRank GET /api/user/get/sign_in/rank */
+export async function getUserSignInRankUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getUserSignInRankUsingGETParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseListUserVO_>('/api/user/get/sign_in/rank', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
 /** getUserVOById GET /api/user/get/vo */
 export async function getUserVoByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

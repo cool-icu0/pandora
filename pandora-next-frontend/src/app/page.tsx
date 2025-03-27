@@ -261,30 +261,23 @@ export default function HomePage() {
       title: '难度',
       key: 'acceptance',
       render: (_: any, record: API.QuestionCodeVO) => {
-        const acceptanceRate = (((record.acceptedNum || 0) / (record.submitNum || 1)) * 100);
-        let color = '';
-        let level = '';
+        let colors = '';
         
-        if (acceptanceRate <= 30) {
-          color = '#f50';
-          level = '极难';
-        } else if (acceptanceRate <= 50) {
-          color = '#ff4d4f';
-          level = '困难';
-        } else if (acceptanceRate <= 70) {
-          color = '#faad14';
-          level = '中等';
-        } else if (acceptanceRate <= 85) {
-          color = '#1890ff';
-          level = '初级';
+        if ((record as any).difficulty === '极难') {
+          colors = '#f50';
+        } else if ((record as any).difficulty === '困难') {
+          colors = '#ff4d4f';
+        } else if ((record as any).difficulty === '中等') {
+          colors = '#faad14';
+        } else if ((record as any).difficulty === '初级') {
+          colors = '#1890ff';
         } else {
-          color = '#52c41a';
-          level = '简单';
+          colors = '#52c41a';
         }
 
         return (
-          <Tag color={color}>
-            {level}
+          <Tag color={colors}>
+            {(record as any).difficulty}
           </Tag>
         );
       }
