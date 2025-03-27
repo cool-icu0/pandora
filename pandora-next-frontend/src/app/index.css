@@ -43,9 +43,57 @@
   min-width: 0; /* 防止内容溢出 */
 }
 
+/* 右侧内容区域基础样式 */
 .content-right {
-  width: 350px;
+  width: 280px;
   flex-shrink: 0;
+  position: relative;
+}
+
+/* 毛玻璃效果相关样式 */
+.content-right.blur-content > *:not(.blur-overlay) {
+  filter: blur(8px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.content-right .blur-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.blur-content {
+  text-align: center;
+}
+
+.blur-title {
+  font-size: 16px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.blur-button {
+  display: inline-block;
+  padding: 8px 24px;
+  background: var(--primary-color);
+  color: #fff;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.blur-button:hover {
+  opacity: 0.9;
+  color: #fff;
 }
 
 /* 签到打卡卡片样式 */
@@ -250,6 +298,9 @@
 @media (max-width: 768px) {
   .two-column-layout {
     grid-template-columns: 1fr;
+  }
+  .content-right {
+    display: none;  /* 在移动端隐藏 */
   }
   
   .content-main,
@@ -834,4 +885,60 @@
 /* 已打卡日期的标签颜色 */
 .checkin-day.checked .date-label {
   color: white;
+}
+
+/* 推荐卡片样式 */
+.recommend-card {
+  margin-top: 16px;
+}
+
+.recommend-content {
+  padding: 8px 0;
+}
+
+.recommend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recommend-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s;
+}
+
+.recommend-item:hover {
+  border-color: #1890ff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recommend-title {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.recommend-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.recommend-info {
+  margin-left: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.recommend-name {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.recommend-profile {
+  color: #666;
+  font-size: 12px;
 }
