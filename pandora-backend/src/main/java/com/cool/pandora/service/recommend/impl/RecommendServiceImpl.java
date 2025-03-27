@@ -1,26 +1,25 @@
 package com.cool.pandora.service.recommend.impl;
 
 
-import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cool.pandora.common.ErrorCode;
 import com.cool.pandora.exception.BusinessException;
-import com.cool.pandora.mapper.UserMapper;
-import com.cool.pandora.mapper.question.QuestionCommentMapper;
-import com.cool.pandora.mapper.question.QuestionMapper;
 import com.cool.pandora.mapper.recommend.QuestionRecommendMapper;
 import com.cool.pandora.mapper.recommend.UserRecommendMapper;
 import com.cool.pandora.model.dto.recommend.QuestionRecommendRequest;
 import com.cool.pandora.model.dto.recommend.UserRecommendRequest;
 import com.cool.pandora.model.entity.User;
-import com.cool.pandora.model.entity.question.Question;
+import com.cool.pandora.model.entity.question.QuestionCode;
 import com.cool.pandora.model.entity.recommend.QuestionRecommend;
 import com.cool.pandora.model.entity.recommend.UserRecommend;
+import com.cool.pandora.model.vo.QuestionCodeVO;
+import com.cool.pandora.model.vo.UserVO;
 import com.cool.pandora.model.vo.recommend.QuestionRecommendVO;
 import com.cool.pandora.model.vo.recommend.UserRecommendVO;
+import com.cool.pandora.service.question.QuestionCodeService;
 import com.cool.pandora.service.recommend.RecommendService;
 import com.cool.pandora.service.recommend.algorithm.RecommendAlgorithm;
+import com.cool.pandora.service.user.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +38,10 @@ public class RecommendServiceImpl implements RecommendService {
 
     @Resource
     private RecommendAlgorithm recommendAlgorithm;
+    @Resource
+    private UserService userService;
+    @Resource
+    private QuestionCodeService questionCodeService;
 
     @Override
     public List<UserRecommendVO> getUserRecommendList(UserRecommendRequest request) {
@@ -102,6 +105,10 @@ public class RecommendServiceImpl implements RecommendService {
         if (userRecommend.getTags() != null) {
             vo.setTags(JSONObject.parseArray(userRecommend.getTags(), String.class));
         }
+        User user = userService.getById(userRecommend.getRecommendUserId());
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        vo.setRecommendUser(userVO);
 
         return vo;
     }
@@ -110,6 +117,11 @@ public class RecommendServiceImpl implements RecommendService {
     private QuestionRecommendVO convertToVO(QuestionRecommend questionRecommend) {
         QuestionRecommendVO vo = new QuestionRecommendVO();
         BeanUtils.copyProperties(questionRecommend, vo);
+
+        QuestionCode questionCode = questionCodeService.getById(questionRecommend.getQuestionId());
+        QuestionCodeVO questionCodeVO = new QuestionCodeVO();
+        BeanUtils.copyProperties(questionCode, questionCodeVO);
+        vo.setQuestionCodeVO(questionCodeVO);
         return vo;
     }
 

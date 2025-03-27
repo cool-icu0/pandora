@@ -4,10 +4,12 @@ import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cool.pandora.mapper.UserMapper;
+import com.cool.pandora.mapper.question.QuestionCodeMapper;
 import com.cool.pandora.mapper.question.QuestionCommentMapper;
 import com.cool.pandora.mapper.question.QuestionMapper;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.model.entity.question.Question;
+import com.cool.pandora.model.entity.question.QuestionCode;
 import com.cool.pandora.model.entity.recommend.QuestionRecommend;
 import com.cool.pandora.model.entity.recommend.UserRecommend;
 import org.springframework.stereotype.Component;
@@ -23,7 +25,7 @@ public class RecommendAlgorithm {
     private UserMapper userMapper;
 
     @Resource
-    private QuestionMapper questionMapper;
+    private QuestionCodeMapper questionCodeMapper;
 
     @Resource
     private QuestionCommentMapper questionCommentMapper;
@@ -51,19 +53,19 @@ public class RecommendAlgorithm {
      */
     public List<QuestionRecommend> getSimilarQuestions(Long userId) {
         // 1. 获取用户最近完成的题目
-        List<Question> recentQuestions = getRecentCompletedQuestions(userId);
+        List<QuestionCode> recentQuestions = getRecentCompletedQuestions(userId);
 
         // 2. 基于题目标签找相似题目
         Set<Long> recommendQuestionIds = new HashSet<>();
-        for (Question question : recentQuestions) {
+        for (QuestionCode question : recentQuestions) {
             List<String> tags = parseQuestionTags(question);
-            QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
+            QueryWrapper<QuestionCode> queryWrapper = new QueryWrapper<>();
             queryWrapper.ne("id", question.getId());
             for (String tag : tags) {
                 queryWrapper.or().like("tags", tag);
             }
             queryWrapper.last("LIMIT 5");
-            List<Question> similar = questionMapper.selectList(queryWrapper);
+            List<QuestionCode> similar = questionCodeMapper.selectList(queryWrapper);
             similar.forEach(q -> recommendQuestionIds.add(q.getId()));
         }
 
@@ -76,16 +78,16 @@ public class RecommendAlgorithm {
      */
     public List<QuestionRecommend> getDailyRecommendations(Long userId) {
         // 1. 获取用户已完成的题目
-        List<Long> completedQuestionIds = questionMapper.selectCompletedQuestionIds(userId);
+        List<Long> completedQuestionIds = questionCodeMapper.selectCompletedQuestionIds(userId);
 
         // 2. 随机选择一些题目
-        List<Question> dailyQuestions = questionMapper.selectList(new QueryWrapper<Question>()
+        List<QuestionCode> dailyQuestions = questionCodeMapper.selectList(new QueryWrapper<QuestionCode>()
                 .notIn("id", completedQuestionIds)
                 .last("ORDER BY RAND() LIMIT 10"));
 
         // 3. 生成推荐记录
         return createQuestionRecommendations(userId,
-                dailyQuestions.stream().map(Question::getId).collect(Collectors.toSet()),
+                dailyQuestions.stream().map(QuestionCode::getId).collect(Collectors.toSet()),
                 "daily");
     }
 
@@ -97,13 +99,13 @@ public class RecommendAlgorithm {
         String currentLevel = getUserLevel(userId);
 
         // 2. 选择稍难的题目
-        List<Question> progressionQuestions = questionMapper.selectList(new QueryWrapper<Question>()
+        List<QuestionCode> progressionQuestions = questionCodeMapper.selectList(new QueryWrapper<QuestionCode>()
                 .gt("difficulty", currentLevel)
                 .last("LIMIT 10"));
 
         // 3. 生成推荐记录
         return createQuestionRecommendations(userId,
-                progressionQuestions.stream().map(Question::getId).collect(Collectors.toSet()),
+                progressionQuestions.stream().map(QuestionCode::getId).collect(Collectors.toSet()),
                 "level");
     }
 
@@ -127,7 +129,7 @@ public class RecommendAlgorithm {
             // 3.1计算用户最近一个月的活跃度
             Date oneMonthAgo = DateUtil.offsetMonth(new Date(), -1);
             // 3.2获取用户最近一个月的题目完成数量
-            Integer questionCount = questionMapper.countUserCompletedQuestions(userId, oneMonthAgo);
+            Integer questionCount = questionCodeMapper.countUserCompletedQuestions(userId, oneMonthAgo);
             // 3.3计算活跃度分数
             float activityScore = Math.min(1f,questionCount / 100f);
 
@@ -210,7 +212,7 @@ public class RecommendAlgorithm {
     /**
      * 解析题目标签
      */
-    private List<String> parseQuestionTags(Question question) {
+    private List<String> parseQuestionTags(QuestionCode question) {
         if (question == null || question.getTags() == null) {
             return new ArrayList<>();
         }
@@ -220,10 +222,10 @@ public class RecommendAlgorithm {
     /**
      * 获取用户最近完成的题目
      */
-    private List<Question> getRecentCompletedQuestions(Long userId) {
+    private List<QuestionCode> getRecentCompletedQuestions(Long userId) {
         // 获取最近一个月完成的题目
         Date oneMonthAgo = DateUtil.offsetMonth(new Date(), -1);
-        return questionMapper.selectRecentCompletedQuestions(userId, oneMonthAgo);
+        return questionCodeMapper.selectRecentCompletedQuestions(userId, oneMonthAgo);
     }
 
     /**
@@ -233,10 +235,10 @@ public class RecommendAlgorithm {
     private String getUserLevel(Long userId) {
         Date threeMonthAgo = DateUtil.offsetMonth(new Date(), -3);
         // 1. 获取用户最近完成的题目难度分布
-        Map<String, Long> difficultyStats = questionMapper.selectRecentCompletedQuestions(userId,threeMonthAgo)  // 统计最近3个月
+        Map<String, Long> difficultyStats = questionCodeMapper.selectRecentCompletedQuestions(userId,threeMonthAgo)  // 统计最近3个月
                 .stream()
                 .collect(Collectors.groupingBy(
-                        Question::getDifficulty,
+                        QuestionCode::getDifficulty,
                         Collectors.counting()
                 ));
         
@@ -292,19 +294,19 @@ public class RecommendAlgorithm {
         List<QuestionRecommend> recommendations = new ArrayList<>();
 
         for (Long questionId : questionIds) {
-            Question question = questionMapper.selectById(questionId);
-            if (question == null) {
+            QuestionCode questionCode =  questionCodeMapper.selectById(questionId);
+            if (questionCode == null) {
                 continue;
             }
 
             // 计算推荐分数（可以根据具体需求调整计算方式）
-            float score = calculateQuestionScore(userId, question, type);
+            float score = calculateQuestionScore(userId, questionCode, type);
 
             QuestionRecommend recommend = new QuestionRecommend();
             recommend.setUserId(userId);
             recommend.setQuestionId(questionId);
             recommend.setScore(score);
-            recommend.setReason(generateQuestionRecommendReason(question, type));
+            recommend.setReason(generateQuestionRecommendReason(questionCode, type));
             recommend.setType(type);
             recommend.setStatus(0); // 未查看状态
 
@@ -317,23 +319,23 @@ public class RecommendAlgorithm {
     /**
      * 计算题目推荐分数
      */
-    private float calculateQuestionScore(Long userId, Question question, String type) {
+    private float calculateQuestionScore(Long userId, QuestionCode questionCode, String type) {
         float score = 0.5f; // 基础分数
 
         switch (type) {
             case "similar":
                 // 基于标签相似度计算分数
                 List<String> userPreferredTags = getUserPreferredTags(userId);
-                List<String> questionTags = parseQuestionTags(question);
+                List<String> questionTags = parseQuestionTags(questionCode);
                 score += calculateTagSimilarity(userPreferredTags, questionTags) * 0.5f;
                 break;
             case "daily":
                 // 考虑题目的通过率和难度
-                score += calculateDailyScore(question);
+                score += calculateDailyScore(questionCode);
                 break;
             case "level":
                 // 考虑难度递进关系
-                score += calculateLevelScore(userId, question);
+                score += calculateLevelScore(userId, questionCode);
                 break;
         }
 
@@ -346,7 +348,7 @@ public class RecommendAlgorithm {
     private List<String> getUserPreferredTags(Long userId) {
         Date threeMonthAgo = DateUtil.offsetMonth(new Date(), -3);
         // 1. 获取用户最近完成的题目
-        List<Question> completedQuestions = questionMapper.selectRecentCompletedQuestions(userId,threeMonthAgo);  // 获取最近3个月的数据
+        List<QuestionCode> completedQuestions = questionCodeMapper.selectRecentCompletedQuestions(userId,threeMonthAgo);  // 获取最近3个月的数据
         
         if (completedQuestions.isEmpty()) {
             // 如果没有完成的题目，返回用户个人信息中的技术方向
@@ -356,8 +358,8 @@ public class RecommendAlgorithm {
 
         // 2. 统计标签出现频率
         Map<String, Integer> tagFrequency = new HashMap<>();
-        for (Question question : completedQuestions) {
-            List<String> tags = parseQuestionTags(question);
+        for (QuestionCode questionCode : completedQuestions) {
+            List<String> tags = parseQuestionTags(questionCode);
             for (String tag : tags) {
                 tagFrequency.merge(tag, 1, Integer::sum);
             }
@@ -374,7 +376,7 @@ public class RecommendAlgorithm {
     /**
      * 计算每日推荐分数
      */
-    private float calculateDailyScore(Question question) {
+    private float calculateDailyScore(QuestionCode questionCode) {
         // 可以根据题目的通过率、点赞数等因素计算分数
         return 0.7f; // 示例固定值，实际应该根据具体因素计算
     }
@@ -382,9 +384,9 @@ public class RecommendAlgorithm {
     /**
      * 计算难度递进分数
      */
-    private float calculateLevelScore(Long userId, Question question) {
+    private float calculateLevelScore(Long userId, QuestionCode questionCode) {
         String userLevel = getUserLevel(userId);
-        String questionLevel = question.getDifficulty();
+        String questionLevel = questionCode.getDifficulty();
         // 根据用户水平和题目难度的关系计算分数
         // 难度略高于用户水平的题目得分较高
         return 0.8f; // 示例固定值，实际应该根据具体因素计算
@@ -393,7 +395,7 @@ public class RecommendAlgorithm {
     /**
      * 生成题目推荐原因
      */
-    private String generateQuestionRecommendReason(Question question, String type) {
+    private String generateQuestionRecommendReason(QuestionCode questionCode, String type) {
         switch (type) {
             case "similar":
                 return "与你最近做过的题目类似";

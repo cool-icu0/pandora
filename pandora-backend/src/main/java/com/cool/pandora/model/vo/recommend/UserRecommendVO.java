@@ -1,5 +1,6 @@
 package com.cool.pandora.model.vo.recommend;
 
+import com.cool.pandora.model.vo.UserVO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -9,15 +10,20 @@ import java.util.List;
 @Data
 public class UserRecommendVO implements Serializable {
     
-    /**
-     * id
-     */
-    private Long id;
+    // /**
+    //  * id
+    //  */
+    // private Long id;
     
     /**
      * 被推荐的用户id
      */
     private Long recommendUserId;
+
+    /**
+     * 推荐的用户
+     */
+    private UserVO recommendUser;
     
     /**
      * 推荐分数
@@ -38,11 +44,6 @@ public class UserRecommendVO implements Serializable {
      * 推荐状态
      */
     private Integer status;
-    
-    /**
-     * 创建时间
-     */
-    private Date createTime;
 
     private static final long serialVersionUID = 1L;
 }
