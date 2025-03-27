@@ -47,4 +47,25 @@ public interface RedisConstant {
     public static String getUserRankCacheKey() {
         return "pandora:user:rank:cache:%d";
     }
+
+    /**
+     * 获取题目通过总排行榜 Redis Key
+     */
+    public static String getQuestionCodeTotalRankKey() {
+        return "pandora:question:rank:total";
+    }
+
+    /**
+     * 获取题目通过年度排行榜 Redis Key
+     */
+    public static String getQuestionCodeRankKey(int year) {
+        return String.format("pandora:question:rank:%d", year);
+    }
+
+    /**
+     * 获取题目通过月度排行榜 Redis Key
+     */
+    public static String getQuestionCodeMonthlyRankKey(int year, int month) {
+        return String.format("pandora:question:rank:%d:%d", year, month);
+    }
 }

@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cool.pandora.model.dto.questionCode.QuestionQueryRequest;
 import com.cool.pandora.model.entity.question.QuestionCode;
 import com.cool.pandora.model.vo.QuestionCodeVO;
+import com.cool.pandora.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Author Cool
@@ -49,4 +51,12 @@ public interface QuestionCodeService extends IService<QuestionCode> {
      */
     Page<QuestionCodeVO> getQuestionCodeVOPage(Page<QuestionCode> questionCodePage, HttpServletRequest request);
 
+    /**
+     * 获取通过题目排行榜
+     * @param limit 返回数量
+     * @param year 年份
+     * @param month 月份
+     * @return 通过题目信息列表
+     */
+    List<UserVO> getQuestionCodeRank(Integer limit, Integer year, Integer month);
 }

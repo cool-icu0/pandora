@@ -1,17 +1,23 @@
 package com.cool.pandora.service.question.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cool.pandora.common.ErrorCode;
 import com.cool.pandora.constant.CommonConstant;
+import com.cool.pandora.constant.RedisConstant;
 import com.cool.pandora.exception.BusinessException;
 import com.cool.pandora.exception.ThrowUtils;
 import com.cool.pandora.mapper.question.QuestionCodeMapper;
+import com.cool.pandora.mapper.question.QuestionSubmitMapper;
 import com.cool.pandora.model.dto.questionCode.QuestionQueryRequest;
+import com.cool.pandora.model.dto.questionSubmit.JudgeInfo;
 import com.cool.pandora.model.entity.question.QuestionCode;
 import com.cool.pandora.model.entity.User;
+import com.cool.pandora.model.entity.question.QuestionSubmit;
+import com.cool.pandora.model.enums.QuestionSubmitStatusEnum;
 import com.cool.pandora.model.vo.QuestionCodeVO;
 import com.cool.pandora.model.vo.UserVO;
 import com.cool.pandora.service.question.QuestionCodeService;
@@ -20,10 +26,14 @@ import com.cool.pandora.utils.SqlUtils;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +50,10 @@ public class QuestionCodeServiceImpl extends ServiceImpl<QuestionCodeMapper, Que
 
     @Resource
     private UserService userService;
+    @Resource
+    private RedisTemplate redisTemplate;
+    @Resource
+    private QuestionSubmitMapper questionSubmitMapper;
 
 
     /**
@@ -164,4 +178,117 @@ public class QuestionCodeServiceImpl extends ServiceImpl<QuestionCodeMapper, Que
         return questionCodeVOPage;
     }
 
+    /**
+     * 获取通过题目排行榜
+     * @param limit 返回数量
+     * @param year 年份（为空表示所有年份）
+     * @param month 月份（为空表示整年）
+     * @return 通过题目信息列表
+     */
+    @Override
+    public List<UserVO> getQuestionCodeRank(Integer limit, Integer year, Integer month) {
+        if (limit == null) {
+            limit = 10;
+        }
+        
+        String rankKey;
+        if (year == null) {
+            rankKey = RedisConstant.getQuestionCodeTotalRankKey();
+        } else if (month == null) {
+            rankKey = RedisConstant.getQuestionCodeRankKey(year);
+        } else {
+            rankKey = RedisConstant.getQuestionCodeMonthlyRankKey(year, month);
+        }
+        String userKey = RedisConstant.getUserRankCacheKey();
+        
+        // 1. 先从Redis获取排行榜
+        Set<Object> rankSet = redisTemplate.opsForZSet().reverseRange(rankKey, 0, limit - 1);
+
+        if (rankSet != null && !rankSet.isEmpty()) {
+            return rankSet.stream()
+                    .map(id -> {
+                        UserVO userVO = (UserVO) redisTemplate.opsForHash().get(userKey, String.valueOf(id));
+                        if (userVO == null) {
+                            User user = userService.getById((Serializable) id);
+                            userVO = userService.getUserVO(user);
+                            redisTemplate.opsForHash().put(userKey, String.valueOf(id), userVO);
+                        }
+                        Double score = redisTemplate.opsForZSet().score(rankKey, id);
+                        userVO.setQuestionPassCount(score != null ? score.intValue() : 0);
+                        return userVO;
+                    })
+                    .collect(Collectors.toList());
+        }
+        
+        // 2. Redis中没有数据，从数据库查询并写入Redis
+        List<UserVO> rankList = userService.list(new QueryWrapper<User>())
+                .stream()
+                .map(user -> {
+                    UserVO userVO = userService.getUserVO(user);
+                    int passCount;
+                    
+                    if (year == null) {
+                        // 统计所有通过的题目数
+                        passCount = getQuestionPassCount(user.getId(), null, null);
+                    } else if (month == null) {
+                        // 统计年度通过的题目数
+                        passCount = getQuestionPassCount(user.getId(), year, null);
+                    } else {
+                        // 统计月度通过的题目数
+                        passCount = getQuestionPassCount(user.getId(), year, month);
+                    }
+                    
+                    userVO.setQuestionPassCount(passCount);
+                    redisTemplate.opsForZSet().add(rankKey, user.getId(), passCount);
+                    redisTemplate.opsForHash().put(userKey, String.valueOf(user.getId()), userVO);
+                    return userVO;
+                })
+                .sorted((a, b) -> b.getQuestionPassCount() - a.getQuestionPassCount())
+                .limit(limit)
+                .collect(Collectors.toList());
+        
+        return rankList;
+    }
+
+    /**
+     * 获取用户通过的题目数量
+     * @param userId 用户id
+     * @param year 年份（为空表示所有年份）
+     * @param month 月份（为空表示整年）
+     * @return 通过的题目数量
+     */
+    private int getQuestionPassCount(Long userId, Integer year, Integer month) {
+        // 1. 先查询该用户的所有提交记录
+        QueryWrapper<QuestionSubmit> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userId", userId);
+        
+        if (year != null) {
+            // 添加年份条件
+            if (month != null) {
+                // 查询指定月份
+                LocalDate startDate = LocalDate.of(year, month, 1);
+                LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+                queryWrapper.between("createTime", startDate, endDate);
+            } else {
+                // 查询整年
+                LocalDate startDate = LocalDate.of(year, 1, 1);
+                LocalDate endDate = startDate.plusYears(1).minusDays(1);
+                queryWrapper.between("createTime", startDate, endDate);
+            }
+        }
+        
+        // 2. 获取提交记录并过滤
+        return (int) questionSubmitMapper.selectList(queryWrapper)
+                .stream()
+                .filter(submit -> {
+                    String judgeInfo = submit.getJudgeInfo();
+                    // 解析 judgeInfo 判断是否通过
+                    JudgeInfo info = GSON.fromJson(judgeInfo, JudgeInfo.class);
+                    return info != null && QuestionSubmitStatusEnum.SUCCEED.getText().equals(info.getMessage());
+                })
+                // 按题目 ID 去重
+                .map(QuestionSubmit::getQuestionId)
+                .distinct()
+                .count();
+    }
 }

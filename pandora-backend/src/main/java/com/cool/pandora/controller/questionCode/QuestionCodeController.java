@@ -19,6 +19,7 @@ import com.cool.pandora.model.entity.question.QuestionSubmit;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.model.vo.QuestionCodeVO;
 import com.cool.pandora.model.vo.QuestionSubmitVO;
+import com.cool.pandora.model.vo.UserVO;
 import com.cool.pandora.service.question.QuestionCodeService;
 import com.cool.pandora.service.question.QuestionSubmitService;
 import com.cool.pandora.service.user.UserService;
@@ -470,6 +471,13 @@ public class QuestionCodeController {
         final User loginUser = userService.getLoginUser(request);
         QuestionSubmitVO questionSubmitVO = questionSubmitService.getQuestionSubmitVO(questionSubmit, loginUser);
         return ResultUtils.success(questionSubmitVO);
+    }
+
+    //通过算法题目排行榜
+    @GetMapping("/rank")
+    public BaseResponse<List<UserVO>> getQuestionCodeRank(Integer limit ,Integer year,Integer month) {
+        List<UserVO> questionCodeList = questionCodeService.getQuestionCodeRank(limit,year,month);
+        return ResultUtils.success(questionCodeList);
     }
 
 }
