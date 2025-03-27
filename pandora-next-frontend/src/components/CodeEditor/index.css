@@ -1,0 +1,41 @@
+.code-editor-container {
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+/* Monaco Editor 暗色主题自定义（用于亮色模式） */
+[theme-mode="light"] .monaco-editor {
+  background-color: #1e1e1e !important;
+}
+
+[theme-mode="light"] .monaco-editor .margin {
+  background-color: #1e1e1e !important;
+}
+
+[theme-mode="light"] .monaco-editor .monaco-editor-background {
+  background-color: #1e1e1e !important;
+}
+
+/* Monaco Editor 亮色主题自定义（用于暗色模式） */
+[theme-mode="dark"] .monaco-editor {
+  background-color: #ffffff !important;
+}
+
+[theme-mode="dark"] .monaco-editor .margin {
+  background-color: #ffffff !important;
+}
+
+[theme-mode="dark"] .monaco-editor .monaco-editor-background {
+  background-color: #ffffff !important;
+}
+
+/* 调整文字颜色 */
+[theme-mode="light"] .monaco-editor .mtk1 {
+  color: #ffffff !important;
+}
+
+[theme-mode="dark"] .monaco-editor .mtk1 {
+  color: #000000 !important;
+}
