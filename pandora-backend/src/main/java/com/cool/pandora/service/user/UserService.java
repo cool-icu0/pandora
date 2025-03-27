@@ -132,4 +132,13 @@ public interface UserService extends IService<User> {
      * @return 签到记录映射
      */
     List<Integer> getUserSignInRecord(long userId, Integer year);
+
+    /**
+     * 获取用户签到排行榜
+     * @param limit 数量
+     * @param year 年份
+     * @param month 月份
+     * @return 用户信息列表
+     */
+    List<UserVO> getUserSignInRank(Integer limit, Integer year,Integer month);
 }

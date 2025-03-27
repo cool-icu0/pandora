@@ -358,4 +358,18 @@ public class UserController {
         return ResultUtils.success(userSignInRecord);
     }
 
+    /**
+     * 获取签到排行榜
+     * @param limit 数量
+     * @param year 年份
+     * @param month 月份
+     * @return 用户信息列表
+     */
+    @GetMapping("/get/sign_in/rank")
+    public BaseResponse<List<UserVO>> getUserSignInRank(Integer limit, Integer year,Integer month) {
+        // 必须要登录才能获取
+        List<UserVO> userSignInRank = userService.getUserSignInRank(limit,year,month);
+        return ResultUtils.success(userSignInRank);
+    }
+
 }

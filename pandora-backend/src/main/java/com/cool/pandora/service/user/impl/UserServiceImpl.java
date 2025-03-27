@@ -4,6 +4,7 @@ import static com.cool.pandora.constant.UserConstant.USER_LOGIN_STATE;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cool.pandora.common.ErrorCode;
@@ -21,6 +22,7 @@ import com.cool.pandora.satoken.DeviceUtils;
 import com.cool.pandora.service.user.UserService;
 import com.cool.pandora.utils.SqlUtils;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,6 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RBitSet;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -45,6 +48,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private RedissonClient redissonClient;
+    @Resource
+    private RedisTemplate redisTemplate;
 
     /**
      * 盐值，混淆密码
@@ -352,6 +357,108 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             index = bitSet.nextSetBit(index + 1);
         }
         return dayList;
+    }
+
+    /**
+     * 获取签到排行榜
+     *
+     * @param limit 排行榜数量
+     * @param year 年份（为空表示所有年份）
+     * @param month 月份（为空表示整年）
+     * @return 用户签到排行榜
+     */
+    @Override
+    public List<UserVO> getUserSignInRank(Integer limit, Integer year, Integer month) {
+        if (limit == null) {
+            limit = 10;
+        }
+        String rankKey;
+        if (year == null) {
+            // 总排行榜
+            rankKey = RedisConstant.getUserSignInTotalRankKey();
+        } else if (month == null) {
+            // 年度排行榜
+            rankKey = RedisConstant.getUserSignInRankKey(year);
+        } else {
+            // 月度排行榜
+            rankKey = RedisConstant.getUserSignInMonthlyRankKey(year, month);
+        }
+        String userKey = RedisConstant.getUserRankCacheKey();
+        
+        // 1. 先从Redis获取排行榜
+        Set<Object> rankSet = redisTemplate.opsForZSet().reverseRange(rankKey, 0, limit - 1);
+
+        if (rankSet != null && !rankSet.isEmpty()) {
+            // Redis中存在数据，直接返回
+            return rankSet.stream()
+                    .map(id -> {
+                        // 先从Redis获取用户信息
+                        UserVO userVO = (UserVO) redisTemplate.opsForHash().get(userKey, String.valueOf(id));
+                        if (userVO == null) {
+                            // Redis中没有，从数据库获取并缓存
+                            User user = this.getById((Serializable) id);
+                            userVO = getUserVO(user);
+                            redisTemplate.opsForHash().put(userKey, String.valueOf(id), userVO);
+                        }
+                        // 设置签到数
+                        Double score = redisTemplate.opsForZSet().score(rankKey, id);
+                        userVO.setSignInCount(score != null ? score.intValue() : 0);
+                        return userVO;
+                    })
+                    .collect(Collectors.toList());
+        }
+        
+        // 2. Redis中没有数据，从数据库查询并写入Redis
+        List<UserVO> rankList = this.baseMapper.selectList(new QueryWrapper<>())
+                .stream()
+                .map(user -> {
+                    UserVO userVO = getUserVO(user);
+                    int signInCount;
+                    
+                    if (year == null) {
+                        // 统计所有年份的签到数
+                        signInCount = getAllYearsSignInCount(user.getId());
+                    } else if (month == null) {
+                        // 统计指定年份的签到数
+                        List<Integer> signInDays = getUserSignInRecord(user.getId(), year);
+                        signInCount = signInDays.size();
+                    } else {
+                        // 统计指定月份的签到数
+                        List<Integer> signInDays = getUserSignInRecord(user.getId(), year);
+                        signInCount = (int) signInDays.stream()
+                                .filter(day -> {
+                                    LocalDate date = LocalDate.ofYearDay(year, day);
+                                    return date.getMonthValue() == month;
+                                })
+                                .count();
+                    }
+                    
+                    userVO.setSignInCount(signInCount);
+                    // 写入排行榜数据
+                    redisTemplate.opsForZSet().add(rankKey, user.getId(), signInCount);
+                    // 写入用户信息缓存
+                    redisTemplate.opsForHash().put(userKey, String.valueOf(user.getId()), userVO);
+                    return userVO;
+                })
+                .sorted((a, b) -> b.getSignInCount() - a.getSignInCount())
+                .limit(limit)
+                .collect(Collectors.toList());
+                
+        return rankList;
+    }
+
+    /**
+     * 获取用户所有年份的签到总数
+     */
+    private int getAllYearsSignInCount(Long userId) {
+        int currentYear = LocalDate.now().getYear();
+        int totalCount = 0;
+        // 统计从2023年（或系统上线年份）到当前年份的所有签到数
+        for (int year = 2023; year <= currentYear; year++) {
+            List<Integer> signInDays = getUserSignInRecord(userId, year);
+            totalCount += signInDays.size();
+        }
+        return totalCount;
     }
 }
 
