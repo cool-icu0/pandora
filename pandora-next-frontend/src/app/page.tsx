@@ -251,12 +251,12 @@ export default function HomePage() {
     // 在 useEffect 中添加推荐数据的初始加载
     useEffect(() => {
         if (user?.id) {
-            fetchRecommendQuestions(recommendType);
+            fetchRecommendQuestions('daily'); // 只在初始化时加载默认推荐
             fetchUserRecommends();
         }
-    }, [user?.id, recommendType]); // 依赖项包含用户ID和推荐类型
+    }, [user?.id]); // 移除 recommendType 依赖
 
-    // 修改获取推荐数据的函数
+    // 修改获取题目推荐数据的函数
     const fetchRecommendQuestions = async (type: string) => {
         setRecommendLoading(true);
         try {
@@ -629,7 +629,7 @@ export default function HomePage() {
                                                 defaultActiveKey="daily"
                                                 onChange={(key) => {
                                                     setRecommendType(key);
-                                                    // fetchRecommendQuestions 会通过 useEffect 自动触发
+                                                    fetchRecommendQuestions(key); // 只在这里触发请求
                                                 }}
                                                 items={[
                                                     {
@@ -700,8 +700,6 @@ export default function HomePage() {
                             onChange={(key) => {
                                 if (key === 'user') {
                                     fetchUserRecommends();
-                                } else {
-                                    fetchRecommendQuestions(recommendType);
                                 }
                             }}
                         />

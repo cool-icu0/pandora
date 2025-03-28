@@ -81,9 +81,13 @@ public class RecommendAlgorithm {
         List<Long> completedQuestionIds = questionCodeMapper.selectCompletedQuestionIds(userId);
 
         // 2. 随机选择一些题目
-        List<QuestionCode> dailyQuestions = questionCodeMapper.selectList(new QueryWrapper<QuestionCode>()
-                .notIn("id", completedQuestionIds)
-                .last("ORDER BY RAND() LIMIT 10"));
+        QueryWrapper<QuestionCode> queryWrapper = new QueryWrapper<>();
+        if (completedQuestionIds != null && !completedQuestionIds.isEmpty()) {
+            queryWrapper.notIn("id", completedQuestionIds);
+        }
+        List<QuestionCode> dailyQuestions = questionCodeMapper.selectList(
+            queryWrapper.orderByAsc("RAND()").last("LIMIT 50")
+        );
 
         // 3. 生成推荐记录
         return createQuestionRecommendations(userId,
@@ -210,7 +214,7 @@ public class RecommendAlgorithm {
     }
 
     /**
-     * 解析题目标签
+     * 解析题目标签标签
      */
     private List<String> parseQuestionTags(QuestionCode question) {
         if (question == null || question.getTags() == null) {
