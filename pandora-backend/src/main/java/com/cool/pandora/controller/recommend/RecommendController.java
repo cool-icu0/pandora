@@ -1,10 +1,12 @@
 package com.cool.pandora.controller.recommend;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cool.pandora.common.BaseResponse;
 import com.cool.pandora.common.ResultUtils;
 import com.cool.pandora.model.dto.recommend.QuestionRecommendRequest;
 import com.cool.pandora.model.dto.recommend.UserRecommendRequest;
+import com.cool.pandora.model.vo.recommend.QuestionRecommendVO;
 import com.cool.pandora.model.vo.recommend.UserRecommendVO;
 import com.cool.pandora.service.recommend.RecommendService;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,7 @@ public class RecommendController {
      * 获取用户推荐
      */
     @PostMapping("/user/list")
-    public BaseResponse<List<UserRecommendVO>> getUserRecommendList(@RequestBody UserRecommendRequest request,
+    public BaseResponse<Page<UserRecommendVO>> getUserRecommendList(@RequestBody UserRecommendRequest request,
                                                                     HttpServletRequest httpServletRequest) {
         return ResultUtils.success(recommendService.getUserRecommendList(request));
     }
@@ -33,8 +35,8 @@ public class RecommendController {
      * 获取题目推荐
      */
     @PostMapping("/question/list")
-    public BaseResponse getQuestionRecommendList(@RequestBody QuestionRecommendRequest request,
-                                              HttpServletRequest httpServletRequest) {
+    public BaseResponse<Page<QuestionRecommendVO>> getQuestionRecommendList(@RequestBody QuestionRecommendRequest request,
+                                                                            HttpServletRequest httpServletRequest) {
         return ResultUtils.success(recommendService.getQuestionRecommendList(request));
     }
 

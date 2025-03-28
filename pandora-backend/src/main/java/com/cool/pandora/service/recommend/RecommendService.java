@@ -2,6 +2,7 @@ package com.cool.pandora.service.recommend;
 
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cool.pandora.model.dto.recommend.QuestionRecommendRequest;
 import com.cool.pandora.model.dto.recommend.UserRecommendRequest;
 import com.cool.pandora.model.vo.recommend.QuestionRecommendVO;
@@ -15,14 +16,14 @@ public interface RecommendService {
      * @param request
      * @return
      */
-    List<UserRecommendVO> getUserRecommendList(UserRecommendRequest request);
+    Page<UserRecommendVO> getUserRecommendList(UserRecommendRequest request);
 
     /**
      * 获取题目推荐列表
-     * @param request
-     * @return
+     * @param request 推荐请求
+     * @return 分页后的推荐题目列表
      */
-    List<QuestionRecommendVO> getQuestionRecommendList(QuestionRecommendRequest request);
+    Page<QuestionRecommendVO> getQuestionRecommendList(QuestionRecommendRequest request);
 
     /**
      * 更新用户推荐状态

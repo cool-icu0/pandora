@@ -2,6 +2,7 @@ package com.cool.pandora.service.recommend.impl;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cool.pandora.common.ErrorCode;
 import com.cool.pandora.exception.BusinessException;
 import com.cool.pandora.mapper.recommend.QuestionRecommendMapper;
@@ -44,7 +45,7 @@ public class RecommendServiceImpl implements RecommendService {
     private QuestionCodeService questionCodeService;
 
     @Override
-    public List<UserRecommendVO> getUserRecommendList(UserRecommendRequest request) {
+    public Page<UserRecommendVO> getUserRecommendList(UserRecommendRequest request) {
         Long userId = request.getUserId();
         // 1. 基于用户标签的协同过滤
         List<User> similarUsers = recommendAlgorithm.findSimilarUsers(userId);
@@ -53,15 +54,33 @@ public class RecommendServiceImpl implements RecommendService {
         List<UserRecommend> recommendations = recommendAlgorithm.calculateUserScores(userId, similarUsers);
 
         // 3. 过滤并排序
-        return recommendations.stream()
-                .filter(rec -> rec.getStatus() == 1) // 只返回待处理的推荐
+        List<UserRecommend> filteredList = recommendations.stream()
+                .filter(rec -> rec.getStatus() == 1)
                 .sorted(Comparator.comparing(UserRecommend::getScore).reversed())
+                .collect(Collectors.toList());
+
+        // 4. 创建分页对象
+        Page<UserRecommendVO> page = new Page<>(request.getCurrent(), request.getPageSize());
+        
+        // 5. 计算分页数据
+        int start = (int) ((request.getCurrent() - 1) * request.getPageSize());
+        int end = Math.min((int) (start + request.getPageSize()), filteredList.size());
+        
+        // 6. 获取分页后的数据
+        List<UserRecommendVO> pageRecords = filteredList.subList(start, end)
+                .stream()
                 .map(this::convertToVO)
                 .collect(Collectors.toList());
+
+        // 7. 设置分页信息
+        page.setRecords(pageRecords);
+        page.setTotal(filteredList.size());
+        
+        return page;
     }
 
     @Override
-    public List<QuestionRecommendVO> getQuestionRecommendList(QuestionRecommendRequest request) {
+    public Page<QuestionRecommendVO> getQuestionRecommendList(QuestionRecommendRequest request) {
         Long userId = request.getUserId();
         String type = request.getType();
 
@@ -80,10 +99,29 @@ public class RecommendServiceImpl implements RecommendService {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        return recommendations.stream()
+        // 对推荐列表进行排序
+        recommendations = recommendations.stream()
                 .sorted(Comparator.comparing(QuestionRecommend::getScore).reversed())
+                .collect(Collectors.toList());
+
+        // 创建分页对象
+        Page<QuestionRecommendVO> page = new Page<>(request.getCurrent(), request.getPageSize());
+        
+        // 计算分页数据
+        int start = (int) ((request.getCurrent() - 1) * request.getPageSize());
+        int end = Math.min((int) (start + request.getPageSize()), recommendations.size());
+        
+        // 获取分页后的数据
+        List<QuestionRecommendVO> pageRecords = recommendations.subList(start, end)
+                .stream()
                 .map(this::convertToVO)
                 .collect(Collectors.toList());
+
+        // 设置分页信息
+        page.setRecords(pageRecords);
+        page.setTotal(recommendations.size());
+        
+        return page;
     }
 
     @Override
@@ -121,6 +159,9 @@ public class RecommendServiceImpl implements RecommendService {
         QuestionCode questionCode = questionCodeService.getById(questionRecommend.getQuestionId());
         QuestionCodeVO questionCodeVO = new QuestionCodeVO();
         BeanUtils.copyProperties(questionCode, questionCodeVO);
+        if (questionCode.getTags() != null) {
+            questionCodeVO.setTags(JSONObject.parseArray(questionCode.getTags(), String.class));
+        }
         vo.setQuestionCodeVO(questionCodeVO);
         return vo;
     }
