@@ -1,4 +1,4 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Select } from "antd";  // 添加 Select 导入
 import { editUserUsingPost } from "@/api/userController";
 import React from "react";
 import {useDispatch} from "react-redux";
@@ -18,20 +18,25 @@ const UserInfoEditForm = (props: Props) => {
 
   const [form] = Form.useForm();
   const { user } = props;
-  form.setFieldsValue(user);
+  // 将 JSON 字符串转换为数组
+  const initialValues = {
+    ...user,
+    expertiseDirection: user.expertiseDirection ? JSON.parse(user.expertiseDirection.replace(/'/g, '"')) : []
+  };
+  form.setFieldsValue(initialValues);
 
-  /**
-   * 提交
-   *
-   * @param values
-   */
   const doSubmit = async (values: API.UserEditRequest) => {
     const hide = message.loading("正在操作");
     try {
-      await editUserUsingPost(values);
+      // 将数组转换为 JSON 字符串
+      const submitValues = {
+        ...values,
+        expertiseDirection: JSON.stringify(values.expertiseDirection)
+      };
+      await editUserUsingPost(submitValues);
       hide();
       message.success("操作成功");
-      dispatch(setLoginUser({...user, ...values}));
+      dispatch(setLoginUser({...user, ...submitValues}));
     } catch (error: any) {
       hide();
       message.error("操作失败，" + error.message);
@@ -62,7 +67,20 @@ const UserInfoEditForm = (props: Props) => {
         <Input placeholder="请输入工作经验" />
       </Form.Item>
       <Form.Item label="擅长方向" name="expertiseDirection">
-        <Input placeholder="请输入擅长方向" />
+        <Select
+          mode="tags"
+          style={{ width: '100%' }}
+          placeholder="请选择或输入擅长方向"
+          options={[
+            { value: 'Java', label: 'Java' },
+            { value: 'Python', label: 'Python' },
+            { value: 'C++', label: 'C++' },
+            { value: '前端开发', label: '前端开发' },
+            { value: '后端开发', label: '后端开发' },
+            { value: '算法', label: '算法' },
+            { value: '数据库', label: '数据库' },
+          ]}
+        />
       </Form.Item>
       <Form.Item>
         <Button style={{ width: 180 }} type="primary" htmlType="submit">

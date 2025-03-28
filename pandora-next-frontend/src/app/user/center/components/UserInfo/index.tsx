@@ -1,5 +1,6 @@
 import React from "react";
 import Paragraph from "antd/es/typography/Paragraph";
+import { Tag } from "antd";
 import "./index.css";
 
 interface Props {
@@ -13,6 +14,11 @@ interface Props {
  */
 const UserInfo = (props: Props) => {
   const { user } = props;
+  
+  // 处理擅长方向标签
+  const expertiseTags = user.expertiseDirection 
+    ? JSON.parse(user.expertiseDirection.replace(/'/g, '"')) 
+    : [];
 
   return (
     <div className="user-info">
@@ -36,7 +42,14 @@ const UserInfo = (props: Props) => {
 
         {/* 擅长方向 */}
         <Paragraph type="secondary">
-          擅长方向：{user.expertiseDirection || "未填写"}
+          擅长方向：
+          {expertiseTags.length > 0
+            ? expertiseTags.map((tag, index) => (
+                <Tag key={index} color="blue" style={{ marginRight: 8 }}>
+                  {tag}
+                </Tag>
+              ))
+            : "未填写"}
         </Paragraph>
       </div>
     </div>
