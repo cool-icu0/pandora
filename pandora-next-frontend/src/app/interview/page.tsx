@@ -125,6 +125,7 @@ export default function InterviewPage() {
         >
           {getRoleName(item.userRole)}
         </Tag>
+        <Link href={`/user/info/${item.id}`}>
         <Flex 
           align="center" 
           className="rank-container"
@@ -142,6 +143,7 @@ export default function InterviewPage() {
           </Flex>
           <span className="rank-count">{item.signInCount}天</span>
         </Flex>
+        </Link>
       </div>
     );
   };
@@ -203,12 +205,26 @@ export default function InterviewPage() {
           }}
           items={[
             {
+              key: 'total',
+              label: '总榜',
+              children: (
+                <>
+                  <RankHeader type="total" />
+                  <div>
+                    {rankList.map((item: any, index) => (
+                      <RankItem key={item.id} item={item} index={index} />
+                    ))}
+                  </div>
+                </>
+              ),
+            },
+            {
               key: 'time',
               label: '年月榜',
               children: (
                 <Space direction="vertical" style={{ width: '100%' }}>
                   <Tabs
-                    defaultActiveKey="year"
+                    defaultActiveKey="total"
                     onChange={(key) => {
                       setCurrentTimeType(key);
                       fetchRankList('time', key);
@@ -245,20 +261,6 @@ export default function InterviewPage() {
                     ]}
                   />
                 </Space>
-              ),
-            },
-            {
-              key: 'total',
-              label: '总榜',
-              children: (
-                <>
-                  <RankHeader type="total" />
-                  <div>
-                    {rankList.map((item: any, index) => (
-                      <RankItem key={item.id} item={item} index={index} />
-                    ))}
-                  </div>
-                </>
               ),
             },
           ]}

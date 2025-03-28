@@ -7,7 +7,7 @@ export async function getQuestionRecommendListUsingPost(
   body: API.QuestionRecommendRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponse>('/api/recommend/question/list', {
+  return request<API.BaseResponsePageQuestionRecommendVO_>('/api/recommend/question/list', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ export async function getUserRecommendListUsingPost(
   body: API.UserRecommendRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponse>('/api/recommend/user/list', {
+  return request<API.BaseResponsePageUserRecommendVO_>('/api/recommend/user/list', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

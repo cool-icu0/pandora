@@ -1,6 +1,5 @@
 'use client';
 
-// 修改导入部分
 import { useEffect, useState, useRef } from 'react';
 import { Card, Tag, Input, Select, Space, Table, message, Progress, Tooltip,Typography, Flex, Tabs, Avatar } from 'antd';
 import { SearchOutlined, LikeFilled, StarFilled } from '@ant-design/icons';
@@ -8,6 +7,7 @@ import { listQuestionCodeVoByPageUsingPost } from '@/api/questionCodeController'
 import { Pie } from '@ant-design/plots';
 import { getQuestionCodeRankUsingGet } from '@/api/questionCodeController';
 import './index.css';
+import Link from 'next/link';
 const { Paragraph } = Typography;
 
 export default function AlgorithmPage() {
@@ -21,7 +21,7 @@ export default function AlgorithmPage() {
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [currentType, setCurrentType] = useState('total');
   const [currentTimeType, setCurrentTimeType] = useState('year');
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const [searchParams, setSearchParams] = useState({
     current: 1,
     pageSize: 20,
@@ -121,6 +121,7 @@ export default function AlgorithmPage() {
   const RankItem = ({ item, index }: { item: any, index: number }) => (
     <div className="rank-item">
       <span className="rank-index">{index + 1}.</span>
+      <Link href={`/user/info/${item.id}`}>
       <Flex 
         align="center" 
         className="rank-container"
@@ -136,6 +137,7 @@ export default function AlgorithmPage() {
         </div>
         <span className="rank-count">已通过：{item.questionPassCount} 题目</span>
       </Flex>
+      </Link>
     </div>
   );
   const columns = [
@@ -390,7 +392,7 @@ function DonutChart({ data, color }: { data: { type: string; value: number }[]; 
       
       <Card title="刷题排行榜" className="rank-card">
         <Tabs
-          defaultActiveKey="year"
+          defaultActiveKey="total"
           onChange={(key) => {
             setCurrentType(key);
             if (key === 'time') {
@@ -398,6 +400,20 @@ function DonutChart({ data, color }: { data: { type: string; value: number }[]; 
             }
           }}
           items={[
+            {
+              key: 'total',
+              label: '总榜',
+              children: (
+                <>
+                  <RankHeader type="total" />
+                  <div>
+                    {rankList.map((item: any, index) => (
+                      <RankItem key={item.id} item={item} index={index} />
+                    ))}
+                  </div>
+                </>
+              ),
+            },
             {
               key: 'time',
               label: '年月榜',
@@ -441,20 +457,6 @@ function DonutChart({ data, color }: { data: { type: string; value: number }[]; 
                     ]}
                   />
                 </Space>
-              ),
-            },
-            {
-              key: 'total',
-              label: '总榜',
-              children: (
-                <>
-                  <RankHeader type="total" />
-                  <div>
-                    {rankList.map((item: any, index) => (
-                      <RankItem key={item.id} item={item} index={index} />
-                    ))}
-                  </div>
-                </>
               ),
             },
           ]}

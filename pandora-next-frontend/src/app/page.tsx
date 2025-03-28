@@ -16,6 +16,7 @@ import {Table, Tag} from "antd";
 import { getQuestionRecommendListUsingPost, getUserRecommendListUsingPost } from "@/api/recommendController";
 import { useSelector } from "react-redux";
 import { RootState } from "@/stores";
+import RecommendQuestionList from '@/components/RecommendQuestionList';
 
 /**
  * 主页
@@ -240,15 +241,37 @@ export default function HomePage() {
         }
     };
 
+    // 添加推荐分页状态
+    const [recommendPagination, setRecommendPagination] = useState({
+        current: 1,
+        pageSize: 5,
+        total: 0
+    });
+
+    // 在 useEffect 中添加推荐数据的初始加载
+    useEffect(() => {
+        if (user?.id) {
+            fetchRecommendQuestions(recommendType);
+            fetchUserRecommends();
+        }
+    }, [user?.id, recommendType]); // 依赖项包含用户ID和推荐类型
+
+    // 修改获取推荐数据的函数
     const fetchRecommendQuestions = async (type: string) => {
         setRecommendLoading(true);
         try {
             const res = await getQuestionRecommendListUsingPost({
                 type,
                 userId: user.id,
+                current: recommendPagination.current,
+                pageSize: recommendPagination.pageSize,
             });
             if ((res as any)?.code === 0) {
-                setRecommendQuestions((res as any).data || []);
+                setRecommendQuestions((res as any).data.records || []);
+                setRecommendPagination(prev => ({
+                    ...prev,
+                    total: (res as any).data.total || 0
+                }));
             }
         } catch (error: any) {
             message.error('获取推荐题目失败：' + error.message);
@@ -262,9 +285,10 @@ export default function HomePage() {
         try {
             const res = await getUserRecommendListUsingPost({
                 userId: user.id,
+                pageSize: 5,
             });
             if ((res as any)?.code === 0) {
-                setUserRecommends((res as any).data || []);
+                setUserRecommends((res as any).data.records || []);
             }
         } catch (error: any) {
             message.error('获取用户推荐失败：' + error.message);
@@ -584,9 +608,11 @@ export default function HomePage() {
                         {!user?.id && (
                             <div className="blur-overlay">
                                 <div className="blur-content">
-                                    <div className="blur-title">登录后查看推荐</div>
+                                    <div className="blur-title">登录后查看个性化推荐</div>
+                                    <div className="blur-subtitle">解锁更多学习资源</div>
                                     <Link href="/user/login" className="blur-button">
-                                        立即登录
+                                        <span className="blur-button-text">立即登录</span>
+                                        <span className="blur-button-arrow">→</span>
                                     </Link>
                                 </div>
                             </div>
@@ -600,82 +626,43 @@ export default function HomePage() {
                                     children: (
                                         <div className="recommend-content">
                                             <Tabs
-                                                defaultActiveKey="similar"
+                                                defaultActiveKey="daily"
                                                 onChange={(key) => {
                                                     setRecommendType(key);
-                                                    fetchRecommendQuestions(key);
+                                                    // fetchRecommendQuestions 会通过 useEffect 自动触发
                                                 }}
                                                 items={[
                                                     {
                                                         key: 'similar',
                                                         label: '相似推荐',
                                                         children: (
-                                                            <Spin spinning={recommendLoading}>
-                                                                <div className="recommend-list">
-                                                                    {recommendQuestions.map((item: any) => (
-                                                                        <Link
-                                                                            key={item.id}
-                                                                            href={`/algorithm/problem/${item.id}`}
-                                                                            className="recommend-item"
-                                                                        >
-                                                                            <div className="recommend-title">{item.title}</div>
-                                                                            <div className="recommend-tags">
-                                                                                {item.tags?.map((tag: string) => (
-                                                                                    <Tag key={tag}>{tag}</Tag>
-                                                                                ))}
-                                                                            </div>
-                                                                        </Link>
-                                                                    ))}
-                                                                </div>
-                                                            </Spin>
+                                                            <RecommendQuestionList
+                                                                loading={recommendLoading}
+                                                                questions={recommendQuestions}
+                                                                scoreLabel="相似度"
+                                                            />
                                                         ),
                                                     },
                                                     {
                                                         key: 'level',
                                                         label: '难度匹配',
                                                         children: (
-                                                            <Spin spinning={recommendLoading}>
-                                                                <div className="recommend-list">
-                                                                    {recommendQuestions.map((item: any) => (
-                                                                        <Link
-                                                                            key={item.id}
-                                                                            href={`/algorithm/problem/${item.id}`}
-                                                                            className="recommend-item"
-                                                                        >
-                                                                            <div className="recommend-title">{item.title}</div>
-                                                                            <div className="recommend-tags">
-                                                                                {item.tags?.map((tag: string) => (
-                                                                                    <Tag key={tag}>{tag}</Tag>
-                                                                                ))}
-                                                                            </div>
-                                                                        </Link>
-                                                                    ))}
-                                                                </div>
-                                                            </Spin>
+                                                            <RecommendQuestionList
+                                                                loading={recommendLoading}
+                                                                questions={recommendQuestions}
+                                                                scoreLabel="难度分"
+                                                            />
                                                         ),
                                                     },
                                                     {
                                                         key: 'daily',
                                                         label: '每日推荐',
                                                         children: (
-                                                            <Spin spinning={recommendLoading}>
-                                                                <div className="recommend-list">
-                                                                    {recommendQuestions.map((item: any) => (
-                                                                        <Link
-                                                                            key={item.id}
-                                                                            href={`/algorithm/problem/${item.id}`}
-                                                                            className="recommend-item"
-                                                                        >
-                                                                            <div className="recommend-title">{item.title}</div>
-                                                                            <div className="recommend-tags">
-                                                                                {item.tags?.map((tag: string) => (
-                                                                                    <Tag key={tag}>{tag}</Tag>
-                                                                                ))}
-                                                                            </div>
-                                                                        </Link>
-                                                                    ))}
-                                                                </div>
-                                                            </Spin>
+                                                            <RecommendQuestionList
+                                                                loading={recommendLoading}
+                                                                questions={recommendQuestions}
+                                                                showScore={false}
+                                                            />
                                                         ),
                                                     },
                                                 ]}
@@ -693,7 +680,7 @@ export default function HomePage() {
                                                     {userRecommends.map((item: any) => (
                                                         <Link
                                                             key={item.id}
-                                                            href={`/user/${item.recommendUser.id}`}
+                                                            href={`/user/info/${item.recommendUser.id}`}
                                                             className="recommend-item"
                                                         >
                                                             <Avatar src={item.recommendUser.userAvatar} />

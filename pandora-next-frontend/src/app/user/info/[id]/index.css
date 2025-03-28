@@ -1,0 +1,69 @@
+.user-info-page {
+    padding: 24px;
+}
+
+.user-info-card {
+    margin-bottom: 24px;
+}
+
+.user-header {
+    margin-bottom: 24px;
+}
+
+.user-avatar {
+    margin-right: 24px;
+    border: 4px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-basic-info {
+    flex: 1;
+}
+
+.user-name {
+    margin: 0 0 8px 0 !important;
+}
+
+.user-profile {
+    color: #666;
+    margin-bottom: 16px !important;
+}
+
+.user-tags {
+    margin-top: 8px;
+}
+
+.user-tags .ant-tag {
+    margin: 0 8px 8px 0;
+    padding: 4px 8px;
+}
+
+.user-statistics {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.user-detail-card {
+    min-height: 400px;
+}
+
+.empty-placeholder {
+    text-align: center;
+    color: #999;
+    padding: 40px 0;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+}
+
+.error-message {
+    text-align: center;
+    color: #ff4d4f;
+    padding: 40px 0;
+    font-size: 16px;
+}

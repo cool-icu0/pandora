@@ -136,6 +136,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageQuestionRecommendVO_ = {
+    code?: number;
+    data?: PageQuestionRecommendVO_;
+    message?: string;
+  };
+
   type BaseResponsePageQuestionSubmitVO_ = {
     code?: number;
     data?: PageQuestionSubmitVO_;
@@ -151,6 +157,12 @@ declare namespace API {
   type BaseResponsePageUser_ = {
     code?: number;
     data?: PageUser_;
+    message?: string;
+  };
+
+  type BaseResponsePageUserRecommendVO_ = {
+    code?: number;
+    data?: PageUserRecommendVO_;
     message?: string;
   };
 
@@ -686,6 +698,19 @@ declare namespace API {
     total?: number;
   };
 
+  type PageQuestionRecommendVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: QuestionRecommendVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
   type PageQuestionSubmitVO_ = {
     countId?: string;
     current?: number;
@@ -720,6 +745,19 @@ declare namespace API {
     orders?: OrderItem[];
     pages?: number;
     records?: User[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
+  type PageUserRecommendVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: UserRecommendVO[];
     searchCount?: boolean;
     size?: number;
     total?: number;
@@ -1114,6 +1152,14 @@ declare namespace API {
     userId?: number;
   };
 
+  type QuestionRecommendVO = {
+    questionCodeVO?: QuestionCodeVO;
+    questionId?: number;
+    reason?: string;
+    score?: number;
+    type?: string;
+  };
+
   type QuestionSubmitAddRequest = {
     inputList?: string;
     questionId?: number;
@@ -1266,6 +1312,15 @@ declare namespace API {
     pageSize?: number;
     status?: number;
     userId?: number;
+  };
+
+  type UserRecommendVO = {
+    reason?: string;
+    recommendUser?: UserVO;
+    recommendUserId?: number;
+    score?: number;
+    status?: number;
+    tags?: string[];
   };
 
   type UserRegisterRequest = {

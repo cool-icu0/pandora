@@ -50,6 +50,7 @@
   position: relative;
 }
 
+
 /* 毛玻璃效果相关样式 */
 .content-right.blur-content > *:not(.blur-overlay) {
   filter: blur(8px);
@@ -71,31 +72,68 @@
   justify-content: center;
   border-radius: 8px;
 }
+.blur-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
 
 .blur-content {
   text-align: center;
+  padding: 32px;
 }
 
 .blur-title {
-  font-size: 16px;
+  font-size: 20px;
   color: var(--text-primary);
-  margin-bottom: 16px;
+  margin-bottom: 8px;
+}
+.blur-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
 }
 
 .blur-button {
-  display: inline-block;
-  padding: 8px 24px;
-  background: var(--primary-color);
-  color: #fff;
-  border-radius: 4px;
-  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #1677ff 0%, #4096ff 100%);
+  color: white;
+  border-radius: 24px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(22, 119, 255, 0.2);
 }
 
 .blur-button:hover {
-  opacity: 0.9;
-  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(22, 119, 255, 0.3);
+  background: linear-gradient(135deg, #0958d9 0%, #1677ff 100%);
+  color: white;
+}
+.blur-button-text {
+  margin-right: 8px;
 }
 
+.blur-button-arrow {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.blur-button:hover .blur-button-arrow {
+  transform: translateX(4px);
+}
 /* 签到打卡卡片样式 */
 .checkin-card {
   width: 100%;
@@ -902,43 +940,102 @@
   gap: 12px;
 }
 
+/* 心动推荐样式 */
 .recommend-item {
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #f0f0f0;
-  transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    background: #fff;
+    transition: all 0.3s;
+    text-decoration: none;
+    color: inherit;
 }
 
 .recommend-item:hover {
-  border-color: #1890ff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.recommend-title {
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-
-.recommend-tags {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
+    background: #f5f5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .recommend-info {
-  margin-left: 12px;
-  flex: 1;
-  min-width: 0;
+    flex: 1;
+    margin: 0 12px;
+    overflow: hidden;
 }
 
 .recommend-name {
-  font-weight: 500;
-  margin-bottom: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
 }
 
 .recommend-profile {
-  color: #666;
-  font-size: 12px;
+    font-size: 14px;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.recommend-item .ant-avatar {
+    width: 48px;
+    height: 48px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recommend-item .recommend-score {
+    font-size: 14px;
+    color: #1890ff;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.recommend-item:hover {
+    background-color: #f5f5f5;
+    border-color: #e6e6e6;
+    transform: translateY(-1px);
+}
+
+.recommend-content-wrapper {
+    flex: 1;
+    min-width: 0;
+}
+
+.recommend-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.recommend-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.recommend-score {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: 12px;
+    min-width: 60px;
+}
+
+.score-label {
+    font-size: 12px;
+    color: #666;
+}
+
+.score-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1677ff;
 }
