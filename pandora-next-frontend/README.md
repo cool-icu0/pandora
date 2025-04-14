@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Pandora Next Frontend
 
-First, run the development server:
+一个面向程序员的在线学习和交流平台，集成算法练习、面试题库和技术讨论功能。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 技术栈
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **框架**: Next.js 14.2.7, React 18
+- **UI 组件**: Ant Design (antd)
+- **编辑器**: 
+  - Monaco Editor (代码编辑)
+  - ByteMD (Markdown 编辑)
+- **数据可视化**: ECharts
+- **状态管理**: Redux Toolkit
 
-You can start editing the page by modifying `app/index.tsx`. The page auto-updates as you edit the file.
+## 主要功能
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### 算法题库系统
+- 题目列表展示
+- 题目难度分级（极难、困难、中等、初级）
+- 代码编辑器集成
+- 在线运行和测试功能
 
-## Learn More
+### 论坛系统
+- 帖子发布和展示
+- 帖子列表分页
+- 标签系统
+- 用户互动功能（评论等）
 
-To learn more about Next.js, take a look at the following resources:
+### 用户系统
+- 用户登录
+- 用户中心
+- 个人信息展示
+- 用户数据统计
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 面试题库
+- 面试题目管理
+- 题目分类
+- 题目推荐
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## 界面特点
 
-## Deploy on Vercel
+### 响应式设计
+- 多屏幕尺寸适配
+- 移动端优化
+- 断点设置
+  | 断点 | 适配设备 |
+  |------|----------|
+  | 1200px | 大屏 |
+  | 768px | 平板 |
+  | 576px | 手机 |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 主题系统
+- ☀️ 亮色/暗色主题切换
+- 🎨 自定义主题色系
+- 📊 统一的色彩变量管理
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### UI 交互
+- ✨ 平滑过渡动画
+- 🖱️ 悬浮效果
+- ⌛ 加载状态处理
+- ❗ 错误状态展示
+
+## 项目特色
+
+### 📦 模块化设计
+清晰的目录结构和模块划分
+
+### 🎯 统一的样式管理
+使用 CSS 变量实现主题切换
+
+### 🛡️ 完善的错误处理
+包含加载状态和错误提示
+
+### ⚡ 性能优化
+- 图片优化
+- 组件懒加载
+- 响应式设计
+
+### 🛠️ 开发体验
+- ESLint 配置
+- Prettier 代码格式化
+- TypeScript 类型支持
