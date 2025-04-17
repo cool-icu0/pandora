@@ -4,12 +4,12 @@ package com.cool.pandora.service.post;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cool.pandora.model.dto.postComment.CommentAddRequest;
-import com.cool.pandora.model.dto.postComment.CommentQueryRequest;
-import com.cool.pandora.model.dto.postComment.CommentUpdateRequest;
-import com.cool.pandora.model.entity.post.PostComment;
+import com.cool.model.dto.postComment.CommentAddRequest;
+import com.cool.model.dto.postComment.CommentQueryRequest;
+import com.cool.model.dto.postComment.CommentUpdateRequest;
+import com.cool.model.entity.post.PostComment;
 import com.cool.pandora.model.entity.User;
-import com.cool.pandora.model.vo.CommentVO;
+import com.cool.model.vo.CommentVO;
 
 /**
  * 帖子评论服务

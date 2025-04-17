@@ -66,7 +66,7 @@ public class QuestionSubmitVO implements Serializable {
     /**
      * 提交用户脱敏信息
      */
-    private com.cool.pandora.model.vo.UserVO userVO;
+    private UserVO userVO;
     /**
      * 对应题目信息
      */

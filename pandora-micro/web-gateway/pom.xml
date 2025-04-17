@@ -8,6 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>web-gateway</artifactId>
+    <packaging>pom</packaging>
 
     <properties>
         <java.version>17</java.version>
@@ -24,11 +25,6 @@
             <artifactId>web-model</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.cool</groupId>-->
-<!--            <artifactId>XmutOJ-backend-service-client</artifactId>-->
-<!--            <version>0.0.1-SNAPSHOT</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>

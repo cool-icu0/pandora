@@ -1,25 +1,25 @@
 package com.cool.pandora.service.user.impl;
 
-import static com.cool.pandora.constant.UserConstant.USER_LOGIN_STATE;
+import static com.cool.common.constant.UserConstant.USER_LOGIN_STATE;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cool.pandora.common.ErrorCode;
-import com.cool.pandora.constant.CommonConstant;
-import com.cool.pandora.constant.RedisConstant;
-import com.cool.pandora.exception.BusinessException;
+import com.cool.common.common.ErrorCode;
+import com.cool.common.constant.CommonConstant;
+import com.cool.common.constant.RedisConstant;
+import com.cool.common.exception.BusinessException;
 import com.cool.pandora.mapper.UserMapper;
-import com.cool.pandora.model.dto.user.UserQueryRequest;
+import com.cool.model.dto.user.UserQueryRequest;
 import com.cool.pandora.model.entity.User;
-import com.cool.pandora.model.enums.AvatarEnum;
-import com.cool.pandora.model.enums.UserRoleEnum;
-import com.cool.pandora.model.vo.LoginUserVO;
-import com.cool.pandora.model.vo.UserVO;
+import com.cool.model.enums.AvatarEnum;
+import com.cool.model.enums.UserRoleEnum;
+import com.cool.model.vo.LoginUserVO;
+import com.cool.model.vo.UserVO;
 import com.cool.pandora.satoken.DeviceUtils;
 import com.cool.pandora.service.user.UserService;
-import com.cool.pandora.utils.SqlUtils;
+import com.cool.common.utils.SqlUtils;
 
 import java.io.Serializable;
 import java.time.LocalDate;

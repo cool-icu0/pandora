@@ -1,11 +1,11 @@
 package com.cool.pandora.controller;
 
 import cn.hutool.core.io.file.FileNameUtil;
-import com.cool.pandora.common.BaseResponse;
-import com.cool.pandora.common.ErrorCode;
-import com.cool.pandora.common.ResultUtils;
-import com.cool.pandora.constant.FileConstant;
-import com.cool.pandora.exception.BusinessException;
+import com.cool.common.common.BaseResponse;
+import com.cool.common.common.ErrorCode;
+import com.cool.common.common.ResultUtils;
+import com.cool.common.constant.FileConstant;
+import com.cool.common.exception.BusinessException;
 import com.cool.pandora.manager.CosManager;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.service.user.UserService;

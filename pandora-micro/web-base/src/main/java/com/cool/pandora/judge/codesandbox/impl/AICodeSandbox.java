@@ -7,8 +7,8 @@ import com.cool.pandora.judge.codesandbox.model.ExecuteCodeRequest;
 import com.cool.pandora.judge.codesandbox.model.ExecuteCodeResponse;
 import com.cool.pandora.judge.codesandbox.model.JudgeInfo;
 import com.cool.pandora.manager.AiManager;
-import com.cool.pandora.model.enums.JudgeInfoMessageEnum;
-import com.cool.pandora.model.enums.QuestionSubmitStatusEnum;
+import com.cool.model.enums.JudgeInfoMessageEnum;
+import com.cool.model.enums.QuestionSubmitStatusEnum;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

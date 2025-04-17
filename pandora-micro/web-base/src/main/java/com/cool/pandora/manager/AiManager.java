@@ -6,8 +6,8 @@ import com.volcengine.ark.runtime.model.completion.chat.ChatCompletionRequest;
 import com.volcengine.ark.runtime.model.completion.chat.ChatMessage;
 import com.volcengine.ark.runtime.model.completion.chat.ChatMessageRole;
 import com.volcengine.ark.runtime.service.ArkService;
-import com.cool.pandora.common.ErrorCode;
-import com.cool.pandora.exception.BusinessException;
+import com.cool.common.common.ErrorCode;
+import com.cool.common.exception.BusinessException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

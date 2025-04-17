@@ -1,6 +1,6 @@
 package com.cool.pandora.esdao;
 
-import com.cool.pandora.model.dto.post.PostEsDTO;
+import com.cool.model.dto.post.PostEsDTO;
 import java.util.List;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 

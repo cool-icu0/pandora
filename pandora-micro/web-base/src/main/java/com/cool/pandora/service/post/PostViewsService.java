@@ -1,7 +1,7 @@
 package com.cool.pandora.service.post;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cool.pandora.model.entity.post.PostViews;
+import com.cool.model.entity.post.PostViews;
 
 /**
  * 题目服务

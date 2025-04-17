@@ -53,12 +53,12 @@ public class QuestionBankVO implements Serializable {
     /**
      * 创建用户信息
      */
-    private com.cool.pandora.model.vo.UserVO user;
+    private UserVO user;
 
     /**
      * 题库里的题目列表（分页）
      */
-    Page<com.cool.pandora.model.vo.QuestionVO> questionPage;
+    Page<QuestionVO> questionPage;
 
     /**
      * 封装类转对象

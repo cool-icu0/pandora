@@ -53,7 +53,7 @@ public class QuestionBankQuestionVO implements Serializable {
     /**
      * 创建用户信息
      */
-    private com.cool.pandora.model.vo.UserVO user;
+    private UserVO user;
 
     /**
      * 封装类转对象

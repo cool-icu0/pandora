@@ -1,8 +1,8 @@
 package com.cool.pandora.job.once;
 
 import com.cool.pandora.esdao.PostEsDao;
-import com.cool.pandora.model.dto.post.PostEsDTO;
-import com.cool.pandora.model.entity.post.Post;
+import com.cool.model.dto.post.PostEsDTO;
+import com.cool.model.entity.post.Post;
 import com.cool.pandora.service.post.PostService;
 import java.util.List;
 import java.util.stream.Collectors;

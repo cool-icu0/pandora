@@ -1,6 +1,6 @@
 package com.cool.pandora.service.post;
 
-import com.cool.pandora.model.entity.post.PostThumb;
+import com.cool.model.entity.post.PostThumb;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cool.pandora.model.entity.User;
 

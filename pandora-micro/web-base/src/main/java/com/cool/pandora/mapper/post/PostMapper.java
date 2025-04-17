@@ -1,7 +1,7 @@
 package com.cool.pandora.mapper.post;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cool.pandora.model.entity.post.Post;
+import com.cool.model.entity.post.Post;
 import java.util.Date;
 import java.util.List;
 

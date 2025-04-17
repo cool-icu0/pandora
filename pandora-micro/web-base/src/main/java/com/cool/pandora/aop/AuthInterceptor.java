@@ -1,10 +1,10 @@
 package com.cool.pandora.aop;
 
-import com.cool.pandora.annotation.AuthCheck;
-import com.cool.pandora.common.ErrorCode;
-import com.cool.pandora.exception.BusinessException;
+import com.cool.common.annotation.AuthCheck;
+import com.cool.common.common.ErrorCode;
+import com.cool.common.exception.BusinessException;
 import com.cool.pandora.model.entity.User;
-import com.cool.pandora.model.enums.UserRoleEnum;
+import com.cool.model.enums.UserRoleEnum;
 import com.cool.pandora.service.user.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

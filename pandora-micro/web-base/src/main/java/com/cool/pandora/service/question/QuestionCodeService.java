@@ -3,10 +3,10 @@ package com.cool.pandora.service.question;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cool.pandora.model.dto.questionCode.QuestionQueryRequest;
+import com.cool.model.dto.questionCode.QuestionQueryRequest;
 import com.cool.pandora.model.entity.question.QuestionCode;
-import com.cool.pandora.model.vo.QuestionCodeVO;
-import com.cool.pandora.model.vo.UserVO;
+import com.cool.model.vo.QuestionCodeVO;
+import com.cool.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

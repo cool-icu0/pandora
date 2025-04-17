@@ -2,10 +2,10 @@ package com.cool.pandora.judge.strategy;
 
 import cn.hutool.json.JSONUtil;
 import com.cool.pandora.judge.codesandbox.model.JudgeInfo;
-import com.cool.pandora.model.dto.questionCode.JudgeCase;
-import com.cool.pandora.model.dto.questionCode.JudgeConfig;
+import com.cool.model.dto.questionCode.JudgeCase;
+import com.cool.model.dto.questionCode.JudgeConfig;
 import com.cool.pandora.model.entity.question.QuestionCode;
-import com.cool.pandora.model.enums.JudgeInfoMessageEnum;
+import com.cool.model.enums.JudgeInfoMessageEnum;
 
 import java.util.List;
 

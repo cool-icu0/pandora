@@ -2,7 +2,7 @@ package com.cool.pandora.service.post;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cool.pandora.model.entity.post.CommentThumb;
+import com.cool.model.entity.post.CommentThumb;
 import com.cool.pandora.model.entity.User;
 
 /**

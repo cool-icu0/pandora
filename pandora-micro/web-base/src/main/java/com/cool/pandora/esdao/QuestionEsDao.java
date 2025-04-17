@@ -1,6 +1,6 @@
 package com.cool.pandora.esdao;
 
-import com.cool.pandora.model.dto.question.QuestionEsDTO;
+import com.cool.model.dto.question.QuestionEsDTO;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 import java.util.List;

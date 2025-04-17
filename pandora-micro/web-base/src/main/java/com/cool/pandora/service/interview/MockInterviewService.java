@@ -2,9 +2,9 @@ package com.cool.pandora.service.interview;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cool.pandora.model.dto.mockinterview.MockInterviewAddRequest;
-import com.cool.pandora.model.dto.mockinterview.MockInterviewEventRequest;
-import com.cool.pandora.model.dto.mockinterview.MockInterviewQueryRequest;
+import com.cool.model.dto.mockinterview.MockInterviewAddRequest;
+import com.cool.model.dto.mockinterview.MockInterviewEventRequest;
+import com.cool.model.dto.mockinterview.MockInterviewQueryRequest;
 import com.cool.pandora.model.entity.MockInterview;
 import com.cool.pandora.model.entity.User;
 

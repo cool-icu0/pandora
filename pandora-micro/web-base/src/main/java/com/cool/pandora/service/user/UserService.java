@@ -2,10 +2,10 @@ package com.cool.pandora.service.user;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cool.pandora.model.dto.user.UserQueryRequest;
+import com.cool.model.dto.user.UserQueryRequest;
 import com.cool.pandora.model.entity.User;
-import com.cool.pandora.model.vo.LoginUserVO;
-import com.cool.pandora.model.vo.UserVO;
+import com.cool.model.vo.LoginUserVO;
+import com.cool.model.vo.UserVO;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;

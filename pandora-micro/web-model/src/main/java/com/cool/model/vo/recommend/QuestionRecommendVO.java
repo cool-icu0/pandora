@@ -1,7 +1,7 @@
 package com.cool.model.vo.recommend;
 
-import com.cool.pandora.model.vo.QuestionCodeVO;
-import com.cool.pandora.model.vo.QuestionVO;
+import com.cool.model.vo.QuestionCodeVO;
+import com.cool.model.vo.QuestionVO;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -1,15 +1,15 @@
 package com.cool.pandora.controller.question;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cool.pandora.common.BaseResponse;
-import com.cool.pandora.common.DeleteRequest;
-import com.cool.pandora.common.ErrorCode;
-import com.cool.pandora.common.ResultUtils;
-import com.cool.pandora.exception.BusinessException;
-import com.cool.pandora.exception.ThrowUtils;
-import com.cool.pandora.model.dto.questionComment.QuestionCommentAddRequest;
-import com.cool.pandora.model.dto.questionComment.QuestionCommentQueryRequest;
-import com.cool.pandora.model.dto.questionComment.QuestionCommentUpdateRequest;
+import com.cool.common.common.BaseResponse;
+import com.cool.common.common.DeleteRequest;
+import com.cool.common.common.ErrorCode;
+import com.cool.common.common.ResultUtils;
+import com.cool.common.exception.BusinessException;
+import com.cool.common.exception.ThrowUtils;
+import com.cool.model.dto.questionComment.QuestionCommentAddRequest;
+import com.cool.model.dto.questionComment.QuestionCommentQueryRequest;
+import com.cool.model.dto.questionComment.QuestionCommentUpdateRequest;
 import com.cool.pandora.model.entity.question.QuestionComment;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.service.question.QuestionCommentService;

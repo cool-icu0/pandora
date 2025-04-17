@@ -1,6 +1,6 @@
 package com.cool.pandora.blackfilter;
 
-import com.cool.pandora.utils.NetUtils;
+import com.cool.common.utils.NetUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;

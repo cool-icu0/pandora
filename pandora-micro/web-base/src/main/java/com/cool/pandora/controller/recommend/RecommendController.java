@@ -2,12 +2,12 @@ package com.cool.pandora.controller.recommend;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cool.pandora.common.BaseResponse;
-import com.cool.pandora.common.ResultUtils;
-import com.cool.pandora.model.dto.recommend.QuestionRecommendRequest;
-import com.cool.pandora.model.dto.recommend.UserRecommendRequest;
-import com.cool.pandora.model.vo.recommend.QuestionRecommendVO;
-import com.cool.pandora.model.vo.recommend.UserRecommendVO;
+import com.cool.common.common.BaseResponse;
+import com.cool.common.common.ResultUtils;
+import com.cool.model.dto.recommend.QuestionRecommendRequest;
+import com.cool.model.dto.recommend.UserRecommendRequest;
+import com.cool.model.vo.recommend.QuestionRecommendVO;
+import com.cool.model.vo.recommend.UserRecommendVO;
 import com.cool.pandora.service.recommend.RecommendService;
 import org.springframework.web.bind.annotation.*;
 

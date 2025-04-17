@@ -2,7 +2,7 @@ package com.cool.pandora.service.post.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cool.pandora.mapper.post.PostViewsMapper;
-import com.cool.pandora.model.entity.post.PostViews;
+import com.cool.model.entity.post.PostViews;
 import com.cool.pandora.service.post.PostViewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

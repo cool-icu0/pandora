@@ -2,8 +2,8 @@ package com.cool.pandora.service.question.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cool.pandora.common.ErrorCode;
-import com.cool.pandora.exception.BusinessException;
+import com.cool.common.common.ErrorCode;
+import com.cool.common.exception.BusinessException;
 import com.cool.pandora.mapper.question.QuestionThumbMapper;
 import com.cool.pandora.model.entity.question.Question;
 import com.cool.pandora.model.entity.question.QuestionThumb;

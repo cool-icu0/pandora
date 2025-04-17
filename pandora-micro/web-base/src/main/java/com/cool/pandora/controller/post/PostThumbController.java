@@ -1,10 +1,10 @@
 package com.cool.pandora.controller.post;
 
-import com.cool.pandora.common.BaseResponse;
-import com.cool.pandora.common.ErrorCode;
-import com.cool.pandora.common.ResultUtils;
-import com.cool.pandora.exception.BusinessException;
-import com.cool.pandora.model.dto.postthumb.PostThumbAddRequest;
+import com.cool.common.common.BaseResponse;
+import com.cool.common.common.ErrorCode;
+import com.cool.common.common.ResultUtils;
+import com.cool.common.exception.BusinessException;
+import com.cool.model.dto.postthumb.PostThumbAddRequest;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.service.post.PostThumbService;
 import com.cool.pandora.service.user.UserService;

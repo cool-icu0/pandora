@@ -63,7 +63,7 @@ public class PostVO implements Serializable {
     /**
      * 创建人信息
      */
-    private com.cool.pandora.model.vo.UserVO user;
+    private UserVO user;
 
     /**
      * 是否已点赞

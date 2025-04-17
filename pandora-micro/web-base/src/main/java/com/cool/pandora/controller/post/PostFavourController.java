@@ -1,17 +1,17 @@
 package com.cool.pandora.controller.post;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cool.pandora.common.BaseResponse;
-import com.cool.pandora.common.ErrorCode;
-import com.cool.pandora.common.ResultUtils;
-import com.cool.pandora.exception.BusinessException;
-import com.cool.pandora.exception.ThrowUtils;
-import com.cool.pandora.model.dto.post.PostQueryRequest;
-import com.cool.pandora.model.dto.postfavour.PostFavourAddRequest;
-import com.cool.pandora.model.dto.postfavour.PostFavourQueryRequest;
-import com.cool.pandora.model.entity.post.Post;
+import com.cool.common.common.BaseResponse;
+import com.cool.common.common.ErrorCode;
+import com.cool.common.common.ResultUtils;
+import com.cool.common.exception.BusinessException;
+import com.cool.common.exception.ThrowUtils;
+import com.cool.model.dto.post.PostQueryRequest;
+import com.cool.model.dto.postfavour.PostFavourAddRequest;
+import com.cool.model.dto.postfavour.PostFavourQueryRequest;
+import com.cool.model.entity.post.Post;
 import com.cool.pandora.model.entity.User;
-import com.cool.pandora.model.vo.PostVO;
+import com.cool.model.vo.PostVO;
 import com.cool.pandora.service.post.PostFavourService;
 import com.cool.pandora.service.post.PostService;
 import com.cool.pandora.service.user.UserService;

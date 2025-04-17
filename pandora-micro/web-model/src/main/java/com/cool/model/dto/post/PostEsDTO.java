@@ -2,7 +2,7 @@ package com.cool.model.dto.post;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
-import com.cool.pandora.model.entity.post.Post;
+import com.cool.model.entity.post.Post;
 import lombok.Data;
 
 import org.apache.commons.lang3.StringUtils;

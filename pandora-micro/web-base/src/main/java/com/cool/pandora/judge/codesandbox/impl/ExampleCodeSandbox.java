@@ -5,8 +5,8 @@ import com.cool.pandora.judge.codesandbox.CodeSandbox;
 import com.cool.pandora.judge.codesandbox.model.ExecuteCodeRequest;
 import com.cool.pandora.judge.codesandbox.model.ExecuteCodeResponse;
 import com.cool.pandora.judge.codesandbox.model.JudgeInfo;
-import com.cool.pandora.model.enums.JudgeInfoMessageEnum;
-import com.cool.pandora.model.enums.QuestionSubmitStatusEnum;
+import com.cool.model.enums.JudgeInfoMessageEnum;
+import com.cool.model.enums.QuestionSubmitStatusEnum;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;

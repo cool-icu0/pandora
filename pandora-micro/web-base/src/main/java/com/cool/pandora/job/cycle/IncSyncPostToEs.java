@@ -2,8 +2,8 @@ package com.cool.pandora.job.cycle;
 
 import com.cool.pandora.esdao.PostEsDao;
 import com.cool.pandora.mapper.post.PostMapper;
-import com.cool.pandora.model.dto.post.PostEsDTO;
-import com.cool.pandora.model.entity.post.Post;
+import com.cool.model.dto.post.PostEsDTO;
+import com.cool.model.entity.post.Post;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;

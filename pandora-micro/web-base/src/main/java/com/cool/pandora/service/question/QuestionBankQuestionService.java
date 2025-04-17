@@ -3,10 +3,10 @@ package com.cool.pandora.service.question;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cool.pandora.model.dto.questionBankQuestion.QuestionBankQuestionQueryRequest;
+import com.cool.model.dto.questionBankQuestion.QuestionBankQuestionQueryRequest;
 import com.cool.pandora.model.entity.question.QuestionBankQuestion;
 import com.cool.pandora.model.entity.User;
-import com.cool.pandora.model.vo.QuestionBankQuestionVO;
+import com.cool.model.vo.QuestionBankQuestionVO;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;

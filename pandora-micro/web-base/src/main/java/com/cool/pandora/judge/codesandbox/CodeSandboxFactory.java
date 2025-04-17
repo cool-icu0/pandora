@@ -5,7 +5,7 @@ import com.cool.pandora.judge.codesandbox.impl.AICodeSandbox;
 import com.cool.pandora.judge.codesandbox.impl.ExampleCodeSandbox;
 import com.cool.pandora.judge.codesandbox.impl.RemoteCodeSandbox;
 import com.cool.pandora.judge.codesandbox.impl.ThirdPartyCodeSandbox;
-import com.cool.pandora.utils.SpringContextUtils;
+import com.cool.common.utils.SpringContextUtils;
 import org.springframework.stereotype.Component;
 
 /**

@@ -13,6 +13,7 @@
     <artifactId>pandora-micro</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>pandora-micro</name>
+    <packaging>pom</packaging>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -110,6 +111,12 @@
             <version>1.39.0</version>
         </dependency>
 
+        <!--JWT-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
         <!-- 提供Redis连接池 -->
         <dependency>
             <groupId>org.apache.commons</groupId>

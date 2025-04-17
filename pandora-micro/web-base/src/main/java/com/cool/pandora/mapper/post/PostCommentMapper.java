@@ -2,7 +2,7 @@ package com.cool.pandora.mapper.post;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cool.pandora.model.entity.post.PostComment;
+import com.cool.model.entity.post.PostComment;
 
 /**
  * 帖子评论 Mapper

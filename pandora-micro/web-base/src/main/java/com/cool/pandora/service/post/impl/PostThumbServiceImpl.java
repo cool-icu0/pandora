@@ -2,11 +2,11 @@ package com.cool.pandora.service.post.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cool.pandora.common.ErrorCode;
-import com.cool.pandora.exception.BusinessException;
+import com.cool.common.common.ErrorCode;
+import com.cool.common.exception.BusinessException;
 import com.cool.pandora.mapper.post.PostThumbMapper;
-import com.cool.pandora.model.entity.post.Post;
-import com.cool.pandora.model.entity.post.PostThumb;
+import com.cool.model.entity.post.Post;
+import com.cool.model.entity.post.PostThumb;
 import com.cool.pandora.model.entity.User;
 import com.cool.pandora.service.post.PostService;
 import com.cool.pandora.service.post.PostThumbService;

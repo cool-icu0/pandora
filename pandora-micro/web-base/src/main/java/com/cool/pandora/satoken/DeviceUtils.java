@@ -4,8 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.Header;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
-import com.cool.pandora.common.ErrorCode;
-import com.cool.pandora.exception.ThrowUtils;
+import com.cool.common.common.ErrorCode;
+import com.cool.common.exception.ThrowUtils;
 
 import javax.servlet.http.HttpServletRequest;
 

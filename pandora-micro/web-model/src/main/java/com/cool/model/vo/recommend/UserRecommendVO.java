@@ -1,6 +1,6 @@
 package com.cool.model.vo.recommend;
 
-import com.cool.pandora.model.vo.UserVO;
+import com.cool.model.vo.UserVO;
 import lombok.Data;
 
 import java.io.Serializable;

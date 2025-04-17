@@ -88,7 +88,7 @@ public class QuestionCodeVO implements Serializable {
     /**
      * 创建题目人的信息
      */
-    private com.cool.pandora.model.vo.UserVO userVO;
+    private UserVO userVO;
 
     private static final long serialVersionUID = 1L;
 

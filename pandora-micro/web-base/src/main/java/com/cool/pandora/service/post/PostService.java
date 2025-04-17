@@ -3,9 +3,9 @@ package com.cool.pandora.service.post;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cool.pandora.model.dto.post.PostQueryRequest;
-import com.cool.pandora.model.entity.post.Post;
-import com.cool.pandora.model.vo.PostVO;
+import com.cool.model.dto.post.PostQueryRequest;
+import com.cool.model.entity.post.Post;
+import com.cool.model.vo.PostVO;
 import javax.servlet.http.HttpServletRequest;
 
 /**

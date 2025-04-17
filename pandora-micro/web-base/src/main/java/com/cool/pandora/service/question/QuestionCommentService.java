@@ -2,7 +2,7 @@ package com.cool.pandora.service.question;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cool.pandora.model.dto.questionComment.QuestionCommentQueryRequest;
+import com.cool.model.dto.questionComment.QuestionCommentQueryRequest;
 import com.cool.pandora.model.entity.question.QuestionComment;
 import com.cool.pandora.model.entity.User;
 

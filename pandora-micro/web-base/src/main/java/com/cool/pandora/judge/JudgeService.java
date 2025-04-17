@@ -1,6 +1,6 @@
 package com.cool.pandora.judge;
-import com.cool.pandora.model.dto.questionSubmit.QuestionRunAddRequest;
-import com.cool.pandora.model.dto.questionSubmit.QuestionSubmitAddRequest;
+import com.cool.model.dto.questionSubmit.QuestionRunAddRequest;
+import com.cool.model.dto.questionSubmit.QuestionSubmitAddRequest;
 import com.cool.pandora.model.entity.question.QuestionSubmit;
 
 /**

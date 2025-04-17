@@ -1,7 +1,7 @@
 package com.cool.gateway.filter;
 
 import com.alibaba.excel.util.StringUtils;
-import com.cool.backendcommon.utils.JwtUtils;
+import com.cool.common.utils.JwtUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;

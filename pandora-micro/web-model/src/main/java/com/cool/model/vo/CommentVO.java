@@ -30,7 +30,7 @@ public class CommentVO implements Serializable {
     /**
      * 评论用户信息
      */
-    private com.cool.pandora.model.vo.UserVO userVO;
+    private UserVO userVO;
 
     /**
      * 评论内容
@@ -55,7 +55,7 @@ public class CommentVO implements Serializable {
     /**
      * 回复用户信息
      */
-    private com.cool.pandora.model.vo.UserVO replyUserVO;
+    private UserVO replyUserVO;
 
     /**
      * 点赞数

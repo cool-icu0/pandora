@@ -3,10 +3,10 @@ package com.cool.pandora.service.recommend;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cool.pandora.model.dto.recommend.QuestionRecommendRequest;
-import com.cool.pandora.model.dto.recommend.UserRecommendRequest;
-import com.cool.pandora.model.vo.recommend.QuestionRecommendVO;
-import com.cool.pandora.model.vo.recommend.UserRecommendVO;
+import com.cool.model.dto.recommend.QuestionRecommendRequest;
+import com.cool.model.dto.recommend.UserRecommendRequest;
+import com.cool.model.vo.recommend.QuestionRecommendVO;
+import com.cool.model.vo.recommend.UserRecommendVO;
 
 import java.util.List;
 
