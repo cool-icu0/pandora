@@ -180,10 +180,10 @@ wx:
 # todo 需替换配置
 cos:
   client:
-    accessKey: xxx
-    secretKey: xxx
-    region: xxx
-    bucket: xxx
+    accessKey: AKIDDJApKbdYLwIQM6PkaHm34qY4OBmBMI1Y
+    secretKey: SfeOyPccOwHQL2VorgIhBhCWfcNCuSq2
+    region: ap-chengdu
+    bucket: cool-miss-tu-1305899653
 # 接口文档配置
 knife4j:
   enable: true
@@ -197,8 +197,8 @@ knife4j:
           - com.cool.pandora.controller
 # AI 大模型接入（目前是火山引擎 DeepSeek）
 ai:
-  apiKey: xxx
+  apiKey: 02432347-ccb3-4a4d-8c8c-5c6411ea02f3
 
 #代码沙箱配置
 codesandbox:
-  type: example
+  type: ai
