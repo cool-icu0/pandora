@@ -4,11 +4,11 @@ package com.cool.heart.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cool.common.common.BaseResponse;
 import com.cool.common.common.ResultUtils;
+import com.cool.heart.service.RecommendService;
 import com.cool.model.dto.recommend.QuestionRecommendRequest;
 import com.cool.model.dto.recommend.UserRecommendRequest;
 import com.cool.model.vo.recommend.QuestionRecommendVO;
 import com.cool.model.vo.recommend.UserRecommendVO;
-import com.cool.pandora.service.recommend.RecommendService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

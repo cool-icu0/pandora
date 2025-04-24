@@ -1,6 +1,8 @@
 package com.cool.server;
 
 
+import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cool.common.common.ErrorCode;
 import com.cool.common.exception.BusinessException;
 import com.cool.model.entity.User;
@@ -9,9 +11,11 @@ import com.cool.model.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -59,6 +63,21 @@ public interface UserFeignClient{
         return currentUser;
     }
 
+        /**
+     * 获取当前登录用户（允许未登录）
+     *
+     * @param request
+     * @return
+     */
+    default User getLoginUserPermitNull(HttpServletRequest request) {
+        // 先判断是否已登录（基于 Sa-Token 实现）
+        Object loginUserId = StpUtil.getLoginIdDefaultNull();
+        if (loginUserId == null) {
+            return null;
+        }
+        return this.getById((Long) loginUserId);
+    }
+
     /**
      * 是否为管理员
      *
@@ -67,6 +86,21 @@ public interface UserFeignClient{
      */
     default boolean isAdmin(User user) {
         return user != null && UserRoleEnum.ADMIN.getValue().equals(user.getUserRole());
+    }
+
+    /**
+     * 是否为管理员
+     *
+     * @param request
+     * @return
+     */
+    default boolean isAdmin(HttpServletRequest request) {
+        // 仅管理员可查询
+        // 基于 Sa-Token 改造
+        Object userObj = StpUtil.getSession().get(USER_LOGIN_STATE);
+//        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        User user = (User) userObj;
+        return isAdmin(user);
     }
 
     /**
@@ -83,4 +117,9 @@ public interface UserFeignClient{
         BeanUtils.copyProperties(user, userVO);
         return userVO;
     }
+    @PostMapping("/update")
+    boolean updateById(User updateUser);
+
+    @PostMapping("/list")
+    List<User> list(QueryWrapper<User> userQueryWrapper);
 }

@@ -7,7 +7,7 @@ import com.cool.common.exception.BusinessException;
 import com.cool.model.dto.questionThumb.QuestionThumbAddRequest;
 import com.cool.model.entity.User;
 import com.cool.pandora.service.question.QuestionThumbService;
-import com.cool.pandora.service.user.UserService;
+import com.cool.server.UserFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +31,7 @@ public class QuestionThumbController {
     private QuestionThumbService questionThumbService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     /**
      * 点赞 / 取消点赞
@@ -47,7 +47,7 @@ public class QuestionThumbController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 登录才能点赞
-        final User loginUser = userService.getLoginUser(request);
+        final User loginUser = userFeignClient.getLoginUser(request);
         long questionId = questionThumbAddRequest.getQuestionId();
         int result = questionThumbService.doQuestionThumb(questionId, loginUser);
         return ResultUtils.success(result);
@@ -82,7 +82,7 @@ public class QuestionThumbController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 获取登录用户
-        final User loginUser = userService.getLoginUser(request);
+        final User loginUser = userFeignClient.getLoginUser(request);
         // 判断是否已收藏
         boolean isFavourite = questionThumbService.isQuestionThumb(questionId, loginUser.getId());
         return ResultUtils.success(isFavourite);

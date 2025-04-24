@@ -20,8 +20,8 @@ import com.cool.model.entity.User;
 import com.cool.model.entity.question.QuestionSubmit;
 import com.cool.model.enums.QuestionSubmitStatusEnum;
 import com.cool.pandora.service.question.QuestionCodeService;
-import com.cool.pandora.service.user.UserService;
 import com.cool.common.utils.SqlUtils;
+import com.cool.server.UserFeignClient;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -47,7 +47,7 @@ public class QuestionCodeServiceImpl extends ServiceImpl<QuestionCodeMapper, Que
     private final static Gson GSON = new Gson();
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
     @Resource
     private RedisTemplate redisTemplate;
     @Resource
@@ -143,9 +143,9 @@ public class QuestionCodeServiceImpl extends ServiceImpl<QuestionCodeMapper, Que
         Long userId = questionCode.getUserId();
         User user = null;
         if (userId != null && userId > 0) {
-            user = userService.getById(userId);
+            user = userFeignClient.getById(userId);
         }
-        UserVO userVO = userService.getUserVO(user);
+        UserVO userVO = userFeignClient.getUserVO(user);
         questionCodeVO.setUserVO(userVO);
         return questionCodeVO;
     }
@@ -159,7 +159,7 @@ public class QuestionCodeServiceImpl extends ServiceImpl<QuestionCodeMapper, Que
         }
         // 1. 关联查询用户信息
         Set<Long> userIdSet = questionCodeList.stream().map(QuestionCode::getUserId).collect(Collectors.toSet());
-        Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
+        Map<Long, List<User>> userIdUserListMap = userFeignClient.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
         // 填充信息
         List<QuestionCodeVO> questionVOList = questionCodeList.stream().map(questionCode -> {
@@ -169,7 +169,7 @@ public class QuestionCodeServiceImpl extends ServiceImpl<QuestionCodeMapper, Que
             if (userIdUserListMap.containsKey(userId)) {
                 user = userIdUserListMap.get(userId).get(0);
             }
-            questionCodeVO.setUserVO(userService.getUserVO(user));
+            questionCodeVO.setUserVO(userFeignClient.getUserVO(user));
             return questionCodeVO;
         }).collect(Collectors.toList());
         questionCodeVOPage.setRecords(questionVOList);
@@ -207,8 +207,8 @@ public class QuestionCodeServiceImpl extends ServiceImpl<QuestionCodeMapper, Que
                     .map(id -> {
                         UserVO userVO = (UserVO) redisTemplate.opsForHash().get(userKey, String.valueOf(id));
                         if (userVO == null) {
-                            User user = userService.getById((Serializable) id);
-                            userVO = userService.getUserVO(user);
+                            User user = userFeignClient.getById((Long) id);
+                            userVO = userFeignClient.getUserVO(user);
                             redisTemplate.opsForHash().put(userKey, String.valueOf(id), userVO);
                         }
                         Double score = redisTemplate.opsForZSet().score(rankKey, id);
@@ -219,10 +219,10 @@ public class QuestionCodeServiceImpl extends ServiceImpl<QuestionCodeMapper, Que
         }
         
         // 2. Redis中没有数据，从数据库查询并写入Redis
-        List<UserVO> rankList = userService.list(new QueryWrapper<User>())
+        List<UserVO> rankList = userFeignClient.list(new QueryWrapper<User>())
                 .stream()
                 .map(user -> {
-                    UserVO userVO = userService.getUserVO(user);
+                    UserVO userVO = userFeignClient.getUserVO(user);
                     int passCount;
                     
                     if (year == null) {

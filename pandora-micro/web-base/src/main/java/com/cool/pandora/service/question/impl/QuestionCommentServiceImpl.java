@@ -11,7 +11,7 @@ import com.cool.model.dto.questionComment.QuestionCommentQueryRequest;
 import com.cool.model.entity.question.QuestionComment;
 import com.cool.model.entity.User;
 import com.cool.pandora.service.question.QuestionCommentService;
-import com.cool.pandora.service.user.UserService;
+import com.cool.server.UserFeignClient;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class QuestionCommentServiceImpl extends ServiceImpl<QuestionCommentMappe
         implements QuestionCommentService {
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     @Override
     public void validQuestionComment(QuestionComment questionComment, boolean add) {
@@ -58,7 +58,7 @@ public class QuestionCommentServiceImpl extends ServiceImpl<QuestionCommentMappe
         QuestionComment oldQuestionComment = this.getById(id);
         ThrowUtils.throwIf(oldQuestionComment == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可删除
-        if (!oldQuestionComment.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
+        if (!oldQuestionComment.getUserId().equals(loginUser.getId()) && !userFeignClient.isAdmin(loginUser)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         return this.removeById(id);
@@ -70,7 +70,7 @@ public class QuestionCommentServiceImpl extends ServiceImpl<QuestionCommentMappe
         QuestionComment oldQuestionComment = this.getById(questionComment.getId());
         ThrowUtils.throwIf(oldQuestionComment == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可修改
-        if (!oldQuestionComment.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
+        if (!oldQuestionComment.getUserId().equals(loginUser.getId()) && !userFeignClient.isAdmin(loginUser)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         validQuestionComment(questionComment, false);

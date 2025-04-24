@@ -1,4 +1,4 @@
-package com.cool.pandora.config;
+package com.cool.user.config;
 
 import lombok.Data;
 import org.redisson.Redisson;

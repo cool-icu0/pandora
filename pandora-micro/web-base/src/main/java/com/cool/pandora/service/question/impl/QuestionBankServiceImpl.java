@@ -14,8 +14,8 @@ import com.cool.model.entity.User;
 import com.cool.model.vo.QuestionBankVO;
 import com.cool.model.vo.UserVO;
 import com.cool.pandora.service.question.QuestionBankService;
-import com.cool.pandora.service.user.UserService;
 import com.cool.common.utils.SqlUtils;
+import com.cool.server.UserFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, QuestionBank> implements QuestionBankService {
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     /**
      * 校验数据
@@ -124,9 +124,9 @@ public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, Que
         Long userId = questionBank.getUserId();
         User user = null;
         if (userId != null && userId > 0) {
-            user = userService.getById(userId);
+            user = userFeignClient.getById(userId);
         }
-        UserVO userVO = userService.getUserVO(user);
+        UserVO userVO = userFeignClient.getUserVO(user);
         questionBankVO.setUser(userVO);
         // endregion
 
@@ -156,7 +156,7 @@ public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, Que
         // region 可选
         // 1. 关联查询用户信息
         Set<Long> userIdSet = questionBankList.stream().map(QuestionBank::getUserId).collect(Collectors.toSet());
-        Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
+        Map<Long, List<User>> userIdUserListMap = userFeignClient.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
         // 填充信息
         questionBankVOList.forEach(questionBankVO -> {
@@ -165,7 +165,7 @@ public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, Que
             if (userIdUserListMap.containsKey(userId)) {
                 user = userIdUserListMap.get(userId).get(0);
             }
-            questionBankVO.setUser(userService.getUserVO(user));
+            questionBankVO.setUser(userFeignClient.getUserVO(user));
         });
         // endregion
 

@@ -21,8 +21,8 @@ import com.cool.model.vo.UserVO;
 import com.cool.pandora.service.question.QuestionBankQuestionService;
 import com.cool.pandora.service.question.QuestionBankService;
 import com.cool.pandora.service.question.QuestionService;
-import com.cool.pandora.service.user.UserService;
 import com.cool.common.utils.SqlUtils;
+import com.cool.server.UserFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.aop.framework.AopContext;
@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
 public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQuestionMapper, QuestionBankQuestion> implements QuestionBankQuestionService {
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     @Resource
     @Lazy
@@ -150,9 +150,9 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
         Long userId = questionBankQuestion.getUserId();
         User user = null;
         if (userId != null && userId > 0) {
-            user = userService.getById(userId);
+            user = userFeignClient.getById(userId);
         }
-        UserVO userVO = userService.getUserVO(user);
+        UserVO userVO = userFeignClient.getUserVO(user);
         questionBankQuestionVO.setUser(userVO);
         // endregion
 
@@ -182,7 +182,7 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
         // region 可选
         // 1. 关联查询用户信息
         Set<Long> userIdSet = questionBankQuestionList.stream().map(QuestionBankQuestion::getUserId).collect(Collectors.toSet());
-        Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
+        Map<Long, List<User>> userIdUserListMap = userFeignClient.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
         // 填充信息
         questionBankQuestionVOList.forEach(questionBankQuestionVO -> {
@@ -191,7 +191,7 @@ public class QuestionBankQuestionServiceImpl extends ServiceImpl<QuestionBankQue
             if (userIdUserListMap.containsKey(userId)) {
                 user = userIdUserListMap.get(userId).get(0);
             }
-            questionBankQuestionVO.setUser(userService.getUserVO(user));
+            questionBankQuestionVO.setUser(userFeignClient.getUserVO(user));
         });
         // endregion
 

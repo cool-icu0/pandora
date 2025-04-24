@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
 * 题目服务
 */
-@FeignClient(name = "XmutOJ-backend-question-service", path = "/api/question/inner")
+@FeignClient(name = "web-base", path = "/api/question/inner")
 public interface QuestionFeignClient{
     @GetMapping("/get/id")
     QuestionCode getQuestionCodeById(@RequestParam("questionId") long questionId);

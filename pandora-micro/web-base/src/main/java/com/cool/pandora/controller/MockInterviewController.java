@@ -15,7 +15,7 @@ import com.cool.model.dto.mockinterview.MockInterviewQueryRequest;
 import com.cool.model.entity.MockInterview;
 import com.cool.model.entity.User;
 import com.cool.pandora.service.interview.MockInterviewService;
-import com.cool.pandora.service.user.UserService;
+import com.cool.server.UserFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +35,7 @@ public class MockInterviewController {
     private MockInterviewService mockInterviewService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     // region 增删改查
 
@@ -50,7 +50,7 @@ public class MockInterviewController {
     public BaseResponse<Long> addMockInterview(@RequestBody MockInterviewAddRequest mockInterviewAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(mockInterviewAddRequest == null, ErrorCode.PARAMS_ERROR);
         // 获取当前登录用户
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         // 调用 Service 创建模拟面试
         Long mockInterviewId = mockInterviewService.createMockInterview(mockInterviewAddRequest, loginUser);
         return ResultUtils.success(mockInterviewId);
@@ -68,13 +68,13 @@ public class MockInterviewController {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User user = userService.getLoginUser(request);
+        User user = userFeignClient.getLoginUser(request);
         long id = deleteRequest.getId();
         // 判断是否存在
         MockInterview oldMockInterview = mockInterviewService.getById(id);
         ThrowUtils.throwIf(oldMockInterview == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可删除
-        if (!oldMockInterview.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
+        if (!oldMockInterview.getUserId().equals(user.getId()) && !userFeignClient.isAdmin(request)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         // 操作数据库
@@ -138,7 +138,7 @@ public class MockInterviewController {
         // 限制爬虫
         ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
         // 限制只能获取本人的
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         mockInterviewQueryRequest.setUserId(loginUser.getId());
         // 查询数据库
         Page<MockInterview> queryPage = new Page<>(current, pageSize);
@@ -163,7 +163,7 @@ public class MockInterviewController {
     public BaseResponse<String> handleMockInterviewEvent(@RequestBody MockInterviewEventRequest mockInterviewEventRequest,
                                                          HttpServletRequest request) {
         // 获取当前登录用户
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         // 调用 Service 处理模拟面试事件
         String aiResponse = mockInterviewService.handleMockInterviewEvent(mockInterviewEventRequest, loginUser);
         // 返回 AI 的回复

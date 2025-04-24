@@ -23,8 +23,8 @@ import com.cool.model.vo.QuestionVO;
 import com.cool.model.vo.UserVO;
 import com.cool.pandora.service.question.QuestionBankQuestionService;
 import com.cool.pandora.service.question.QuestionService;
-import com.cool.pandora.service.user.UserService;
 import com.cool.common.utils.SqlUtils;
+import com.cool.server.UserFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -56,7 +56,7 @@ import java.util.stream.Collectors;
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> implements QuestionService {
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     @Resource
     private QuestionBankQuestionService questionBankQuestionService;
@@ -162,9 +162,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         Long userId = question.getUserId();
         User user = null;
         if (userId != null && userId > 0) {
-            user = userService.getById(userId);
+            user = userFeignClient.getById(userId);
         }
-        UserVO userVO = userService.getUserVO(user);
+        UserVO userVO = userFeignClient.getUserVO(user);
         questionVO.setUser(userVO);
         // endregion
         return questionVO;
@@ -193,7 +193,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         // region 可选
         // 1. 关联查询用户信息
         Set<Long> userIdSet = questionList.stream().map(Question::getUserId).collect(Collectors.toSet());
-        Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
+        Map<Long, List<User>> userIdUserListMap = userFeignClient.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
         // 填充信息
         questionVOList.forEach(questionVO -> {
@@ -202,7 +202,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             if (userIdUserListMap.containsKey(userId)) {
                 user = userIdUserListMap.get(userId).get(0);
             }
-            questionVO.setUser(userService.getUserVO(user));
+            questionVO.setUser(userFeignClient.getUserVO(user));
         });
         // endregion
 

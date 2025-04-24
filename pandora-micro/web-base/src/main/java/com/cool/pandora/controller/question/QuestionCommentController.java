@@ -13,7 +13,7 @@ import com.cool.model.dto.questionComment.QuestionCommentUpdateRequest;
 import com.cool.model.entity.question.QuestionComment;
 import com.cool.model.entity.User;
 import com.cool.pandora.service.question.QuestionCommentService;
-import com.cool.pandora.service.user.UserService;
+import com.cool.server.UserFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +33,7 @@ public class QuestionCommentController {
     private QuestionCommentService questionCommentService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     @PostMapping("/add")
     public BaseResponse<Long> addQuestionComment(@RequestBody QuestionCommentAddRequest questionCommentAddRequest,
@@ -43,7 +43,7 @@ public class QuestionCommentController {
         }
         QuestionComment questionComment = new QuestionComment();
         BeanUtils.copyProperties(questionCommentAddRequest, questionComment);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         long result = questionCommentService.addComment(questionComment, loginUser);
         return ResultUtils.success(result);
     }
@@ -53,7 +53,7 @@ public class QuestionCommentController {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         boolean result = questionCommentService.deleteComment(deleteRequest.getId(), loginUser);
         return ResultUtils.success(result);
     }
@@ -66,7 +66,7 @@ public class QuestionCommentController {
         }
         QuestionComment questionComment = new QuestionComment();
         BeanUtils.copyProperties(questionCommentUpdateRequest, questionComment);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         boolean result = questionCommentService.updateComment(questionComment, loginUser);
         return ResultUtils.success(result);
     }

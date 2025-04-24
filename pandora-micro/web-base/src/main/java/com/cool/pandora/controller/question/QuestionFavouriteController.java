@@ -11,7 +11,7 @@ import com.cool.model.dto.questionFavourite.QuestionFavouriteQueryRequest;
 import com.cool.model.entity.question.Question;
 import com.cool.model.entity.User;
 import com.cool.pandora.service.question.QuestionFavouriteService;
-import com.cool.pandora.service.user.UserService;
+import com.cool.server.UserFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +31,7 @@ public class QuestionFavouriteController {
     private QuestionFavouriteService questionFavouriteService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     /**
      * 获取用户收藏的题目列表
@@ -44,7 +44,7 @@ public class QuestionFavouriteController {
         if (request == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        final User loginUser = userService.getLoginUser(request);
+        final User loginUser = userFeignClient.getLoginUser(request);
         List<Question> questionList = questionFavouriteService.listMyFavouriteQuestions(loginUser);
         return ResultUtils.success(questionList);
     }
@@ -63,7 +63,7 @@ public class QuestionFavouriteController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 登录才能收藏
-        final User loginUser = userService.getLoginUser(request);
+        final User loginUser = userFeignClient.getLoginUser(request);
         long questionId = questionFavouriteAddRequest.getQuestionId();
         int result = questionFavouriteService.doQuestionFavourite(questionId, loginUser);
         return ResultUtils.success(result);
@@ -83,7 +83,7 @@ public class QuestionFavouriteController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 获取登录用户
-        final User loginUser = userService.getLoginUser(request);
+        final User loginUser = userFeignClient.getLoginUser(request);
         // 判断是否已收藏
         boolean isFavourite = questionFavouriteService.isQuestionFavourite(questionId, loginUser.getId());
         return ResultUtils.success(isFavourite);
@@ -118,7 +118,7 @@ public class QuestionFavouriteController {
         if (questionFavouriteQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         long current = questionFavouriteQueryRequest.getCurrent();
         long size = questionFavouriteQueryRequest.getPageSize();
         // 限制爬虫

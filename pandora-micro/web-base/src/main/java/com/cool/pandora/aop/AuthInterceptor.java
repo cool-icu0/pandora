@@ -5,7 +5,7 @@ import com.cool.common.common.ErrorCode;
 import com.cool.common.exception.BusinessException;
 import com.cool.model.entity.User;
 import com.cool.model.enums.UserRoleEnum;
-import com.cool.pandora.service.user.UserService;
+import com.cool.server.UserFeignClient;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.springframework.web.context.request.RequestAttributes;
@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthInterceptor {
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     /**
      * 执行拦截
@@ -39,7 +39,7 @@ public class AuthInterceptor {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
         // 当前登录用户
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         UserRoleEnum mustRoleEnum = UserRoleEnum.getEnumByValue(mustRole);
         // 不需要权限，放行
         if (mustRoleEnum == null) {

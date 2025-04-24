@@ -22,7 +22,7 @@ import com.cool.model.vo.QuestionSubmitVO;
 import com.cool.model.vo.UserVO;
 import com.cool.pandora.service.question.QuestionCodeService;
 import com.cool.pandora.service.question.QuestionSubmitService;
-import com.cool.pandora.service.user.UserService;
+import com.cool.server.UserFeignClient;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -53,7 +53,7 @@ public class QuestionCodeController {
     private QuestionCodeService questionCodeService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     @Resource
     private QuestionSubmitService questionSubmitService;
@@ -92,7 +92,7 @@ public class QuestionCodeController {
             questionCode.setJudgeConfig(GSON.toJson(judgeConfig));
         }
         questionCodeService.validQuestionCode(questionCode, true);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         questionCode.setUserId(loginUser.getId());
         questionCode.setFavourNum(0);
         questionCode.setThumbNum(0);
@@ -112,13 +112,13 @@ public class QuestionCodeController {
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteQuestionCode(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(deleteRequest == null || deleteRequest.getId() <= 0, ErrorCode.PARAMS_ERROR);
-        User user = userService.getLoginUser(request);
+        User user = userFeignClient.getLoginUser(request);
         long id = deleteRequest.getId();
         // 判断是否存在
         QuestionCode oldQuestionCode = questionCodeService.getById(id);
         ThrowUtils.throwIf(oldQuestionCode == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可删除
-        ThrowUtils.throwIf(!oldQuestionCode.getUserId().equals(user.getId()) && !userService.isAdmin(request), ErrorCode.NO_AUTH_ERROR);
+        ThrowUtils.throwIf(!oldQuestionCode.getUserId().equals(user.getId()) && !userFeignClient.isAdmin(request), ErrorCode.NO_AUTH_ERROR);
         boolean b = questionCodeService.removeById(id);
         return ResultUtils.success(b);
     }
@@ -133,14 +133,14 @@ public class QuestionCodeController {
     @PostMapping("/batchDelete")
     public BaseResponse<Boolean> batchDeleteQuestionCode(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(deleteRequest == null || deleteRequest.getIds() == null || deleteRequest.getIds().isEmpty(), ErrorCode.PARAMS_ERROR);
-        User user = userService.getLoginUser(request);
+        User user = userFeignClient.getLoginUser(request);
         List<Long> ids = deleteRequest.getIds();
 
         // 判断是否存在以及权限
         for (Long id : ids) {
             QuestionCode oldQuestionCode = questionCodeService.getById(id);
             ThrowUtils.throwIf(oldQuestionCode == null, ErrorCode.NOT_FOUND_ERROR);
-            ThrowUtils.throwIf(!oldQuestionCode.getUserId().equals(user.getId()) && !userService.isAdmin(request), ErrorCode.NO_AUTH_ERROR);
+            ThrowUtils.throwIf(!oldQuestionCode.getUserId().equals(user.getId()) && !userFeignClient.isAdmin(request), ErrorCode.NO_AUTH_ERROR);
         }
         boolean success = questionCodeService.removeByIds(ids);
         return ResultUtils.success(success);
@@ -269,7 +269,7 @@ public class QuestionCodeController {
 
         QuestionCode questionCode = questionCodeService.getById(id);
         ThrowUtils.throwIf(questionCode == null, ErrorCode.NOT_FOUND_ERROR);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         QuestionCode q1 = new QuestionCode();
         BeanUtils.copyProperties(q1, questionCode);
         q1.setAnswer(questionCode.getAnswer());
@@ -285,7 +285,7 @@ public class QuestionCodeController {
     @GetMapping("/get/vo")
     public BaseResponse<QuestionCodeVO> getQuestionCodeVOById(long id, HttpServletRequest request) {
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
-        User loginUser = userService.getLoginUserPermitNull(request);
+        User loginUser = userFeignClient.getLoginUserPermitNull(request);
         // 友情提示，对于敏感的内容，可以再打印一些日志，记录用户访问的内容
         if (loginUser != null) {
             crawlerDetectManager.crawlerDetect(loginUser.getId());
@@ -332,7 +332,7 @@ public class QuestionCodeController {
     public BaseResponse<Page<QuestionCodeVO>> listMyQuestionCodeVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                                          HttpServletRequest request) {
         ThrowUtils.throwIf(questionQueryRequest == null, ErrorCode.PARAMS_ERROR);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         questionQueryRequest.setUserId(loginUser.getId());
         long current = questionQueryRequest.getCurrent();
         long size = questionQueryRequest.getPageSize();
@@ -389,13 +389,13 @@ public class QuestionCodeController {
         }
         // 参数校验
         questionCodeService.validQuestionCode(questionCode, false);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         long id = questionEditRequest.getId();
         // 判断是否存在
         QuestionCode oldQuestionCode = questionCodeService.getById(id);
         ThrowUtils.throwIf(oldQuestionCode == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可编辑
-        if (!oldQuestionCode.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
+        if (!oldQuestionCode.getUserId().equals(loginUser.getId()) && !userFeignClient.isAdmin(loginUser)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         boolean result = questionCodeService.updateById(questionCode);
@@ -416,7 +416,7 @@ public class QuestionCodeController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 登录才能提交
-        final User loginUser = userService.getLoginUser(request);
+        final User loginUser = userFeignClient.getLoginUser(request);
         long questionSubmitId = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
         return ResultUtils.success(questionSubmitId);
     }
@@ -435,7 +435,7 @@ public class QuestionCodeController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 登录才能运行
-        final User loginUser = userService.getLoginUser(request);
+        final User loginUser = userFeignClient.getLoginUser(request);
         long questionSubmitId = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
         return ResultUtils.success(questionSubmitId);
     }
@@ -455,7 +455,7 @@ public class QuestionCodeController {
         // 从数据库中查询原始的题目提交分页信息
         Page<QuestionSubmit> questionSubmitPage = questionSubmitService.page(new Page<>(current, size),
                 questionSubmitService.getQueryWrapper(questionSubmitQueryRequest));
-        final User loginUser = userService.getLoginUser(request);
+        final User loginUser = userFeignClient.getLoginUser(request);
         // 返回脱敏信息
         return ResultUtils.success(questionSubmitService.getQuestionSubmitVOPage(questionSubmitPage, loginUser));
     }
@@ -468,7 +468,7 @@ public class QuestionCodeController {
         }
         QuestionSubmit questionSubmit = questionSubmitService.getById(questionSubmitId);
         ThrowUtils.throwIf(questionSubmit == null, ErrorCode.NOT_FOUND_ERROR);
-        final User loginUser = userService.getLoginUser(request);
+        final User loginUser = userFeignClient.getLoginUser(request);
         QuestionSubmitVO questionSubmitVO = questionSubmitService.getQuestionSubmitVO(questionSubmit, loginUser);
         return ResultUtils.success(questionSubmitVO);
     }

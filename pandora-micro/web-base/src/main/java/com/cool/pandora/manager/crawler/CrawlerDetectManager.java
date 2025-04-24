@@ -5,7 +5,7 @@ import com.cool.common.common.ErrorCode;
 import com.cool.common.exception.BusinessException;
 import com.cool.pandora.manager.CounterManager;
 import com.cool.model.entity.User;
-import com.cool.pandora.service.user.UserService;
+import com.cool.server.UserFeignClient;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class CrawlerDetectManager {
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
     @Resource
     private CounterManager counterManager;
     /**
@@ -40,7 +40,7 @@ public class CrawlerDetectManager {
             User updateUser = new User();
             updateUser.setId(loginUserId);
             updateUser.setUserRole("ban");
-            userService.updateById(updateUser);
+            userFeignClient.updateById(updateUser);
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR, "访问次数过多，已被封号");
         }
         // 是否告警

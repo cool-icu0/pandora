@@ -18,8 +18,8 @@ import com.cool.model.enums.QuestionSubmitStatusEnum;
 import com.cool.model.vo.QuestionSubmitVO;
 import com.cool.pandora.service.question.QuestionCodeService;
 import com.cool.pandora.service.question.QuestionSubmitService;
-import com.cool.pandora.service.user.UserService;
 import com.cool.common.utils.SqlUtils;
+import com.cool.server.UserFeignClient;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +44,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
     private QuestionCodeService questionCodeService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     @Resource
     @Lazy
@@ -144,7 +144,7 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         // 脱敏：仅本人和管理员能看见自己（提交 userId 和登录用户 id 不同）提交的代码
         long userid = loginUser.getId();
         //处理脱敏
-        if (userid != questionSubmit.getUserId() && userService.isAdmin(loginUser)){
+        if (userid != questionSubmit.getUserId() && userFeignClient.isAdmin(loginUser)){
             questionSubmitVO.setSubmitCode(null);
         }
             return questionSubmitVO;

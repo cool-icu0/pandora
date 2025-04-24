@@ -25,7 +25,7 @@ import com.cool.model.vo.QuestionVO;
 import com.cool.pandora.sentinel.SentinelConstant;
 import com.cool.pandora.service.question.QuestionService;
 import com.cool.pandora.service.question.QuestionViewsService;
-import com.cool.pandora.service.user.UserService;
+import com.cool.server.UserFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +50,7 @@ public class QuestionController {
     private QuestionViewsService questionViewsService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
     @Resource
     private CrawlerDetectManager crawlerDetectManager;
 
@@ -77,7 +77,7 @@ public class QuestionController {
         // 数据校验
         questionService.validQuestion(question, true);
         // 填充默认值
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         question.setUserId(loginUser.getId());
         // 写入数据库
         boolean result = questionService.save(question);
@@ -100,13 +100,13 @@ public class QuestionController {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User user = userService.getLoginUser(request);
+        User user = userFeignClient.getLoginUser(request);
         long id = deleteRequest.getId();
         // 判断是否存在
         Question oldQuestion = questionService.getById(id);
         ThrowUtils.throwIf(oldQuestion == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可删除
-        if (!oldQuestion.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
+        if (!oldQuestion.getUserId().equals(user.getId()) && !userFeignClient.isAdmin(request)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         // 操作数据库
@@ -156,7 +156,7 @@ public class QuestionController {
     public BaseResponse<QuestionVO> getQuestionVOById(long id, HttpServletRequest request) {
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
         // 检测和处置爬虫（可以自行扩展为 - 登录后才能获取到答案）
-        User loginUser = userService.getLoginUserPermitNull(request);
+        User loginUser = userFeignClient.getLoginUserPermitNull(request);
         // 友情提示，对于敏感的内容，可以再打印一些日志，记录用户访问的内容
         if (loginUser != null) {
             crawlerDetectManager.crawlerDetect(loginUser.getId());
@@ -258,7 +258,7 @@ public class QuestionController {
      */
     public BaseResponse<Page<QuestionVO>> handleFallback(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                          HttpServletRequest request, Throwable ex) {
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         log.error("listQuestionVOByPageSentinel 降级操作,传入参数：{},用户id：{},报错信息",
                 questionQueryRequest,loginUser.getId(), ex);
         // 可以返回本地数据或空数据
@@ -278,7 +278,7 @@ public class QuestionController {
                                                                  HttpServletRequest request) {
         ThrowUtils.throwIf(questionQueryRequest == null, ErrorCode.PARAMS_ERROR);
         // 补充查询条件，只查询当前登录用户的数据
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         questionQueryRequest.setUserId(loginUser.getId());
         long current = questionQueryRequest.getCurrent();
         long size = questionQueryRequest.getPageSize();
@@ -313,13 +313,13 @@ public class QuestionController {
         }
         // 数据校验
         questionService.validQuestion(question, false);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         // 判断是否存在
         long id = questionEditRequest.getId();
         Question oldQuestion = questionService.getById(id);
         ThrowUtils.throwIf(oldQuestion == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可编辑
-        if (!oldQuestion.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
+        if (!oldQuestion.getUserId().equals(loginUser.getId()) && !userFeignClient.isAdmin(loginUser)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         // 操作数据库
@@ -394,7 +394,7 @@ public class QuestionController {
         ThrowUtils.throwIf(StrUtil.isBlank(questionType), ErrorCode.PARAMS_ERROR, "题目类型不能为空");
         ThrowUtils.throwIf(number <= 0, ErrorCode.PARAMS_ERROR, "题目数量必须大于 0");
         // 获取当前登录用户
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         // 调用 AI 生成题目服务
         questionService.aiGenerateQuestions(questionType, number, loginUser);
         // 返回结果

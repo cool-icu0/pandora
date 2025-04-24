@@ -25,7 +25,7 @@ import com.cool.model.vo.QuestionVO;
 import com.cool.pandora.sentinel.SentinelConstant;
 import com.cool.pandora.service.question.QuestionBankService;
 import com.cool.pandora.service.question.QuestionService;
-import com.cool.pandora.service.user.UserService;
+import com.cool.server.UserFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +49,7 @@ public class QuestionBankController {
     private QuestionService questionService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     // region 增删改查
 
@@ -70,7 +70,7 @@ public class QuestionBankController {
         // 数据校验
         questionBankService.validQuestionBank(questionBank, true);
         // todo 填充默认值
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         questionBank.setUserId(loginUser.getId());
         // 写入数据库
         boolean result = questionBankService.save(questionBank);
@@ -93,13 +93,13 @@ public class QuestionBankController {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User user = userService.getLoginUser(request);
+        User user = userFeignClient.getLoginUser(request);
         long id = deleteRequest.getId();
         // 判断是否存在
         QuestionBank oldQuestionBank = questionBankService.getById(id);
         ThrowUtils.throwIf(oldQuestionBank == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可删除
-        if (!oldQuestionBank.getUserId().equals(user.getId()) && !userService.isAdmin(request)) {
+        if (!oldQuestionBank.getUserId().equals(user.getId()) && !userFeignClient.isAdmin(request)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         // 操作数据库
@@ -263,7 +263,7 @@ public class QuestionBankController {
                                                                          HttpServletRequest request) {
         ThrowUtils.throwIf(questionBankQueryRequest == null, ErrorCode.PARAMS_ERROR);
         // 补充查询条件，只查询当前登录用户的数据
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         questionBankQueryRequest.setUserId(loginUser.getId());
         long current = questionBankQueryRequest.getCurrent();
         long size = questionBankQueryRequest.getPageSize();
@@ -294,13 +294,13 @@ public class QuestionBankController {
         BeanUtils.copyProperties(questionBankEditRequest, questionBank);
         // 数据校验
         questionBankService.validQuestionBank(questionBank, false);
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         // 判断是否存在
         long id = questionBankEditRequest.getId();
         QuestionBank oldQuestionBank = questionBankService.getById(id);
         ThrowUtils.throwIf(oldQuestionBank == null, ErrorCode.NOT_FOUND_ERROR);
         // 仅本人或管理员可编辑
-        if (!oldQuestionBank.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
+        if (!oldQuestionBank.getUserId().equals(loginUser.getId()) && !userFeignClient.isAdmin(loginUser)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
         // 操作数据库
