@@ -21,7 +21,7 @@ import java.util.List;
  * 用户服务
  *
  */
-@FeignClient(name = "XmutOJ-backend-user-service", path = "/api/user/inner")
+@FeignClient(name = "web-user", path = "/api/user/inner")
 public interface UserFeignClient{
 
     String USER_LOGIN_STATE = "user_login";
