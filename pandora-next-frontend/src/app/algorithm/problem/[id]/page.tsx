@@ -240,7 +240,7 @@ if __name__ == "__main__":
             const config = JSON.parse(data.judgeConfig);
             judgeConfigInfo = `### 判题配置
 - 时间限制: ${config.timeLimit || 0} ms
-- 内存限制: ${config.memoryLimit || 0} MB
+- 内存限制: ${config.memoryLimit || 0} KB
 - 栈限制: ${config.stackLimit || 0} KB
 `;
           } catch (e) {
@@ -389,9 +389,18 @@ ${judgeCase}
         try {
           const submitId = (res as any).data;
           // 获取提交结果详情
-          const submitResultRes = await getQuestionCodeSubmitByIdUsingGet({
+          // 首次获取提交结果
+          let submitResultRes = await getQuestionCodeSubmitByIdUsingGet({
             questionSubmitId: submitId
           });
+
+          // 如果判题状态为0(等待判题),则等待10秒后重试
+          if (submitResultRes.data?.submitState === 0) {
+            await new Promise(resolve => setTimeout(resolve, 10000));
+            submitResultRes = await getQuestionCodeSubmitByIdUsingGet({
+              questionSubmitId: submitId
+            });
+          }
           
           if ((submitResultRes as any).code === 0) {
             // 设置提交结果并显示模态框

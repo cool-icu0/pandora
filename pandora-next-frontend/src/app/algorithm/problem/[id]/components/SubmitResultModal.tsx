@@ -4,6 +4,7 @@ import React from 'react';
 import { Modal, Button, Result, Space, Typography, Tag } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import CodeEditor from '@/components/CodeEditor';
+import { sub } from '@antv/g2/lib/utils/vector';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -27,22 +28,20 @@ const SubmitResultModal: React.FC<SubmitResultModalProps> = ({
   const getStatusIcon = (status: number) => {
     if (status === 2) {
       return <CheckCircleOutlined style={{ color: '#52c41a' }} />;
-    } else if (status === 1) {
-      return <LoadingOutlined style={{ color: '#1890ff' }} />;
     } else if (status === 3){
       return <CloseCircleOutlined style={{ color: '#f5222d' }} />;
     } else {
-      return <ClockCircleOutlined style={{ color: '#f5222d' }} />;
+      return <LoadingOutlined style={{ color: '#1890ff' }} />;
     }
   };
 
   const getStatusTag = (status: string) => {
     if (status === '成功') {
       return <Tag color="success">通过</Tag>;
-    } else if (status === 'Running') {
-      return <Tag color="processing">运行中</Tag>;
-    } else {
+    } else if (status === '失败') {
       return <Tag color="error">未通过</Tag>;
+    } else {
+      return <Tag color="processing">评测中</Tag>;
     }
   };
 
@@ -62,11 +61,11 @@ const SubmitResultModal: React.FC<SubmitResultModalProps> = ({
       width={600}
     >
       <Result
-        icon={getStatusIcon(submitResult.submitStatus)}
+        icon={getStatusIcon(submitResult.submitState)}
         title={
           <Space>
             <span>提交结果：</span>
-            {getStatusTag(submitResult.judgeInfo.message)}
+            {getStatusTag(submitResult.submitState === 0 || submitResult.submitState === 1 ? '等待' : submitResult.judgeInfo.message)}
           </Space>
         }
         subTitle={

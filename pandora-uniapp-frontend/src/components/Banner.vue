@@ -20,7 +20,7 @@ const handleAdClick = (url: string) => {
   <view class="banner-container">
     <!-- 默认展示区域 -->
     <view v-if="!ads?.length" class="banner card">
-      <text class="title">{{ title || '智能面试平台' }}</text>
+      <text class="title">{{ title || '智能刷题平台' }}</text>
       <text class="subtitle">{{ subtitle || '你的面试刷题助手' }}</text>
     </view>
 

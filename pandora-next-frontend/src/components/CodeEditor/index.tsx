@@ -74,7 +74,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 
   return (
     <MonacoEditor className="code-editor-container"
-      height="400"
+      height="380"
       language={language.toLowerCase()}
       theme="vs-dark"
       value={value}

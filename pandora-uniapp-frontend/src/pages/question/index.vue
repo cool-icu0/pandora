@@ -63,7 +63,7 @@ const navigateToAllBanks = () => {
 <template>
   <view class="container">
     <Banner 
-      title="智能面试平台"
+      title="智能刷题平台"
       subtitle="你的面试刷题助手"
       :ads="ads"
     />
