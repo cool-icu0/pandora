@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Card, Tag, Space, Button, message, Select } from 'antd';
 import { LikeFilled, StarFilled, EditOutlined } from '@ant-design/icons';
-import { getQuestionCodeByIdUsingGet, doQuestionCodeSubmitUsingPost, getQuestionCodeSubmitByIdUsingGet, doQuestionCodeRunUsingPost } from '@/api/questionCodeController';
+import { getQuestionCodeVoByIdUsingGet, doQuestionCodeSubmitUsingPost, getQuestionCodeSubmitByIdUsingGet, doQuestionCodeRunUsingPost } from '@/api/questionCodeController';
 import MdViewer from '@/components/MdViewer';
 import CodeEditor from '@/components/CodeEditor';
 import { BorderHorizontalOutlined, BorderVerticleOutlined } from '@ant-design/icons';
@@ -223,7 +223,7 @@ if __name__ == "__main__":
   const fetchProblem = async () => {
     try {
       setLoading(true);
-      const res = await getQuestionCodeByIdUsingGet({ id: params.id });
+      const res = await getQuestionCodeVoByIdUsingGet({ id: params.id });
       if ((res as any).code === 0 && res.data) {
         const data = (res as any).data;
         const judgeCase = data.judgeCase ? JSON.parse(data.judgeCase).map((item: any, index: number) => (
