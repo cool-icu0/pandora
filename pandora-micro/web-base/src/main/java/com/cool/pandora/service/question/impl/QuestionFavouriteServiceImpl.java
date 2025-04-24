@@ -6,12 +6,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cool.common.common.ErrorCode;
 import com.cool.common.exception.BusinessException;
+import com.cool.model.entity.question.QuestionFavourite;
 import com.cool.pandora.mapper.question.QuestionFavouriteMapper;
 import com.cool.pandora.mapper.question.QuestionMapper;
 import com.cool.model.dto.questionFavourite.QuestionFavouriteQueryRequest;
-import com.cool.pandora.model.entity.question.Question;
-import com.cool.pandora.model.entity.question.QuestionFavourite;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.question.Question;
+import com.cool.model.entity.question.QuestionFavourite;
+import com.cool.model.entity.User;
 import com.cool.pandora.service.question.QuestionFavouriteService;
 import com.cool.pandora.service.question.QuestionService;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
  * 题目收藏服务实现
  */
 @Service
-public class QuestionFavouriteServiceImpl extends ServiceImpl<QuestionFavouriteMapper,QuestionFavourite> implements QuestionFavouriteService {
+public class QuestionFavouriteServiceImpl extends ServiceImpl<QuestionFavouriteMapper, QuestionFavourite> implements QuestionFavouriteService {
     
     @Resource
     private QuestionFavouriteMapper questionFavouriteMapper;

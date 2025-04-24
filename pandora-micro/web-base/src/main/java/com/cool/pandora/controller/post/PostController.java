@@ -15,7 +15,7 @@ import com.cool.model.dto.post.PostEditRequest;
 import com.cool.model.dto.post.PostQueryRequest;
 import com.cool.model.dto.post.PostUpdateRequest;
 import com.cool.model.entity.post.Post;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.User;
 import com.cool.model.vo.PostVO;
 import com.cool.pandora.service.post.PostService;
 import com.cool.pandora.service.post.PostViewsService;

@@ -10,7 +10,7 @@ import com.cool.model.dto.post.PostQueryRequest;
 import com.cool.model.dto.postfavour.PostFavourAddRequest;
 import com.cool.model.dto.postfavour.PostFavourQueryRequest;
 import com.cool.model.entity.post.Post;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.User;
 import com.cool.model.vo.PostVO;
 import com.cool.pandora.service.post.PostFavourService;
 import com.cool.pandora.service.post.PostService;

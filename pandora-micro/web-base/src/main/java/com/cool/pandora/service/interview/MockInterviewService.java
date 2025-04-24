@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cool.model.dto.mockinterview.MockInterviewAddRequest;
 import com.cool.model.dto.mockinterview.MockInterviewEventRequest;
 import com.cool.model.dto.mockinterview.MockInterviewQueryRequest;
-import com.cool.pandora.model.entity.MockInterview;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.MockInterview;
+import com.cool.model.entity.User;
 
 /**
 

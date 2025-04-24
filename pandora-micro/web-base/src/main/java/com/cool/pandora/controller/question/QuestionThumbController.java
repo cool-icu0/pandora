@@ -5,7 +5,7 @@ import com.cool.common.common.ErrorCode;
 import com.cool.common.common.ResultUtils;
 import com.cool.common.exception.BusinessException;
 import com.cool.model.dto.questionThumb.QuestionThumbAddRequest;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.User;
 import com.cool.pandora.service.question.QuestionThumbService;
 import com.cool.pandora.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;

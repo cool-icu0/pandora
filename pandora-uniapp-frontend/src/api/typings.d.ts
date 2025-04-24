@@ -4,6 +4,12 @@ declare namespace API {
     postId: number;
   };
 
+  type BaseResponse = {
+    code?: number;
+    data?: Record<string, any>;
+    message?: string;
+  };
+
   type BaseResponseBoolean_ = {
     code?: number;
     data?: boolean;
@@ -31,6 +37,12 @@ declare namespace API {
   type BaseResponseListQuestion_ = {
     code?: number;
     data?: Question[];
+    message?: string;
+  };
+
+  type BaseResponseListUserVO_ = {
+    code?: number;
+    data?: UserVO[];
     message?: string;
   };
 
@@ -124,6 +136,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageQuestionRecommendVO_ = {
+    code?: number;
+    data?: PageQuestionRecommendVO_;
+    message?: string;
+  };
+
   type BaseResponsePageQuestionSubmitVO_ = {
     code?: number;
     data?: PageQuestionSubmitVO_;
@@ -139,6 +157,12 @@ declare namespace API {
   type BaseResponsePageUser_ = {
     code?: number;
     data?: PageUser_;
+    message?: string;
+  };
+
+  type BaseResponsePageUserRecommendVO_ = {
+    code?: number;
+    data?: PageUserRecommendVO_;
     message?: string;
   };
 
@@ -370,6 +394,15 @@ declare namespace API {
     id?: number;
   };
 
+  type getQuestionCodeRankUsingGETParams = {
+    /** limit */
+    limit?: number;
+    /** month */
+    month?: number;
+    /** year */
+    year?: number;
+  };
+
   type getQuestionCodeSubmitByIdUsingGETParams = {
     /** questionSubmitId */
     questionSubmitId?: number;
@@ -408,6 +441,15 @@ declare namespace API {
   type getUserByIdUsingGETParams = {
     /** id */
     id?: number;
+  };
+
+  type getUserSignInRankUsingGETParams = {
+    /** limit */
+    limit?: number;
+    /** month */
+    month?: number;
+    /** year */
+    year?: number;
   };
 
   type getUserSignInRecordUsingGETParams = {
@@ -656,6 +698,19 @@ declare namespace API {
     total?: number;
   };
 
+  type PageQuestionRecommendVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: QuestionRecommendVO[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
   type PageQuestionSubmitVO_ = {
     countId?: string;
     current?: number;
@@ -690,6 +745,19 @@ declare namespace API {
     orders?: OrderItem[];
     pages?: number;
     records?: User[];
+    searchCount?: boolean;
+    size?: number;
+    total?: number;
+  };
+
+  type PageUserRecommendVO_ = {
+    countId?: string;
+    current?: number;
+    maxLimit?: number;
+    optimizeCountSql?: boolean;
+    orders?: OrderItem[];
+    pages?: number;
+    records?: UserRecommendVO[];
     searchCount?: boolean;
     size?: number;
     total?: number;
@@ -793,6 +861,7 @@ declare namespace API {
     answer?: string;
     content?: string;
     createTime?: string;
+    difficulty?: string;
     editTime?: string;
     id?: number;
     isDelete?: number;
@@ -814,6 +883,7 @@ declare namespace API {
   type QuestionAddRequest1 = {
     answer?: string;
     content?: string;
+    difficulty?: string;
     tags?: string[];
     title?: string;
   };
@@ -1023,6 +1093,7 @@ declare namespace API {
   type QuestionEditRequest1 = {
     answer?: string;
     content?: string;
+    difficulty?: string;
     id?: number;
     tags?: string[];
     title?: string;
@@ -1060,6 +1131,7 @@ declare namespace API {
     answer?: string;
     content?: string;
     current?: number;
+    difficulty?: string;
     id?: number;
     notId?: number;
     pageSize?: number;
@@ -1070,6 +1142,22 @@ declare namespace API {
     tags?: string[];
     title?: string;
     userId?: number;
+  };
+
+  type QuestionRecommendRequest = {
+    current?: number;
+    pageSize?: number;
+    status?: number;
+    type?: string;
+    userId?: number;
+  };
+
+  type QuestionRecommendVO = {
+    questionCodeVO?: QuestionCodeVO;
+    questionId?: number;
+    reason?: string;
+    score?: number;
+    type?: string;
   };
 
   type QuestionSubmitAddRequest = {
@@ -1121,6 +1209,7 @@ declare namespace API {
   type QuestionUpdateRequest1 = {
     answer?: string;
     content?: string;
+    difficulty?: string;
     id?: number;
     tags?: string[];
     title?: string;
@@ -1136,6 +1225,24 @@ declare namespace API {
     updateTime?: string;
     user?: UserVO;
     userId?: number;
+  };
+
+  type updateQuestionRecommendStatusUsingPOSTParams = {
+    /** questionId */
+    questionId: number;
+    /** status */
+    status: number;
+    /** userId */
+    userId: number;
+  };
+
+  type updateUserRecommendStatusUsingPOSTParams = {
+    /** recommendUserId */
+    recommendUserId: number;
+    /** status */
+    status: number;
+    /** userId */
+    userId: number;
   };
 
   type User = {
@@ -1200,6 +1307,22 @@ declare namespace API {
     userRole?: string;
   };
 
+  type UserRecommendRequest = {
+    current?: number;
+    pageSize?: number;
+    status?: number;
+    userId?: number;
+  };
+
+  type UserRecommendVO = {
+    reason?: string;
+    recommendUser?: UserVO;
+    recommendUserId?: number;
+    score?: number;
+    status?: number;
+    tags?: string[];
+  };
+
   type UserRegisterRequest = {
     checkPassword?: string;
     userAccount?: string;
@@ -1223,6 +1346,8 @@ declare namespace API {
   type UserVO = {
     createTime?: string;
     id?: number;
+    questionPassCount?: number;
+    signInCount?: number;
     userAvatar?: string;
     userName?: string;
     userProfile?: string;

@@ -17,7 +17,7 @@ import com.cool.model.dto.postComment.CommentUpdateRequest;
 import com.cool.model.entity.post.CommentThumb;
 import com.cool.model.entity.post.Post;
 import com.cool.model.entity.post.PostComment;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.User;
 import com.cool.model.vo.CommentVO;
 import com.cool.model.vo.UserVO;
 import com.cool.pandora.service.post.PostCommentService;

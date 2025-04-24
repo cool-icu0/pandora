@@ -1,8 +1,8 @@
 package com.cool.pandora.mapper.question;
 
-import com.cool.pandora.model.entity.question.Question;
+import com.cool.model.entity.question.Question;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cool.pandora.model.entity.question.QuestionCode;
+import com.cool.model.entity.question.QuestionCode;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;

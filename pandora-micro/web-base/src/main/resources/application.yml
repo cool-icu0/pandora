@@ -155,35 +155,6 @@ sa-token:
   token-style: uuid
   # 是否输出操作日志
   is-log: true
-# 微信相关
-wx:
-  # 微信公众平台
-  # todo 需替换配置
-  mp:
-    token: xxx
-    aesKey: xxx
-    appId: xxx
-    secret: xxx
-    config-storage:
-      http-client-type: HttpClient
-      key-prefix: wx
-      redis:
-        host: 127.0.0.1
-        port: 6379
-      type: Memory
-  # 微信开放平台
-  # todo 需替换配置
-  open:
-    appId: xxx
-    appSecret: xxx
-# 对象存储
-# todo 需替换配置
-cos:
-  client:
-    accessKey: AKIDDJApKbdYLwIQM6PkaHm34qY4OBmBMI1Y
-    secretKey: SfeOyPccOwHQL2VorgIhBhCWfcNCuSq2
-    region: ap-chengdu
-    bucket: cool-miss-tu-1305899653
 # 接口文档配置
 knife4j:
   enable: true

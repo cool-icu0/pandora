@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.cool.pandora.esdao.QuestionEsDao;
 import com.cool.pandora.mapper.question.QuestionMapper;
 import com.cool.model.dto.question.QuestionEsDTO;
-import com.cool.pandora.model.entity.question.Question;
+import com.cool.model.entity.question.Question;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 

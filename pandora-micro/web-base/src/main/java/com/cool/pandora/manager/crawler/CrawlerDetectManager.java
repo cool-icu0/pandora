@@ -4,7 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.cool.common.common.ErrorCode;
 import com.cool.common.exception.BusinessException;
 import com.cool.pandora.manager.CounterManager;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.User;
 import com.cool.pandora.service.user.UserService;
 import org.springframework.stereotype.Component;
 

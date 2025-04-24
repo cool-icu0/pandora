@@ -7,7 +7,7 @@ import com.cool.pandora.mapper.post.CommentThumbMapper;
 import com.cool.pandora.mapper.post.PostCommentMapper;
 import com.cool.model.entity.post.CommentThumb;
 import com.cool.model.entity.post.PostComment;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.User;
 import com.cool.pandora.service.post.CommentThumbService;
 import com.cool.pandora.service.post.PostCommentService;
 import org.springframework.aop.framework.AopContext;

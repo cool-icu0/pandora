@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cool.model.dto.questionBank.QuestionBankQueryRequest;
-import com.cool.pandora.model.entity.question.QuestionBank;
+import com.cool.model.entity.question.QuestionBank;
 import com.cool.model.vo.QuestionBankVO;
 
 import javax.servlet.http.HttpServletRequest;

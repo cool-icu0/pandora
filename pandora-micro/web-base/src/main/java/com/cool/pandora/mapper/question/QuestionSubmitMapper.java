@@ -1,7 +1,7 @@
 package com.cool.pandora.mapper.question;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cool.pandora.model.entity.question.QuestionSubmit;
+import com.cool.model.entity.question.QuestionSubmit;
 
 /**
 * @author Cool

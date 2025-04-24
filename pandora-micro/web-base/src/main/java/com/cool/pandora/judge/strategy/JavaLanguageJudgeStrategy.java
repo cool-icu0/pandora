@@ -4,7 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.cool.pandora.judge.codesandbox.model.JudgeInfo;
 import com.cool.model.dto.questionCode.JudgeCase;
 import com.cool.model.dto.questionCode.JudgeConfig;
-import com.cool.pandora.model.entity.question.QuestionCode;
+import com.cool.model.entity.question.QuestionCode;
 import com.cool.model.enums.JudgeInfoMessageEnum;
 
 import java.util.List;

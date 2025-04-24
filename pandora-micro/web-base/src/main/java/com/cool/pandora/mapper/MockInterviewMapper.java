@@ -1,6 +1,6 @@
 package com.cool.pandora.mapper;
 
-import com.cool.pandora.model.entity.MockInterview;
+import com.cool.model.entity.MockInterview;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

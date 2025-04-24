@@ -2,7 +2,7 @@ package com.cool.pandora.mapper.recommend;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cool.pandora.model.entity.recommend.QuestionRecommend;
+import com.cool.model.entity.recommend.QuestionRecommend;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

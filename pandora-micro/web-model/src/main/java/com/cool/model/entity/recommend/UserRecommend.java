@@ -1,4 +1,4 @@
-package com.cool.pandora.model.entity.recommend;
+package com.cool.model.entity.recommend;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;

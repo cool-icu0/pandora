@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cool.model.dto.questionSubmit.QuestionSubmitAddRequest;
 
 import com.cool.model.dto.questionSubmit.QuestionSubmitQueryRequest;
-import com.cool.pandora.model.entity.question.QuestionSubmit;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.question.QuestionSubmit;
+import com.cool.model.entity.User;
 import com.cool.model.vo.QuestionSubmitVO;
 
 /**

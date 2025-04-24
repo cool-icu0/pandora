@@ -15,7 +15,7 @@ import com.cool.model.dto.post.PostQueryRequest;
 import com.cool.model.entity.post.Post;
 import com.cool.model.entity.post.PostFavour;
 import com.cool.model.entity.post.PostThumb;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.User;
 import com.cool.model.vo.PostVO;
 import com.cool.model.vo.UserVO;
 import com.cool.pandora.service.post.PostService;

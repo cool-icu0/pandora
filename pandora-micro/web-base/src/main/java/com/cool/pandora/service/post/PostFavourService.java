@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cool.model.entity.post.Post;
 import com.cool.model.entity.post.PostFavour;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.User;
 
 /**
  * 帖子收藏服务

@@ -3,7 +3,7 @@ package com.cool.pandora.job.once;
 import cn.hutool.core.collection.CollUtil;
 import com.cool.pandora.esdao.QuestionEsDao;
 import com.cool.model.dto.question.QuestionEsDTO;
-import com.cool.pandora.model.entity.question.Question;
+import com.cool.model.entity.question.Question;
 import com.cool.pandora.service.question.QuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

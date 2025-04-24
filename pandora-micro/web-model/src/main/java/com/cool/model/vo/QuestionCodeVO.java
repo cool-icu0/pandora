@@ -1,11 +1,10 @@
 package com.cool.model.vo;
 
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.cool.model.dto.questionCode.JudgeConfig;
-import com.cool.pandora.model.entity.question.QuestionCode;
+import com.cool.model.entity.question.QuestionCode;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -129,8 +128,8 @@ public class QuestionCodeVO implements Serializable {
         QuestionCodeVO questionCodeVO = new QuestionCodeVO();
         BeanUtils.copyProperties(questionCode, questionCodeVO);
         // List<String> tagList = JSONUtil.toList(questionCode.getTags(), String.class);
-        JSONArray tagsArray = JSON.parseArray(questionCode.getTags());
-        List<String> tagList = tagsArray.toJavaList(String.class);
+        JSONArray tagsArray = JSONUtil.parseArray(questionCode.getTags());
+        List<String> tagList = tagsArray.toList(String.class);
         questionCodeVO.setTags(tagList);
         String judgeConfig = questionCode.getJudgeConfig();
         questionCodeVO.setJudgeConfig(JSONUtil.toBean(judgeConfig, JudgeConfig.class));

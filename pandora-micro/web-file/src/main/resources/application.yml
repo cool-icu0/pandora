@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: web-file
+  # 默认 dev 环境
+  profiles:
+    active: dev
+  # 文件上传
+  servlet:
+    multipart:
+      # 大小限制
+      max-file-size: 10MB
+  # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/pandora
+    username: root
+    password: root
+  # Redis 配置
+  redis:
+    database: 1
+    host: localhost
+    port: 6379
+    timeout: 5000
+#    password: 123456
+  # 注册到 nacos 服务
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+server:
+  address: 0.0.0.0
+  port: 8105
+  servlet:
+    context-path: /api
+# 开启knife4j接口文档
+knife4j:
+  enable: true
+# 对象存储
+cos:
+  client:
+    accessKey: AKIDDJApKbdYLwIQM6PkaHm34qY4OBmBMI1Y
+    secretKey: SfeOyPccOwHQL2VorgIhBhCWfcNCuSq2
+    region: ap-chengdu
+    bucket: cool-miss-tu-1305899653

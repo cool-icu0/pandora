@@ -1,6 +1,6 @@
 package com.cool.model.vo;
 
-import com.cool.pandora.model.entity.question.QuestionBankQuestion;
+import com.cool.model.entity.question.QuestionBankQuestion;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 

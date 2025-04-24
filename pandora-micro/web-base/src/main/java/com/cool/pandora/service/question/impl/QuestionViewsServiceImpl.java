@@ -2,7 +2,7 @@ package com.cool.pandora.service.question.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cool.pandora.mapper.question.QuestionViewsMapper;
-import com.cool.pandora.model.entity.question.QuestionViews;
+import com.cool.model.entity.question.QuestionViews;
 import com.cool.pandora.service.question.QuestionViewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

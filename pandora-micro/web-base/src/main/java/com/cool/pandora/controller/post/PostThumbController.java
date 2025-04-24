@@ -5,7 +5,7 @@ import com.cool.common.common.ErrorCode;
 import com.cool.common.common.ResultUtils;
 import com.cool.common.exception.BusinessException;
 import com.cool.model.dto.postthumb.PostThumbAddRequest;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.User;
 import com.cool.pandora.service.post.PostThumbService;
 import com.cool.pandora.service.user.UserService;
 import javax.annotation.Resource;

@@ -10,7 +10,7 @@ import com.cool.common.exception.BusinessException;
 import com.cool.pandora.mapper.post.PostFavourMapper;
 import com.cool.model.entity.post.Post;
 import com.cool.model.entity.post.PostFavour;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.User;
 import com.cool.pandora.service.post.PostFavourService;
 import com.cool.pandora.service.post.PostService;
 import javax.annotation.Resource;

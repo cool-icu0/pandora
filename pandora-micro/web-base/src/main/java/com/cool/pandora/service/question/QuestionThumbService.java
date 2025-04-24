@@ -1,8 +1,8 @@
 package com.cool.pandora.service.question;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cool.pandora.model.entity.question.QuestionThumb;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.question.QuestionThumb;
+import com.cool.model.entity.User;
 
 /**
  * 题目点赞服务

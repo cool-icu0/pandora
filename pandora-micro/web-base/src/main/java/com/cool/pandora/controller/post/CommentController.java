@@ -12,7 +12,7 @@ import com.cool.model.dto.postComment.CommentAddRequest;
 import com.cool.model.dto.postComment.CommentQueryRequest;
 import com.cool.model.dto.postComment.CommentThumbAddRequest;
 import com.cool.model.dto.postComment.CommentUpdateRequest;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.User;
 import com.cool.model.vo.CommentVO;
 import com.cool.pandora.service.post.CommentThumbService;
 import com.cool.pandora.service.post.PostCommentService;

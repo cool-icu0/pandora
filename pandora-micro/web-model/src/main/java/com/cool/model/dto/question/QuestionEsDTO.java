@@ -3,7 +3,7 @@ package com.cool.model.dto.question;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.cool.pandora.model.entity.question.Question;
+import com.cool.model.entity.question.Question;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;

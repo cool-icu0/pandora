@@ -1,4 +1,4 @@
-package com.cool.pandora.model.entity;
+package com.cool.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

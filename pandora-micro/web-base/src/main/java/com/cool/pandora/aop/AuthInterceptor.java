@@ -3,7 +3,7 @@ package com.cool.pandora.aop;
 import com.cool.common.annotation.AuthCheck;
 import com.cool.common.common.ErrorCode;
 import com.cool.common.exception.BusinessException;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.User;
 import com.cool.model.enums.UserRoleEnum;
 import com.cool.pandora.service.user.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;

@@ -16,6 +16,7 @@ import * as questionCodeController from "./questionCodeController";
 import * as questionCommentController from "./questionCommentController";
 import * as questionFavouriteController from "./questionFavouriteController";
 import * as questionThumbController from "./questionThumbController";
+import * as recommendController from "./recommendController";
 import * as testSaTokenLoginController from "./testSaTokenLoginController";
 import * as userController from "./userController";
 export default {
@@ -33,6 +34,7 @@ export default {
   questionCommentController,
   questionFavouriteController,
   questionThumbController,
+  recommendController,
   testSaTokenLoginController,
   userController,
 };

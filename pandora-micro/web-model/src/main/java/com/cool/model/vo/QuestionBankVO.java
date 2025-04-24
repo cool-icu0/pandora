@@ -1,7 +1,7 @@
 package com.cool.model.vo;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cool.pandora.model.entity.question.QuestionBank;
+import com.cool.model.entity.question.QuestionBank;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 

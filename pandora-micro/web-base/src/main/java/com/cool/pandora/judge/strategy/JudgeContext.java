@@ -3,8 +3,8 @@ package com.cool.pandora.judge.strategy;
 
 import com.cool.pandora.judge.codesandbox.model.JudgeInfo;
 import com.cool.model.dto.questionCode.JudgeCase;
-import com.cool.pandora.model.entity.question.QuestionCode;
-import com.cool.pandora.model.entity.question.QuestionSubmit;
+import com.cool.model.entity.question.QuestionCode;
+import com.cool.model.entity.question.QuestionSubmit;
 import lombok.Data;
 
 import java.util.List;

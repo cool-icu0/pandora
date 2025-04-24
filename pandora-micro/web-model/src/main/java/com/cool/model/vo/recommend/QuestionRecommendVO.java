@@ -1,12 +1,9 @@
 package com.cool.model.vo.recommend;
 
 import com.cool.model.vo.QuestionCodeVO;
-import com.cool.model.vo.QuestionVO;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 @Data
 public class QuestionRecommendVO implements Serializable {

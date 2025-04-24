@@ -3,8 +3,8 @@ package com.cool.pandora.service.question;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cool.model.dto.questionComment.QuestionCommentQueryRequest;
-import com.cool.pandora.model.entity.question.QuestionComment;
-import com.cool.pandora.model.entity.User;
+import com.cool.model.entity.question.QuestionComment;
+import com.cool.model.entity.User;
 
 /**
  * 题目评论服务

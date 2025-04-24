@@ -1,6 +1,6 @@
 package com.cool.pandora.mapper.question;
 
-import com.cool.pandora.model.entity.question.QuestionBankQuestion;
+import com.cool.model.entity.question.QuestionBankQuestion;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
