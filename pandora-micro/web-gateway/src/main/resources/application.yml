@@ -29,20 +29,11 @@ spring:
         - id: web-base
           uri: http://localhost:8109
           predicates:
-            - Path=/api/question/**
-            - Path=/api/questionBank/**
-            - Path=/api/mockInterview/**
-            - Path=/api/question_thumb/**
-            - Path=/api/question_favourite/**
-            - Path=/api/question_comment/**
-            - Path=/api/questionBankQuestion/**
+            - Path=/api/question/**,/api/questionBank/**,/api/mockInterview/**,/api/question_thumb/**,/api/question_favourite/**,/api/question_comment/**,/api/questionBankQuestion/**
         - id: web-post
           uri: lb://web-post
           predicates:
-            - Path=/api/post/**
-            - Path=/api/comment/**
-            - Path=/api/post_favour/**
-            - Path=/api/post_thumb/**
+            - Path=/api/post/**,/api/comment/**,/api/post_favour/**,/api/post_thumb/**
 #        - id: XmutOJ-backend-judge-service
 #          uri: lb://XmutOJ-backend-judge-service
 #          predicates:
