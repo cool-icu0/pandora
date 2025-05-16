@@ -11,7 +11,6 @@ import com.cool.pandora.mapper.question.QuestionFavouriteMapper;
 import com.cool.pandora.mapper.question.QuestionMapper;
 import com.cool.model.dto.questionFavourite.QuestionFavouriteQueryRequest;
 import com.cool.model.entity.question.Question;
-import com.cool.model.entity.question.QuestionFavourite;
 import com.cool.model.entity.User;
 import com.cool.pandora.service.question.QuestionFavouriteService;
 import com.cool.pandora.service.question.QuestionService;

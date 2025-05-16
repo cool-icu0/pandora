@@ -5,9 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cool.common.common.ErrorCode;
 import com.cool.common.exception.BusinessException;
+import com.cool.heart.mapper.QuestionRecommendMapper;
+import com.cool.heart.mapper.UserRecommendMapper;
 import com.cool.heart.service.RecommendService;
-import com.cool.pandora.mapper.recommend.QuestionRecommendMapper;
-import com.cool.pandora.mapper.recommend.UserRecommendMapper;
 import com.cool.model.dto.recommend.QuestionRecommendRequest;
 import com.cool.model.dto.recommend.UserRecommendRequest;
 import com.cool.model.entity.User;
@@ -18,9 +18,8 @@ import com.cool.model.vo.QuestionCodeVO;
 import com.cool.model.vo.UserVO;
 import com.cool.model.vo.recommend.QuestionRecommendVO;
 import com.cool.model.vo.recommend.UserRecommendVO;
-import com.cool.pandora.service.question.QuestionCodeService;
 import com.cool.heart.service.algorithm.RecommendAlgorithm;
-import com.cool.pandora.service.user.UserService;
+import com.cool.server.UserFeignClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,7 @@ public class RecommendServiceImpl implements RecommendService {
     @Resource
     private RecommendAlgorithm recommendAlgorithm;
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
     @Resource
     private QuestionCodeService questionCodeService;
 
@@ -143,7 +142,7 @@ public class RecommendServiceImpl implements RecommendService {
         if (userRecommend.getTags() != null) {
             vo.setTags(JSONObject.parseArray(userRecommend.getTags(), String.class));
         }
-        User user = userService.getById(userRecommend.getRecommendUserId());
+        User user = userFeignClient.getById(userRecommend.getRecommendUserId());
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user, userVO);
         vo.setRecommendUser(userVO);

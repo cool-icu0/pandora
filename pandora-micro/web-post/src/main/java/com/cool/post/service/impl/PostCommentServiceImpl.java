@@ -7,10 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cool.common.common.ErrorCode;
 import com.cool.common.constant.CommonConstant;
 import com.cool.common.exception.BusinessException;
-import com.cool.pandora.mapper.post.CommentThumbMapper;
-import com.cool.pandora.mapper.post.PostCommentMapper;
-import com.cool.pandora.mapper.post.PostMapper;
-import com.cool.pandora.mapper.UserMapper;
+
 import com.cool.model.dto.postComment.CommentAddRequest;
 import com.cool.model.dto.postComment.CommentQueryRequest;
 import com.cool.model.dto.postComment.CommentUpdateRequest;
@@ -20,9 +17,12 @@ import com.cool.model.entity.post.PostComment;
 import com.cool.model.entity.User;
 import com.cool.model.vo.CommentVO;
 import com.cool.model.vo.UserVO;
+import com.cool.post.mapper.CommentThumbMapper;
+import com.cool.post.mapper.PostCommentMapper;
+import com.cool.post.mapper.PostMapper;
 import com.cool.post.service.PostCommentService;
-import com.cool.pandora.service.user.UserService;
 import com.cool.common.utils.SqlUtils;
+import com.cool.server.UserFeignClient;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -43,10 +43,7 @@ public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostC
     private PostMapper postMapper;
 
     @Resource
-    private UserMapper userMapper;
-
-    @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     @Resource
     private CommentThumbMapper commentThumbMapper;
@@ -145,9 +142,9 @@ public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostC
         Long userId = comment.getUserId();
         User user = null;
         if (userId != null && userId > 0) {
-            user = userMapper.selectById(userId);
+            user = userFeignClient.getById(userId);
         }
-        UserVO userVO = userService.getUserVO(user);
+        UserVO userVO = userFeignClient.getUserVO(user);
         commentVO.setUserVO(userVO);
         
         // 2. 已登录，获取点赞状态
@@ -163,8 +160,8 @@ public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostC
         // 3. 关联查询回复用户信息
         Long replyUserId = comment.getReplyUserId();
         if (replyUserId != null && replyUserId > 0) {
-            User replyUser = userMapper.selectById(replyUserId);
-            UserVO replyUserVO = userService.getUserVO(replyUser);
+            User replyUser = userFeignClient.getById(replyUserId);
+            UserVO replyUserVO = userFeignClient.getUserVO(replyUser);
             commentVO.setReplyUserVO(replyUserVO);
         }
         
@@ -188,7 +185,7 @@ public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostC
         
         // 1. 关联查询用户信息
         Set<Long> userIdSet = commentList.stream().map(PostComment::getUserId).collect(Collectors.toSet());
-        Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
+        Map<Long, List<User>> userIdUserListMap = userFeignClient.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
         
         // 2. 已登录，获取点赞状态
@@ -210,7 +207,7 @@ public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostC
                 .collect(Collectors.toSet());
         Map<Long, List<User>> replyUserIdUserListMap = new HashMap<>();
         if (!replyUserIdSet.isEmpty()) {
-            replyUserIdUserListMap = userService.listByIds(replyUserIdSet).stream()
+            replyUserIdUserListMap = userFeignClient.listByIds(replyUserIdSet).stream()
                     .collect(Collectors.groupingBy(User::getId));
         }
 
@@ -226,7 +223,7 @@ public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostC
             if (userIdUserListMap.containsKey(userId)) {
                 user = userIdUserListMap.get(userId).get(0);
             }
-            commentVO.setUserVO(userService.getUserVO(user));
+            commentVO.setUserVO(userFeignClient.getUserVO(user));
             
             // 填充点赞状态
             commentVO.setHasThumb(finalCommentIdHasThumbMap.getOrDefault(comment.getId(), false));
@@ -235,7 +232,7 @@ public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostC
             Long replyUserId = comment.getReplyUserId();
             if (replyUserId != null && finalReplyUserIdUserListMap.containsKey(replyUserId)) {
                 User replyUser = finalReplyUserIdUserListMap.get(replyUserId).get(0);
-                commentVO.setReplyUserVO(userService.getUserVO(replyUser));
+                commentVO.setReplyUserVO(userFeignClient.getUserVO(replyUser));
             }
             
             return commentVO;
@@ -342,7 +339,7 @@ public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostC
         }
 
         // 仅本人或管理员可编辑
-        if (!oldComment.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
+        if (!oldComment.getUserId().equals(loginUser.getId()) && !userFeignClient.isAdmin(loginUser)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
 
@@ -373,7 +370,7 @@ public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostC
         }
 
         // 仅本人或管理员可删除
-        if (!comment.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)) {
+        if (!comment.getUserId().equals(loginUser.getId()) && !userFeignClient.isAdmin(loginUser)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }
 

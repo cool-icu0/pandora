@@ -1,10 +1,11 @@
-package com.cool.common.exception;
+package com.cool.user.exception;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotRoleException;
 import com.cool.common.common.BaseResponse;
 import com.cool.common.common.ErrorCode;
 import com.cool.common.common.ResultUtils;
+import com.cool.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

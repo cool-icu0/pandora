@@ -14,9 +14,10 @@ import com.cool.model.dto.postComment.CommentThumbAddRequest;
 import com.cool.model.dto.postComment.CommentUpdateRequest;
 import com.cool.model.entity.User;
 import com.cool.model.vo.CommentVO;
-import com.cool.pandora.service.post.CommentThumbService;
-import com.cool.pandora.service.post.PostCommentService;
-import com.cool.pandora.service.user.UserService;
+
+import com.cool.post.service.CommentThumbService;
+import com.cool.post.service.PostCommentService;
+import com.cool.server.UserFeignClient;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class CommentController {
     private CommentThumbService commentThumbService;
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     /**
      * 创建评论
@@ -53,8 +54,8 @@ public class CommentController {
         if (commentAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        
-        User loginUser = userService.getLoginUser(request);
+
+        User loginUser = userFeignClient.getLoginUser(request);
         Long commentId = postCommentService.addComment(commentAddRequest, loginUser);
         return ResultUtils.success(commentId);
     }
@@ -72,7 +73,7 @@ public class CommentController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         long id = deleteRequest.getId();
         boolean result = postCommentService.deleteComment(id, loginUser);
         return ResultUtils.success(result);
@@ -91,7 +92,7 @@ public class CommentController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         boolean result = postCommentService.updateComment(commentUpdateRequest, loginUser);
         return ResultUtils.success(result);
     }
@@ -109,7 +110,7 @@ public class CommentController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         
-        User loginUser = userService.getLoginUserPermitNull(request);
+        User loginUser = userFeignClient.getLoginUserPermitNull(request);
         CommentVO commentVO = postCommentService.getCommentVO(postCommentService.getById(id), loginUser);
         return ResultUtils.success(commentVO);
     }
@@ -127,7 +128,7 @@ public class CommentController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         
-        User loginUser = userService.getLoginUserPermitNull(request);
+        User loginUser = userFeignClient.getLoginUserPermitNull(request);
         Page<CommentVO> commentVOPage = postCommentService.listCommentVOByPage(commentQueryRequest, loginUser);
         return ResultUtils.success(commentVOPage);
     }
@@ -145,7 +146,7 @@ public class CommentController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         int result = commentThumbService.doThumb(commentThumbAddRequest.getCommentId(), loginUser);
         return ResultUtils.success(result);
     }
@@ -182,7 +183,7 @@ public class CommentController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userFeignClient.getLoginUser(request);
         commentQueryRequest.setUserId(loginUser.getId());
         Page<CommentVO> commentVOPage = postCommentService.listCommentVOByPage(commentQueryRequest, loginUser);
         return ResultUtils.success(commentVOPage);

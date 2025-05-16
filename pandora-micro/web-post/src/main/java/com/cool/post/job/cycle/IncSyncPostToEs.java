@@ -1,13 +1,14 @@
 package com.cool.post.job.cycle;
 
-import com.cool.pandora.esdao.PostEsDao;
-import com.cool.pandora.mapper.post.PostMapper;
 import com.cool.model.dto.post.PostEsDTO;
 import com.cool.model.entity.post.Post;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
+
+import com.cool.post.esdao.PostEsDao;
+import com.cool.post.mapper.PostMapper;
 import lombok.extern.slf4j.Slf4j;
 import cn.hutool.core.collection.CollUtil;
 import org.springframework.scheduling.annotation.Scheduled;

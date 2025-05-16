@@ -1,8 +1,8 @@
 package com.cool.post.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cool.pandora.mapper.post.PostViewsMapper;
 import com.cool.model.entity.post.PostViews;
+import com.cool.post.mapper.PostViewsMapper;
 import com.cool.post.service.PostViewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

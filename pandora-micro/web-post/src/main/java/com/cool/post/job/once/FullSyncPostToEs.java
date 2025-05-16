@@ -1,12 +1,13 @@
 package com.cool.post.job.once;
 
-import com.cool.pandora.esdao.PostEsDao;
 import com.cool.model.dto.post.PostEsDTO;
 import com.cool.model.entity.post.Post;
-import com.cool.pandora.service.post.PostService;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
+
+import com.cool.post.esdao.PostEsDao;
+import com.cool.post.service.PostService;
 import lombok.extern.slf4j.Slf4j;
 import cn.hutool.core.collection.CollUtil;
 import org.springframework.boot.CommandLineRunner;

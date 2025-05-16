@@ -3,11 +3,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cool.common.common.ErrorCode;
 import com.cool.common.exception.BusinessException;
-import com.cool.pandora.mapper.post.CommentThumbMapper;
-import com.cool.pandora.mapper.post.PostCommentMapper;
+
 import com.cool.model.entity.post.CommentThumb;
 import com.cool.model.entity.post.PostComment;
 import com.cool.model.entity.User;
+import com.cool.post.mapper.CommentThumbMapper;
+import com.cool.post.mapper.PostCommentMapper;
 import com.cool.post.service.CommentThumbService;
 import com.cool.post.service.PostCommentService;
 import org.springframework.aop.framework.AopContext;

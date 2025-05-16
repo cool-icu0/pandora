@@ -7,9 +7,6 @@ import com.cool.common.common.ErrorCode;
 import com.cool.common.constant.CommonConstant;
 import com.cool.common.exception.BusinessException;
 import com.cool.common.exception.ThrowUtils;
-import com.cool.pandora.mapper.post.PostFavourMapper;
-import com.cool.pandora.mapper.post.PostMapper;
-import com.cool.pandora.mapper.post.PostThumbMapper;
 import com.cool.model.dto.post.PostEsDTO;
 import com.cool.model.dto.post.PostQueryRequest;
 import com.cool.model.entity.post.Post;
@@ -18,8 +15,10 @@ import com.cool.model.entity.post.PostThumb;
 import com.cool.model.entity.User;
 import com.cool.model.vo.PostVO;
 import com.cool.model.vo.UserVO;
+import com.cool.post.mapper.PostFavourMapper;
+import com.cool.post.mapper.PostMapper;
+import com.cool.post.mapper.PostThumbMapper;
 import com.cool.post.service.PostService;
-import com.cool.pandora.service.user.UserService;
 import com.cool.common.utils.SqlUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +28,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import com.cool.server.UserFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import cn.hutool.core.collection.CollUtil;
 import org.apache.commons.lang3.ObjectUtils;
@@ -55,7 +56,7 @@ import org.springframework.stereotype.Service;
 public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements PostService {
 
     @Resource
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     @Resource
     private PostThumbMapper postThumbMapper;
@@ -232,12 +233,12 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         Long userId = post.getUserId();
         User user = null;
         if (userId != null && userId > 0) {
-            user = userService.getById(userId);
+            user = userFeignClient.getById(userId);
         }
-        UserVO userVO = userService.getUserVO(user);
+        UserVO userVO = userFeignClient.getUserVO(user);
         postVO.setUser(userVO);
         // 2. 已登录，获取用户点赞、收藏状态
-        User loginUser = userService.getLoginUserPermitNull(request);
+        User loginUser = userFeignClient.getLoginUserPermitNull(request);
         if (loginUser != null) {
             // 获取点赞
             QueryWrapper<PostThumb> postThumbQueryWrapper = new QueryWrapper<>();
@@ -264,15 +265,15 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         }
         // 1. 关联查询用户信息
         Set<Long> userIdSet = postList.stream().map(Post::getUserId).collect(Collectors.toSet());
-        Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
+        Map<Long, List<User>> userIdUserListMap = userFeignClient.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
         // 2. 已登录，获取用户点赞、收藏状态
         Map<Long, Boolean> postIdHasThumbMap = new HashMap<>();
         Map<Long, Boolean> postIdHasFavourMap = new HashMap<>();
-        User loginUser = userService.getLoginUserPermitNull(request);
+        User loginUser = userFeignClient.getLoginUserPermitNull(request);
         if (loginUser != null) {
             Set<Long> postIdSet = postList.stream().map(Post::getId).collect(Collectors.toSet());
-            loginUser = userService.getLoginUser(request);
+            loginUser = userFeignClient.getLoginUser(request);
             // 获取点赞
             QueryWrapper<PostThumb> postThumbQueryWrapper = new QueryWrapper<>();
             postThumbQueryWrapper.in("postId", postIdSet);
@@ -294,7 +295,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
             if (userIdUserListMap.containsKey(userId)) {
                 user = userIdUserListMap.get(userId).get(0);
             }
-            postVO.setUser(userService.getUserVO(user));
+            postVO.setUser(userFeignClient.getUserVO(user));
             postVO.setHasThumb(postIdHasThumbMap.getOrDefault(post.getId(), false));
             postVO.setHasFavour(postIdHasFavourMap.getOrDefault(post.getId(), false));
             return postVO;

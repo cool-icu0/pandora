@@ -1,7 +1,7 @@
 # 公共配置文件
 spring:
   application:
-    name: web-user
+    name: web-post
   # 默认 dev 环境
   profiles:
     active: dev
@@ -31,7 +31,7 @@ spring:
     timeout: 5000
 server:
   address: 0.0.0.0
-  port: 8108
+  port: 8104
   servlet:
     context-path: /api
     # cookie 30 天过期
@@ -83,4 +83,4 @@ knife4j:
       default:
         api-rule: package
         api-rule-resources:
-          - com.cool.user.controller
+          - com.cool.post.controller

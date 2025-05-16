@@ -160,7 +160,7 @@ public class QuestionController {
         // 友情提示，对于敏感的内容，可以再打印一些日志，记录用户访问的内容
         if (loginUser != null) {
             crawlerDetectManager.crawlerDetect(loginUser.getId());
-            log.info("用户Id为：{}访问了题目id为：{}", loginUser.getId(), id);
+            log.info("用户Id为：{},访问了题目id为：{}", loginUser.getId(), id);
             // 禁止访问被封号的用户
             if(!loginUser.getUserRole().equals(UserConstant.BAN_ROLE)) {
                 Question question = questionService.getById(id);

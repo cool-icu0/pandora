@@ -10,6 +10,7 @@ import com.cool.model.entity.User;
 import com.cool.model.entity.question.QuestionCode;
 import com.cool.model.entity.recommend.QuestionRecommend;
 import com.cool.model.entity.recommend.UserRecommend;
+import com.cool.server.UserFeignClient;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,20 +21,17 @@ import java.util.stream.Collectors;
 public class RecommendAlgorithm {
 
     @Resource
-    private UserMapper userMapper;
+    private UserFeignClient userFeignClient;
 
     @Resource
     private QuestionCodeMapper questionCodeMapper;
-
-    @Resource
-    private QuestionCommentMapper questionCommentMapper;
 
     /**
      * 查找相似用户
      */
     public List<User> findSimilarUsers(Long userId) {
         // 1. 获取用户标签
-        User user = userMapper.selectById(userId);
+        User user = userFeignClient.getById(userId);
         List<String> userTags = parseUserTags(user);
 
         // 2. 查找具有相似标签的用户
@@ -42,7 +40,7 @@ public class RecommendAlgorithm {
         for (String tag : userTags) {
             queryWrapper.or().like("expertiseDirection", tag);
         }
-        return userMapper.selectList(queryWrapper);
+        return userFeignClient.list(queryWrapper);
     }
 
 
@@ -114,7 +112,7 @@ public class RecommendAlgorithm {
     // 计算用户分数
     public List<UserRecommend> calculateUserScores(Long userId, List<User> similarUsers) {
         // 获取当前用户信息
-        User currentUser = userMapper.selectById(userId);
+        User currentUser = userFeignClient.getById(userId);
         List<String> currentUserTags = JSONObject.parseArray(currentUser.getExpertiseDirection(), String.class);
 
         List<UserRecommend> recommendations = new ArrayList<>();
@@ -354,7 +352,7 @@ public class RecommendAlgorithm {
         
         if (completedQuestions.isEmpty()) {
             // 如果没有完成的题目，返回用户个人信息中的技术方向
-            User user = userMapper.selectById(userId);
+            User user = userFeignClient.getById(userId);
             return parseUserTags(user);
         }
 
