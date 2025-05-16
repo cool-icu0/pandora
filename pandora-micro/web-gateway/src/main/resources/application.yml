@@ -1,4 +1,9 @@
 spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/pandora
+    username: root
+    password: root
   cloud:
     nacos:
       discovery:
