@@ -1,7 +1,7 @@
 # 公共配置文件
 spring:
   application:
-    name: pandora-backend
+    name: web-base
   # 默认 dev 环境
   profiles:
     active: dev
@@ -107,7 +107,7 @@ spring:
       max-file-size: 10MB
 server:
   address: 0.0.0.0
-  port: 8101
+  port: 8109
   servlet:
     context-path: /api
     # cookie 30 天过期

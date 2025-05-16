@@ -19,7 +19,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/inner")
+@RequestMapping("/user/inner")
 public class UserInnerController implements UserFeignClient {
 
     @Resource

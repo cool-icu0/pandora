@@ -3,13 +3,11 @@ package com.cool.heart.service.algorithm;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.cool.pandora.mapper.UserMapper;
-import com.cool.pandora.mapper.question.QuestionCodeMapper;
-import com.cool.pandora.mapper.question.QuestionCommentMapper;
 import com.cool.model.entity.User;
 import com.cool.model.entity.question.QuestionCode;
 import com.cool.model.entity.recommend.QuestionRecommend;
 import com.cool.model.entity.recommend.UserRecommend;
+import com.cool.server.QuestionCodeFeignClient;
 import com.cool.server.UserFeignClient;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +22,7 @@ public class RecommendAlgorithm {
     private UserFeignClient userFeignClient;
 
     @Resource
-    private QuestionCodeMapper questionCodeMapper;
+    private QuestionCodeFeignClient questionCodeFeignClient;
 
     /**
      * 查找相似用户
@@ -61,7 +59,7 @@ public class RecommendAlgorithm {
                 queryWrapper.or().like("tags", tag);
             }
             queryWrapper.last("LIMIT 5");
-            List<QuestionCode> similar = questionCodeMapper.selectList(queryWrapper);
+            List<QuestionCode> similar = questionCodeFeignClient.getSimilarQuestionCode(queryWrapper);
             similar.forEach(q -> recommendQuestionIds.add(q.getId()));
         }
 
@@ -74,14 +72,14 @@ public class RecommendAlgorithm {
      */
     public List<QuestionRecommend> getDailyRecommendations(Long userId) {
         // 1. 获取用户已完成的题目
-        List<Long> completedQuestionIds = questionCodeMapper.selectCompletedQuestionIds(userId);
+        List<Long> completedQuestionIds = questionCodeFeignClient.getCompletedQuestionIds(userId);
 
         // 2. 随机选择一些题目
         QueryWrapper<QuestionCode> queryWrapper = new QueryWrapper<>();
         if (completedQuestionIds != null && !completedQuestionIds.isEmpty()) {
             queryWrapper.notIn("id", completedQuestionIds);
         }
-        List<QuestionCode> dailyQuestions = questionCodeMapper.selectList(
+        List<QuestionCode> dailyQuestions = questionCodeFeignClient.getSimilarQuestionCode(
             queryWrapper.orderByAsc("RAND()").last("LIMIT 50")
         );
 
@@ -99,7 +97,7 @@ public class RecommendAlgorithm {
         String currentLevel = getUserLevel(userId);
 
         // 2. 选择稍难的题目
-        List<QuestionCode> progressionQuestions = questionCodeMapper.selectList(new QueryWrapper<QuestionCode>()
+        List<QuestionCode> progressionQuestions = questionCodeFeignClient.getSimilarQuestionCode(new QueryWrapper<QuestionCode>()
                 .gt("difficulty", currentLevel)
                 .last("LIMIT 10"));
 
@@ -128,8 +126,9 @@ public class RecommendAlgorithm {
             // 3.计算活跃度分数
             // 3.1计算用户最近一个月的活跃度
             Date oneMonthAgo = DateUtil.offsetMonth(new Date(), -1);
+            String date = DateUtil.format(oneMonthAgo, "yyyy-MM-dd HH:mm:ss");
             // 3.2获取用户最近一个月的题目完成数量
-            Integer questionCount = questionCodeMapper.countUserCompletedQuestions(userId, oneMonthAgo);
+            Integer questionCount = questionCodeFeignClient.getRecentCompletedQuestionsCount(userId, date);
             // 3.3计算活跃度分数
             float activityScore = Math.min(1f,questionCount / 100f);
 
@@ -225,7 +224,8 @@ public class RecommendAlgorithm {
     private List<QuestionCode> getRecentCompletedQuestions(Long userId) {
         // 获取最近一个月完成的题目
         Date oneMonthAgo = DateUtil.offsetMonth(new Date(), -1);
-        return questionCodeMapper.selectRecentCompletedQuestions(userId, oneMonthAgo);
+        String date = DateUtil.format(oneMonthAgo, "yyyy-MM-dd HH:mm:ss");
+        return questionCodeFeignClient.getRecentCompletedQuestions(userId, date);
     }
 
     /**
@@ -234,8 +234,9 @@ public class RecommendAlgorithm {
      */
     private String getUserLevel(Long userId) {
         Date threeMonthAgo = DateUtil.offsetMonth(new Date(), -3);
+        String date = DateUtil.format(threeMonthAgo, "yyyy-MM-dd HH:mm:ss");
         // 1. 获取用户最近完成的题目难度分布
-        Map<String, Long> difficultyStats = questionCodeMapper.selectRecentCompletedQuestions(userId,threeMonthAgo)  // 统计最近3个月
+        Map<String, Long> difficultyStats = questionCodeFeignClient.getRecentCompletedQuestions(userId,date)  // 统计最近3个月
                 .stream()
                 .collect(Collectors.groupingBy(
                         QuestionCode::getDifficulty,
@@ -294,7 +295,7 @@ public class RecommendAlgorithm {
         List<QuestionRecommend> recommendations = new ArrayList<>();
 
         for (Long questionId : questionIds) {
-            QuestionCode questionCode =  questionCodeMapper.selectById(questionId);
+            QuestionCode questionCode =  questionCodeFeignClient.getQuestionCodeById(questionId);
             if (questionCode == null) {
                 continue;
             }
@@ -347,8 +348,9 @@ public class RecommendAlgorithm {
      */
     private List<String> getUserPreferredTags(Long userId) {
         Date threeMonthAgo = DateUtil.offsetMonth(new Date(), -3);
+        String date = DateUtil.format(threeMonthAgo, "yyyy-MM-dd HH:mm:ss");
         // 1. 获取用户最近完成的题目
-        List<QuestionCode> completedQuestions = questionCodeMapper.selectRecentCompletedQuestions(userId,threeMonthAgo);  // 获取最近3个月的数据
+        List<QuestionCode> completedQuestions = questionCodeFeignClient.getRecentCompletedQuestions(userId,date);  // 获取最近3个月的数据
         
         if (completedQuestions.isEmpty()) {
             // 如果没有完成的题目，返回用户个人信息中的技术方向

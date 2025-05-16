@@ -5,7 +5,7 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
   application:
-    name: web-post
+    name: web-recommend
   # 支持 swagger3
   mvc:
     pathmatch:
@@ -24,7 +24,7 @@ spring:
     timeout: 5000
 server:
   address: 0.0.0.0
-  port: 8104
+  port: 8107
   servlet:
     context-path: /api
 mybatis-plus:
@@ -36,6 +36,7 @@ mybatis-plus:
       logic-delete-field: isDelete # 全局逻辑删除的实体字段名
       logic-delete-value: 1 # 逻辑已删除值（默认为 1）
       logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
+
 # 接口文档配置
 knife4j:
   enable: true
@@ -46,4 +47,4 @@ knife4j:
       default:
         api-rule: package
         api-rule-resources:
-          - com.cool.post.controller
+          - com.cool.heart.controller

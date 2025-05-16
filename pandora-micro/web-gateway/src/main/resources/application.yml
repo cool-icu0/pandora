@@ -18,10 +18,31 @@ spring:
           uri: lb://web-file
           predicates:
             - Path=/api/file/**
-#        - id: XmutOJ-backend-question-service
-#          uri: lb://XmutOJ-backend-question-service
-#          predicates:
-#            - Path=/api/question/**
+        - id: web-code
+          uri: lb://web-code
+          predicates:
+            - Path=/api/questionCode/**
+        - id: web-recommend
+          uri: lb://web-recommend
+          predicates:
+            - Path=/api/recommend/**
+        - id: web-base
+          uri: http://localhost:8109
+          predicates:
+            - Path=/api/question/**
+            - Path=/api/questionBank/**
+            - Path=/api/mockInterview/**
+            - Path=/api/question_thumb/**
+            - Path=/api/question_favourite/**
+            - Path=/api/question_comment/**
+            - Path=/api/questionBankQuestion/**
+        - id: web-post
+          uri: lb://web-post
+          predicates:
+            - Path=/api/post/**
+            - Path=/api/comment/**
+            - Path=/api/post_favour/**
+            - Path=/api/post_thumb/**
 #        - id: XmutOJ-backend-judge-service
 #          uri: lb://XmutOJ-backend-judge-service
 #          predicates:

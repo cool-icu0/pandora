@@ -19,6 +19,7 @@ import com.cool.model.vo.UserVO;
 import com.cool.model.vo.recommend.QuestionRecommendVO;
 import com.cool.model.vo.recommend.UserRecommendVO;
 import com.cool.heart.service.algorithm.RecommendAlgorithm;
+import com.cool.server.QuestionCodeFeignClient;
 import com.cool.server.UserFeignClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class RecommendServiceImpl implements RecommendService {
     @Resource
     private UserFeignClient userFeignClient;
     @Resource
-    private QuestionCodeService questionCodeService;
+    private QuestionCodeFeignClient questionCodeFeignClient;
 
     @Override
     public Page<UserRecommendVO> getUserRecommendList(UserRecommendRequest request) {
@@ -155,7 +156,7 @@ public class RecommendServiceImpl implements RecommendService {
         QuestionRecommendVO vo = new QuestionRecommendVO();
         BeanUtils.copyProperties(questionRecommend, vo);
 
-        QuestionCode questionCode = questionCodeService.getById(questionRecommend.getQuestionId());
+        QuestionCode questionCode = questionCodeFeignClient.getQuestionCodeById(questionRecommend.getQuestionId());
         QuestionCodeVO questionCodeVO = new QuestionCodeVO();
         BeanUtils.copyProperties(questionCode, questionCodeVO);
         if (questionCode.getTags() != null) {

@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 // todo 如需开启 Redis，须移除 exclude 中的内容
 // @SpringBootApplication(exclude = {RedisAutoConfiguration.class})
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = {"com.cool.pandora"})
+@EnableFeignClients(basePackages = {"com.cool.server"})
 @MapperScan("com.cool.pandora.mapper")
 @EnableScheduling
 @ServletComponentScan
