@@ -237,7 +237,7 @@ if __name__ == "__main__":
         let judgeConfigInfo = '';
         if (data.judgeConfig) {
           try {
-            const config = JSON.parse(data.judgeConfig);
+            const config = data.judgeConfig;
             judgeConfigInfo = `### 判题配置
 - 时间限制: ${config.timeLimit || 0} ms
 - 内存限制: ${config.memoryLimit || 0} KB
