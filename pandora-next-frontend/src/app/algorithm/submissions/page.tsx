@@ -148,7 +148,7 @@ export default function SubmissionsPage() {
   ];
 
   return (
-    <div className="submissions-page" style={{ padding: '24px', background: '#f7f9fc' }}>
+    <div className="submissions-page" style={{ padding: '24px' }}>
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
         <div className="page-header">
           <Title level={2}>我的提交记录</Title>
