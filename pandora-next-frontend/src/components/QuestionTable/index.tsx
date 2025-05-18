@@ -45,10 +45,32 @@ const QuestionTable: React.FC<Props> = (props: Props) => {
       title: "标题",
       dataIndex: "title",
       valueType: "text",
+      width:600,
       hideInSearch: true,
       render: (_, record) => {
         return <Link href={`/interview/question/${record.id}`}>{record.title}</Link>;
       },
+    },
+    {
+      title: "难度",
+      dataIndex: "difficulty",
+      width: "160px",
+      render: (text, record) => (
+          <span
+              style={{
+                color:
+                    record.difficulty === "简单"
+                        ? "green"
+                        : record.difficulty === "中等"
+                            ? "#ee9e0b"
+                            : "red",
+                fontSize: "16px",
+                fontWeight: "bold", // 添加这行使文本加粗
+              }}
+          >
+          {record.difficulty}
+        </span>
+      ),
     },
     {
       title: "标签",
