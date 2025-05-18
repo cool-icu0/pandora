@@ -46,6 +46,11 @@ public class QuestionCodeVO implements Serializable {
     private List<String> tags;
 
     /**
+     * 判题用例（json 数组）
+     */
+    private String judgeCase;
+
+    /**
      * 判题配置（json 对象）
      */
     private JudgeConfig judgeConfig;
