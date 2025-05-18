@@ -71,11 +71,13 @@ public interface UserFeignClient{
      */
     default User getLoginUserPermitNull(HttpServletRequest request) {
         // 先判断是否已登录（基于 Sa-Token 实现）
-        Object loginUserId = StpUtil.getLoginIdDefaultNull();
-        if (loginUserId == null) {
-            return null;
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        User currentUser = (User) userObj;
+        if (currentUser == null || currentUser.getId() == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
-        return this.getById((Long) loginUserId);
+        // 可以考虑在这里做全局权限校验
+        return currentUser;
     }
 
     /**
