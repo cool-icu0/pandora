@@ -49,7 +49,6 @@ import java.util.stream.Collectors;
 
 /**
  * 题目服务实现
-
  */
 @Service
 @Slf4j
@@ -240,6 +239,20 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 // 题库为空，则返回空列表
                 return new Page<>(current, size, 0);
             }
+        } else {
+            String searchText = questionQueryRequest.getSearchText();
+            String difficulty = questionQueryRequest.getDifficulty();
+            // 未指定题库，则返回所有题目
+            queryWrapper.eq(StringUtils.isNotBlank(difficulty), "difficulty", difficulty);
+            // 按关键词检索
+            if (StringUtils.isNotBlank(searchText)) {
+                // title = '' or content = '' or answer = ''
+                queryWrapper.like("title", searchText)
+                        .or()
+                        .like("content", searchText)
+                        .or()
+                        .like("answer", searchText);
+            }
         }
         // 查询数据库
         Page<Question> questionPage = this.page(new Page<>(current, size), queryWrapper);
@@ -387,7 +400,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
             Question question = new Question();
             question.setTitle(title);
             question.setUserId(user.getId());
-            question.setTags("[\"待审核\"]");
+            question.setTags("[\"通用\"]");
             question.setDifficulty("简单");
             // 优化点：可以并发生成
             question.setAnswer(aiGenerateQuestionAnswer(title));

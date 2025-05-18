@@ -36,7 +36,6 @@ import java.util.List;
 
 /**
  * 题目接口
-
  */
 @RestController
 @RequestMapping("/question")
@@ -60,7 +59,7 @@ public class QuestionController {
      * 创建题目
      *
      * @param questionAddRequest 添加题目信息
-     * @param request HTTP 请求
+     * @param request            HTTP 请求
      * @return 题目 ID
      */
     @PostMapping("/add")
@@ -91,8 +90,8 @@ public class QuestionController {
      * 删除题目
      *
      * @param deleteRequest 删除请求
-     * @param request HTTP 请求
-     * @return  是否删除成功
+     * @param request       HTTP 请求
+     * @return 是否删除成功
      */
     @PostMapping("/delete")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
@@ -119,7 +118,7 @@ public class QuestionController {
      * 更新题目（仅管理员可用）
      *
      * @param questionUpdateRequest 更新题目信息
-     * @return  是否更新成功
+     * @return 是否更新成功
      */
     @PostMapping("/update")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
@@ -149,8 +148,8 @@ public class QuestionController {
     /**
      * 根据 id 获取题目（封装类）
      *
-     * @param id     题目ID
-     * @return      题目信息
+     * @param id 题目ID
+     * @return 题目信息
      */
     @GetMapping("/get/vo")
     public BaseResponse<QuestionVO> getQuestionVOById(long id, HttpServletRequest request) {
@@ -162,7 +161,7 @@ public class QuestionController {
             crawlerDetectManager.crawlerDetect(loginUser.getId());
             log.info("用户Id为：{}访问了题目id为：{}", loginUser.getId(), id);
             // 禁止访问被封号的用户
-            if(!loginUser.getUserRole().equals(UserConstant.BAN_ROLE)) {
+            if (!loginUser.getUserRole().equals(UserConstant.BAN_ROLE)) {
                 Question question = questionService.getById(id);
                 ThrowUtils.throwIf(question == null, ErrorCode.NOT_FOUND_ERROR);
                 QuestionVO questionVO = questionService.getQuestionVO(question, request);
@@ -176,8 +175,8 @@ public class QuestionController {
     /**
      * 分页获取题目列表（仅管理员可用）
      *
-     * @param questionQueryRequest  查询条件
-     * @return  题目列表
+     * @param questionQueryRequest 查询条件
+     * @return 题目列表
      */
     @PostMapping("/list/page")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
@@ -192,8 +191,8 @@ public class QuestionController {
      * 分页获取题目列表（封装类）
      *
      * @param questionQueryRequest 查询条件
-     * @param request HTTP 请求
-     * @return  题目列表
+     * @param request              HTTP 请求
+     * @return 题目列表
      */
     @PostMapping("/list/page/vo")
     public BaseResponse<Page<QuestionVO>> listQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
@@ -212,7 +211,7 @@ public class QuestionController {
      * 分页获取题目列表（封装类 - 限流版）
      *
      * @param questionQueryRequest 题目查询条件
-     * @param request HTTP 请求
+     * @param request              HTTP 请求
      * @return 题目列表
      */
     @PostMapping("/list/page/vo/sentinel")
@@ -260,7 +259,7 @@ public class QuestionController {
                                                          HttpServletRequest request, Throwable ex) {
         User loginUser = userFeignClient.getLoginUser(request);
         log.error("listQuestionVOByPageSentinel 降级操作,传入参数：{},用户id：{},报错信息",
-                questionQueryRequest,loginUser.getId(), ex);
+                questionQueryRequest, loginUser.getId(), ex);
         // 可以返回本地数据或空数据
         return ResultUtils.success(null);
     }
@@ -270,8 +269,8 @@ public class QuestionController {
      * 分页获取当前登录用户创建的题目列表
      *
      * @param questionQueryRequest 查询条件
-     * @param request HTTP 请求
-     * @return  题目列表
+     * @param request              HTTP 请求
+     * @return 题目列表
      */
     @PostMapping("/my/list/page/vo")
     public BaseResponse<Page<QuestionVO>> listMyQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
@@ -295,7 +294,7 @@ public class QuestionController {
      * 编辑题目（给用户使用）
      *
      * @param questionEditRequest 编辑题目信息
-     * @param request HTTP 请求
+     * @param request             HTTP 请求
      * @return 是否编辑成功
      */
     @PostMapping("/edit")
@@ -338,10 +337,14 @@ public class QuestionController {
         ThrowUtils.throwIf(size > 200, ErrorCode.PARAMS_ERROR);
         // todo 取消注释开启 ES（须先配置 ES）
         // 查询 ES
-        // Page<Question> questionPage = questionService.searchFromEs(questionQueryRequest);
-        // 查询数据库（作为没有 ES 的降级方案）
-        Page<Question> questionPage = questionService.listQuestionByPage(questionQueryRequest);
-        return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
+        Page<Question> questionPage = questionService.searchFromEs(questionQueryRequest);
+        if (questionPage.getTotal() != 0) {
+            return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
+        } else {
+            // 查询数据库（作为没有 ES 的降级方案）
+            questionPage = questionService.listQuestionByPage(questionQueryRequest);
+            return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
+        }
     }
 
     /**
@@ -382,7 +385,7 @@ public class QuestionController {
      * AI 生成题目（仅管理员可用）
      *
      * @param questionAIGenerateRequest 请求参数
-     * @param request HTTP 请求
+     * @param request                   HTTP 请求
      * @return 是否生成成功
      */
     @PostMapping("/ai/generate/question")

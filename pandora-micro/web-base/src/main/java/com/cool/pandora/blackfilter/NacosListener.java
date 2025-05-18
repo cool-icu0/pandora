@@ -2,6 +2,7 @@ package com.cool.pandora.blackfilter;
 
 import com.alibaba.nacos.api.annotation.NacosInjected;
 import com.alibaba.nacos.api.config.ConfigService;
+import com.alibaba.nacos.api.config.annotation.NacosValue;
 import com.alibaba.nacos.api.config.listener.Listener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -27,10 +28,10 @@ public class NacosListener implements InitializingBean {
     @NacosInjected
     private ConfigService configService;
 
-    @Value("${nacos.config.data-id}")
+    @NacosValue("${nacos.config.data-id}")
     private String dataId;
 
-    @Value("${nacos.config.group}")
+    @NacosValue("${nacos.config.group}")
     private String group;
 
     @Override
