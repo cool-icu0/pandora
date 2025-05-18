@@ -11,7 +11,6 @@ import java.util.List;
 
 /**
  * 题目视图
-
  */
 @Data
 public class QuestionVO implements Serializable {
@@ -59,6 +58,7 @@ public class QuestionVO implements Serializable {
     /**
      * 题目难度
      */
+    private String difficulty;
 
     /**
      * 创建用户信息

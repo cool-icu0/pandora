@@ -8,7 +8,7 @@ import {listQuestionVoByPageUsingPost} from "@/api/questionController";
 import {listQuestionCodeVoByPageUsingPost} from '@/api/questionCodeController';
 import {addUserSignInUsingPost, getUserSignInRecordUsingGet} from '@/api/userController'; // 添加获取打卡记录接口
 import QuestionBankList from "@/components/QuestionBankList";
-import QuestionList from "@/components/QuestionList";
+import BankQuestionList from "../components/BankQuestionList";
 import "./index.css";
 import type {Dayjs} from 'dayjs';
 import {useState, useEffect} from "react";
@@ -453,7 +453,7 @@ export default function HomePage() {
                             <Link href={"/interview/questions"} className="view-more-link">查看更多</Link>
                         </Flex>
                         <div className="question-list-container">
-                            <QuestionList questionList={questionList}/>
+                            <BankQuestionList questionList={questionList}/>
                             {/* 添加分页组件 */}
                             <Table
                                 dataSource={[]}

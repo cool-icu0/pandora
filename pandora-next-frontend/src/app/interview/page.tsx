@@ -8,7 +8,7 @@ import { listQuestionBankVoByPageUsingPost } from "@/api/questionBankController"
 import { listQuestionVoByPageUsingPost } from "@/api/questionController";
 import { getUserSignInRankUsingGet } from "@/api/userController";
 import QuestionBankList from "@/components/QuestionBankList";
-import QuestionList from "@/components/QuestionList";
+import BankQuestionList from "../../components/BankQuestionList";
 import "./index.css";
 
 const { Paragraph } = Typography;
@@ -191,7 +191,7 @@ export default function InterviewPage() {
           <Title level={3}>最新题目</Title>
           <Link href={"/interview/questions"}>查看更多</Link>
         </Flex>
-        <QuestionList questionList={questionList} />
+        <BankQuestionList questionList={questionList} />
       </div>
       
       <Card title="坚持力排行榜" style={{ width: 300 }}>

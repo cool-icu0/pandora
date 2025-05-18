@@ -1224,6 +1224,7 @@ declare namespace API {
     title?: string;
     updateTime?: string;
     user?: UserVO;
+    difficulty?: string;
     userId?: number;
   };
 
