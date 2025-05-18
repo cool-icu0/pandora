@@ -10,7 +10,7 @@ export default function GlobalFooter() {
 
   return (
     <div className="global-footer">
-      <div>© {currentYear} 面试刷题平台</div>
+      <div>© {currentYear} 智能刷题平台</div>
     </div>
   );
 }

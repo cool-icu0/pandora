@@ -68,6 +68,7 @@ const QuestionBankAdminPage: React.FC = () => {
       title: "描述",
       dataIndex: "description",
       valueType: "text",
+      width:300
     },
     {
       title: "图片",
