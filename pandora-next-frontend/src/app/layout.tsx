@@ -8,6 +8,7 @@ import { getLoginUserUsingGet } from "@/api/userController";
 import AccessLayout from "@/access/AccessLayout";
 import { setLoginUser } from "@/stores/loginUser";
 import "./globals.css";
+import { usePathname } from "next/navigation";
 
 /**
  * 全局初始化逻辑
@@ -61,15 +62,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isAuthPage = pathname === "/user/login" || pathname === "/user/register";
   return (
     <html lang="zh">
       <body>
         <AntdRegistry>
           <Provider store={store}>
             <InitLayout>
-              <BasicLayout>
+              {isAuthPage ? (
                 <AccessLayout>{children}</AccessLayout>
-              </BasicLayout>
+              ) : (
+                <BasicLayout>
+                  <AccessLayout>{children}</AccessLayout>
+                </BasicLayout>
+              )}
             </InitLayout>
           </Provider>
         </AntdRegistry>
