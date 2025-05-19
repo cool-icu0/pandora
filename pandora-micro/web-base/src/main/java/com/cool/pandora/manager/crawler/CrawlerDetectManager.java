@@ -6,6 +6,8 @@ import com.cool.common.exception.BusinessException;
 import com.cool.pandora.manager.CounterManager;
 import com.cool.model.entity.User;
 import com.cool.server.UserFeignClient;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -18,6 +20,8 @@ public class CrawlerDetectManager {
     private UserFeignClient userFeignClient;
     @Resource
     private CounterManager counterManager;
+    @Resource
+    private JavaMailSender mailSender;
     /**
      * 检测爬虫
      *
@@ -46,7 +50,20 @@ public class CrawlerDetectManager {
         // 是否告警
         if (count == WARN_COUNT) {
             // 可以改为向管理员发送邮件通知
+            String from = "990299103@qq.com";
+            String to = "990299103@qq.com";
+            String subject = "警告：访问太频繁";
+            String text = "用户 ID：" + loginUserId + "，访问次数过多，已被警告。";
+            sendMail(from, to, subject, text);
             throw new BusinessException(110, "警告：访问太频繁");
         }
+    }
+    public void sendMail(String from,String to, String subject,String text) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);//发件人邮箱
+        message.setTo(to);//收件人邮箱
+        message.setSubject(subject);//主题
+        message.setText(text);//内容
+        mailSender.send(message);
     }
 }

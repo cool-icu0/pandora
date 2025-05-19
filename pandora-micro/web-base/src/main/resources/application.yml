@@ -105,6 +105,18 @@ spring:
     multipart:
       # 大小限制
       max-file-size: 10MB
+  mail:
+    host: smtp.qq.com          # QQ 邮箱 SMTP 服务器地址
+    port: 465                  # SMTP 服务端口（SSL）
+    username: 990299103@qq.com # 发件人邮箱（QQ邮箱地址）
+    password: fgigeobymsxpbedd # 授权码（非邮箱密码）
+    protocol: smtp             # 邮件协议
+    properties:
+      mail:
+        smtp:
+          auth: true           # 启用认证
+          starttls.enable: true # 启用 TLS
+          ssl.enable: true      # 启用 SSL 加密
 server:
   address: 0.0.0.0
   port: 8109
@@ -170,6 +182,3 @@ knife4j:
 ai:
   apiKey: 02432347-ccb3-4a4d-8c8c-5c6411ea02f3
 
-#代码沙箱配置
-codesandbox:
-  type: ai
