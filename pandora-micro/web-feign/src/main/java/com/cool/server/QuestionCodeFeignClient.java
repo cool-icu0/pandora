@@ -1,4 +1,5 @@
 package com.cool.server;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cool.model.entity.question.QuestionCode;
 import com.cool.model.entity.question.QuestionSubmit;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,6 +16,7 @@ import java.util.List;
 */
 @FeignClient(name = "web-code", path = "/api/questionCode/inner")
 public interface QuestionCodeFeignClient {
+
     @GetMapping("/get/id")
     QuestionCode getQuestionCodeById(@RequestParam("questionId") long questionId);
 
@@ -25,21 +26,29 @@ public interface QuestionCodeFeignClient {
     @PostMapping("/question_submit/update")
     boolean updateQuestionSubmitById(@RequestBody QuestionSubmit questionSubmit);
 
-    //根据参数获取题目
+    // 根据参数获取题目
     @PostMapping("/get/similar")
     List<QuestionCode> getSimilarQuestionCode(QueryWrapper<QuestionCode> queryWrapper);
 
-    //获取用户已完成的题目ID列表
+    // 获取用户已完成的题目ID列表
     @GetMapping("/get/completed/question/ids")
     List<Long> getCompletedQuestionIds(@RequestParam("userId") Long userId);
 
-    //获取用户最近时间段内完成的题目
+    // 获取用户最近时间段内完成的题目
     @GetMapping("/questionCode/get/recent")
     List<QuestionCode> getRecentCompletedQuestions(@RequestParam("userId") Long userId,
                                                    @RequestParam("date") String date);
 
-    //获取最近时间段内完成的题目数量
+    // 获取最近时间段内完成的题目数量
     @GetMapping("/questionCode/get/recent/count")
     Integer getRecentCompletedQuestionsCount(@RequestParam("userId") Long userId,
-                                         @RequestParam("date") String date);
+                                             @RequestParam("date") String date);
+
+    // 更新算法题目
+    @PostMapping("/update/code")
+    Boolean updateQuestionCode(@RequestBody QuestionCode questionCode);
+
+    //查询数据库提交信息
+    @GetMapping("/get/submit")
+    QuestionSubmit getQuestionSubmit(@RequestParam("questionId") Long questionId);
 }

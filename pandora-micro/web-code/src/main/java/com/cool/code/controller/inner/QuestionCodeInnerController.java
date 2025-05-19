@@ -70,4 +70,18 @@ public class QuestionCodeInnerController implements QuestionCodeFeignClient {
                                                     @RequestParam("date") String date) {
         return questionCodeService.getRecentCompletedQuestionsCount(userId, date);
     }
+
+    //更新算法题目
+    @Override
+    @PostMapping("/update/code")
+    public Boolean updateQuestionCode(QuestionCode questionCode) {
+        return questionCodeService.updateById(questionCode);
+    }
+
+    //查询数据库提交信息
+    @Override
+    @GetMapping("/get/submit")
+    public QuestionSubmit getQuestionSubmit(Long questionId) {
+        return questionSubmitService.getById(questionId);
+    }
 }

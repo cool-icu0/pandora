@@ -5,7 +5,7 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
   application:
-    name: web-code
+    name: web-judge
   # 支持 swagger3
   mvc:
     pathmatch:
@@ -29,7 +29,7 @@ spring:
     port: 5672
 server:
   address: 0.0.0.0
-  port: 8102
+  port: 8103
   servlet:
     context-path: /api
 mybatis-plus:
@@ -52,4 +52,11 @@ knife4j:
       default:
         api-rule: package
         api-rule-resources:
-          - com.cool.code.controller
+          - com.cool.judge.controller
+# AI 大模型接入（目前是火山引擎 DeepSeek）
+ai:
+  apiKey: 02432347-ccb3-4a4d-8c8c-5c6411ea02f3
+
+#代码沙箱配置
+codesandbox:
+  type: ai

@@ -68,6 +68,15 @@ services:
     ports:
       - "2379:2379"
       - "2380:2380"
+  rabbitmq:
+    image: rabbitmq:4.0.2-management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 #  链路追踪
 #  oap:
 #    image: apache/skywalking-oap-server:10.0.0-java17

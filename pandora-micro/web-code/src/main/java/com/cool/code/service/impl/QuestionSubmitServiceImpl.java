@@ -3,8 +3,8 @@ package com.cool.code.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cool.code.judge.JudgeService;
 import com.cool.code.mapper.QuestionSubmitMapper;
+import com.cool.code.rabbitmq.CodeMqProducer;
 import com.cool.code.service.QuestionCodeService;
 import com.cool.code.service.QuestionSubmitService;
 import com.cool.common.common.ErrorCode;
@@ -19,6 +19,7 @@ import com.cool.model.enums.QuestionSubmitLanguageEnum;
 import com.cool.model.enums.QuestionSubmitStatusEnum;
 import com.cool.model.vo.QuestionSubmitVO;
 import com.cool.common.utils.SqlUtils;
+import com.cool.server.JudgeFeignClient;
 import com.cool.server.UserFeignClient;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -48,7 +49,10 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
 
     @Resource
     @Lazy
-    private JudgeService judgeService;
+    private JudgeFeignClient judgeFeignClient;
+
+    @Resource
+    private CodeMqProducer codeMqProducer;
 
     /**
      * 题目提交
@@ -92,8 +96,15 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据插入失败");
         }
         Long questionSubmitId = questionSubmit.getId();
+        // CompletableFuture.runAsync(()->{
+        //     judgeService.doJudge(questionSubmitId,questionSubmitAddRequest);
+        // });
+
+        //  设置mq消息队列发送消息
+        codeMqProducer.sendMessage("code_exchange","my_routingkey",String.valueOf(questionSubmitId));
+        // 异步化，执行判题服务
         CompletableFuture.runAsync(()->{
-            judgeService.doJudge(questionSubmitId,questionSubmitAddRequest);
+            judgeFeignClient.doJudge(questionSubmitId);
         });
 
         return questionSubmitId;
