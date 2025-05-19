@@ -1,4 +1,4 @@
-name: pandora-backend
+name: pandora-micro
 version: '4.31'
 services:
   mysql:
@@ -59,7 +59,15 @@ services:
 #      - USERNAME=sentinel
     ports:
       - "8858:8858"  # 更新后的端口
-      - "8719:8719"
+      - "8729:8729"
+  etcd:
+    image: bitnami/etcd:3.5.15
+    container_name: etcd
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+    ports:
+      - "2379:2379"
+      - "2380:2380"
 #  链路追踪
 #  oap:
 #    image: apache/skywalking-oap-server:10.0.0-java17

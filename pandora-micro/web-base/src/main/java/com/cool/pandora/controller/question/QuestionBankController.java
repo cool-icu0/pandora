@@ -26,6 +26,7 @@ import com.cool.pandora.sentinel.SentinelConstant;
 import com.cool.pandora.service.question.QuestionBankService;
 import com.cool.pandora.service.question.QuestionService;
 import com.cool.server.UserFeignClient;
+import com.jd.platform.hotkey.client.callback.JdHotKeyStore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -148,17 +149,17 @@ public class QuestionBankController {
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
 
         // todo 取消注释开启 HotKey（须确保 HotKey 依赖被打进 jar 包）
-//        // 生成 key
-//        String key = "bank_detail_" + id;
-//        // 如果是热 key
-//        if (JdHotKeyStore.isHotKey(key)) {
-//            // 从本地缓存中获取缓存值
-//            Object cachedQuestionBankVO = JdHotKeyStore.get(key);
-//            if (cachedQuestionBankVO != null) {
-//                // 如果缓存中有值，直接返回缓存的值
-//                return ResultUtils.success((QuestionBankVO) cachedQuestionBankVO);
-//            }
-//        }
+       // 生成 key
+       String key = "bank_detail_" + id;
+       // 如果是热 key
+       if (JdHotKeyStore.isHotKey(key)) {
+           // 从本地缓存中获取缓存值
+           Object cachedQuestionBankVO = JdHotKeyStore.get(key);
+           if (cachedQuestionBankVO != null) {
+               // 如果缓存中有值，直接返回缓存的值
+               return ResultUtils.success((QuestionBankVO) cachedQuestionBankVO);
+           }
+       }
 
         // 查询数据库
         QuestionBank questionBank = questionBankService.getById(id);
@@ -179,8 +180,8 @@ public class QuestionBankController {
         }
 
         // todo 取消注释开启 HotKey（须确保 HotKey 依赖被打进 jar 包）
-//        // 设置本地缓存（如果不是热 key，这个方法不会设置缓存）
-//        JdHotKeyStore.smartSet(key, questionBankVO);
+       // 设置本地缓存（如果不是热 key，这个方法不会设置缓存）
+       JdHotKeyStore.smartSet(key, questionBankVO);
 
         // 获取封装类
         return ResultUtils.success(questionBankVO);

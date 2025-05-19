@@ -2,15 +2,17 @@ package com.cool.pandora.config;
 
 import com.jd.platform.hotkey.client.ClientStarter;
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * hotkey 热 key 发现配置
 
  */
 // todo 取消注释开启 HotKey（须先配置 HotKey）
-//@Configuration
-//@ConfigurationProperties(prefix = "hotkey")
+@Configuration
+@ConfigurationProperties(prefix = "hotkey")
 @Data
 public class HotKeyConfig {
 
