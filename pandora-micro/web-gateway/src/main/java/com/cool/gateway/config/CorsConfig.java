@@ -21,7 +21,7 @@ public class CorsConfig {
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);
         // 设置线上前端项目地址
-        config.setAllowedOriginPatterns(Arrays.asList("http://localhost:8080", "http://127.0.0.1:8080","http://localhost:3000", "http://127.0.0.1:3000"));
+        config.setAllowedOriginPatterns(Arrays.asList("http://127.0.0.1:5173","http://localhost:5173","http://localhost:8080", "http://127.0.0.1:8080","http://localhost:3000", "http://127.0.0.1:3000"));
         // config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "http://127.0.0.1:3000"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
