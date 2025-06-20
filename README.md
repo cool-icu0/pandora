@@ -65,8 +65,11 @@
 - ⭐️ Druid 数据库连接池 + 并发编程
 - ⭐️ Sa-Token 权限控制
 - ⭐️ HotKey 热点探测
-- ⭐️ Sentinel 流量控制
-- ⭐️ Nacos 配置中心
+- 微服务架构（SpringCloud Alibaba）
+  - ⭐️ Sentinel 流量控制、限流熔断
+  - ⭐️ Nacos 配置中心、注册中心
+  - ⭐️ GateWay 微服务网关
+  - ⭐️ OpenFeign 远程调用
 - ⭐️ 多角度项目优化：性能、安全性、可用性
 
 ### 环境搭建
